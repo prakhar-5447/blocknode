@@ -1,0 +1,9 @@
+<div class="node-container" cdkDrag (cdkDragMoved)="onDragMoved($event)">
+  <div class="node-header">
+    <span>{{ nodeName }}</span>
+    <span class="connect-icon" (mousedown)="startConnecting($event)">+</span>
+  </div>
+  <div class="node-content">
+    <!-- Node content, e.g., custom code -->
+  </div>
+</div>

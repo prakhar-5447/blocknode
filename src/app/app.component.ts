@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { fabric } from 'fabric';
 
 @Component({
   selector: 'app-root',
