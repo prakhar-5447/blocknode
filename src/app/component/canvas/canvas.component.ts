@@ -47,9 +47,54 @@ export class CanvasComponent {
   }
 
   generatePath(fromNode: any, toNode: any): string {
-    const start = fromNode.position;
-    const end = toNode.position;
-    const midX = (start.x + end.x) / 2;
-    return `M${start.x},${start.y} C${midX},${start.y} ${midX},${end.y} ${end.x},${end.y}`;
+    const start = { x: fromNode.position.x, y: fromNode.position.y }; // Adjust starting point for better visual alignment
+    const end = { x: toNode.position.x, y: toNode.position.y }; // Adjust ending point similarly
+
+    // Calculate path based on relative positions
+    let path = `M${start.x},${start.y} `;
+
+    // Determine the direction of the path
+    if (start.x < end.x) {
+      path += `H${start.x - 50} `; // Move horizontally left 
+      if (Math.abs(start.y - end.y) < 100) {
+        // Move vertically first if y difference is less than 50
+        if (start.y < end.y) {
+          path += `V${end.y + 100} `; // Move vertically up to align
+        } else {
+          path += `V${end.y - 100} `; // Move vertically down to align
+        }
+        path += `H${end.x - 50} `; // Move vertically down to align
+        path += `V${end.y} `; // Move vertically down to align
+        path += `H${end.x + 50} `; // Move vertically down to align
+      } else {
+        path += `V${end.y} `; // Move vertically down to align
+        path += `H${end.x} `; // Move vertically down to align
+      }
+      path += `H${end.x} `; // Move horizontally to the endpoint
+    } else {
+      if (Math.abs(start.y - end.y) < 100) {
+        path += `H${start.x - 50} `; // Move vertically down to align
+
+        // Move vertically first if y difference is less than 50
+        if (start.y < end.y) {
+          path += `V${end.y - 100} `; // Move vertically up to align
+        } else {
+          path += `V${end.y + 100} `; // Move vertically down to align
+        }
+        path += `H${end.x - 50} `; // Move vertically down to align
+        path += `V${end.y} `; // Move vertically down to align
+        path += `H${end.x + 50} `; // Move vertically down to align
+
+      } else {
+        path += `H${end.x - 50} `; // Move horizontally left 
+        path += `V${end.y} `; // Move vertically down to align
+      }
+      path += `H${end.x} `; // Move horizontally to the endpoint
+    }
+
+    return path;
   }
+
+
+
 }
