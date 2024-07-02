@@ -1,0 +1,23 @@
+<div class="sidebar">
+    <mat-toolbar color="primary">
+        <span>My Sidebar</span>
+    </mat-toolbar>
+    <mat-tab-group (selectedTabChange)="onTabChange($event)">
+        <mat-tab label="Home"></mat-tab>
+        <mat-tab label="Search"></mat-tab>
+        <mat-tab label="Node Buttons"></mat-tab>
+    </mat-tab-group>
+    <div class="sidebar-content">
+        <ng-container [ngSwitch]="selectedTabIndex">
+            <div *ngSwitchCase="0">
+                <p>Home Content</p>
+            </div>
+            <div *ngSwitchCase="1">
+                <p>Search Content</p>
+            </div>
+            <div *ngSwitchCase="2">
+                <p>Node Buttons Content</p>
+            </div>
+        </ng-container>
+    </div>
+</div>
