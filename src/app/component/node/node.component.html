@@ -1,4 +1,5 @@
-<div class="node-container" cdkDrag (cdkDragMoved)="onDragMoved($event)">
+<div class="node-container" cdkDrag (cdkDragMoved)="onDragMoved($event)" (cdkDragStarted)="onDragStart($event)"
+  (cdkDragEnded)="onDragEnd($event)" >
   <div class="node-header">
     <span>{{ nodeName }}</span>
     <span class="connect-icon" (mousedown)="startConnecting($event)">+</span>

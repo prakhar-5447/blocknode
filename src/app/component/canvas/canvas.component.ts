@@ -11,21 +11,69 @@ export class CanvasComponent {
   drawingConnection: any = null;
   cursorPosition: { x: number, y: number } = { x: 0, y: 0 };
 
+  // Zoom and pan properties
+  panX = 0;
+  panY = 0;
+  isNodeDragging = false;
+  isPanning = false;
+  startX = 0;
+  startY = 0;
+
+  onMouseMove(event: MouseEvent): void {
+    if (this.drawingConnection) {
+      this.cursorPosition = { x: (event.clientX - this.panX), y: (event.clientY - this.panY) };
+    }
+    if (this.isPanning && !this.isNodeDragging) {
+      this.panX += (event.clientX - this.startX);
+      this.panY += (event.clientY - this.startY);
+      this.startX = event.clientX;
+      this.startY = event.clientY;
+    }
+  }
+
+  onMouseDown(event: MouseEvent): void {
+    if (!this.isNodeDragging) {
+      this.isPanning = true;
+      this.startX = event.clientX;
+      this.startY = event.clientY;
+    }
+    console.log(event.clientX)
+    console.log(event.clientY)
+  }
+
+  onMouseUp(): void {
+    this.isPanning = false;
+  }
+
+  onDragStarted(): void {
+    this.isNodeDragging = true;
+  }
+
+  onDragEnded(): void {
+    this.isNodeDragging = false;
+  }
+
   addNode(): void {
     const nodeName = `Node ${this.nodes.length + 1}`;
     this.nodes.push({ name: nodeName, position: { x: 0, y: 0 } });
+    console.log(`added ${nodeName}`);
   }
 
   onNodeMoved(event: { name: string, position: { x: number, y: number } }): void {
     const node = this.nodes.find(n => n.name === event.name);
     if (node) {
-      node.position = event.position;
+      node.position = {
+        x: event.position.x - this.panX,
+        y: event.position.y - this.panY
+      };
     }
   }
 
   startConnection(startPosition: { node: any, position: { x: number, y: number } }): void {
     this.drawingConnection = { fromNode: startPosition.node, toNode: null };
+    console.log(this.drawingConnection);
     this.cursorPosition = { x: startPosition.position.x, y: startPosition.position.y };
+    this.isNodeDragging = true;
   }
 
   endConnection(endPosition: { node: any }): void {
@@ -36,19 +84,15 @@ export class CanvasComponent {
         this.connections.push(this.drawingConnection);
       }
       this.drawingConnection = null;
+      this.isNodeDragging = false;
+
       this.cursorPosition = { x: 0, y: 0 };
     }
   }
 
-  onMouseMove(event: MouseEvent): void {
-    if (this.drawingConnection) {
-      this.cursorPosition = { x: event.clientX, y: event.clientY };
-    }
-  }
-
   generatePath(fromNode: any, toNode: any): string {
-    const start = { x: fromNode.position.x, y: fromNode.position.y }; // Adjust starting point for better visual alignment
-    const end = { x: toNode.position.x, y: toNode.position.y }; // Adjust ending point similarly
+    const start = { x: fromNode.position.x, y: fromNode.position.y };
+    const end = { x: toNode.position.x, y: toNode.position.y };
 
     // Calculate path based on relative positions
     let path = `M${start.x},${start.y} `;
@@ -94,7 +138,4 @@ export class CanvasComponent {
 
     return path;
   }
-
-
-
 }
