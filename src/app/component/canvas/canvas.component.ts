@@ -91,8 +91,8 @@ export class CanvasComponent {
   }
 
   generatePath(fromNode: any, toNode: any): string {
-    const start = { x: fromNode.position.x, y: fromNode.position.y };
-    const end = { x: toNode.position.x, y: toNode.position.y };
+    const start = { x: fromNode.position.x + this.panX, y: fromNode.position.y + this.panY };
+    const end = { x: toNode.position.x + this.panX, y: toNode.position.y + this.panY };
 
     // Calculate path based on relative positions
     let path = `M${start.x},${start.y} `;

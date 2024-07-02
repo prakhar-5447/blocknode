@@ -6,7 +6,7 @@
       (nodeMoved)="onNodeMoved($event)" (startConnection)="startConnection($event)"
       (mouseup)="endConnection({ node: node })" (dragStarted)="onDragStarted()" (dragEnded)="onDragEnded()">
     </app-node>
-    <svg class="connections">
+    <svg class="connections"  [ngStyle]="{'transform': 'translate(' + -panX + 'px, ' + -panY + 'px)'}">
       <path *ngFor="let connection of connections" [attr.d]="generatePath(connection.fromNode, connection.toNode)"
         stroke="black" fill="none" />
       <path *ngIf="drawingConnection" [attr.d]="generatePath(drawingConnection.fromNode, { position: cursorPosition })"
