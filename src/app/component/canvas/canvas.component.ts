@@ -6,7 +6,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./canvas.component.sass']
 })
 export class CanvasComponent {
-  nodes: { name: string, position: { x: number, y: number } }[] = [];
+  server: { name: string, position: { x: number, y: number }, width: number } = {
+    name: "server", position: { x: 0, y: 0 }, width: 300
+  };
+
+  nodes: { name: string, position: { x: number, y: number }, width: number }[] = [];
   connections: { fromNode: any, toNode: any }[] = [];
   drawingConnection: any = null;
   cursorPosition: { x: number, y: number } = { x: 0, y: 0 };
@@ -37,8 +41,6 @@ export class CanvasComponent {
       this.startX = event.clientX;
       this.startY = event.clientY;
     }
-    console.log(event.clientX)
-    console.log(event.clientY)
   }
 
   onMouseUp(): void {
@@ -55,8 +57,7 @@ export class CanvasComponent {
 
   addNode(): void {
     const nodeName = `Node ${this.nodes.length + 1}`;
-    this.nodes.push({ name: nodeName, position: { x: 0, y: 0 } });
-    console.log(`added ${nodeName}`);
+    this.nodes.push({ name: nodeName, position: { x: 0, y: 0 }, width: 250 });
   }
 
   onNodeMoved(event: { name: string, position: { x: number, y: number } }): void {
@@ -69,9 +70,17 @@ export class CanvasComponent {
     }
   }
 
-  startConnection(startPosition: { node: any, position: { x: number, y: number } }): void {
+  onServerMoved(event: { name: string, position: { x: number, y: number } }): void {
+    if (this.server) {
+      this.server.position = {
+        x: event.position.x - this.panX,
+        y: event.position.y - this.panY
+      };
+    }
+  }
+
+  startConnection(startPosition: { node: any, position: { x: number, y: number }, name: string }): void {
     this.drawingConnection = { fromNode: startPosition.node, toNode: null };
-    console.log(this.drawingConnection);
     this.cursorPosition = { x: startPosition.position.x, y: startPosition.position.y };
     this.isNodeDragging = true;
   }
