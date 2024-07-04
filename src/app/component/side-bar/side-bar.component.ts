@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-side-bar',
@@ -6,9 +6,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./side-bar.component.sass']
 })
 export class SideBarComponent {
-  selectedTabIndex: number = 0;
+  @Input() nodes: { name: string, id: number }[] = [];
+  @Output() tabSelected = new EventEmitter<string>();
 
-  onTabChange(event: any): void {
-    this.selectedTabIndex = event.index;
+  selectTab(tabName: string): void {
+    this.tabSelected.emit(tabName);
   }
 }

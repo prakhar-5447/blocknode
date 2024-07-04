@@ -1,4 +1,7 @@
 <div class="dashboard">
-    <app-side-bar></app-side-bar>
-    <app-canvas></app-canvas>
+    <app-side-bar [nodes]="nodes" (tabSelected)="selectTab($event)"></app-side-bar>
+    <div class="main-content">
+        <app-canvas *ngIf="selectedTab === 'canvas'"></app-canvas>
+        <app-editor *ngIf="selectedTab !== 'editor'" [code]="selectedTab"></app-editor>
+    </div>
 </div>

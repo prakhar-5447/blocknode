@@ -19,6 +19,7 @@ import { SideBarComponent } from './component/side-bar/side-bar.component';
 import { ServerComponent } from './component/nodes/server/server.component';
 import { MiddlewareComponent } from './component/nodes/middleware/middleware.component';
 import { RouteComponent } from './component/nodes/route/route.component';
+import { EditorComponent } from './component/editor/editor.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { RouteComponent } from './component/nodes/route/route.component';
     SideBarComponent,
     ServerComponent,
     MiddlewareComponent,
-    RouteComponent
+    RouteComponent,
+    EditorComponent
   ],
   imports: [
     BrowserModule,
