@@ -7,6 +7,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
@@ -16,8 +17,9 @@ import { NodeComponent } from './component/node/node.component';
 import { CanvasComponent } from './component/canvas/canvas.component';
 import { BoardComponent } from './component/board/board.component';
 import { SideBarComponent } from './component/side-bar/side-bar.component';
-import { PanelComponent } from './component/panel/panel.component';
 import { ServerComponent } from './component/nodes/server/server.component';
+import { MiddlewareComponent } from './component/nodes/middleware/middleware.component';
+import { RouteComponent } from './component/nodes/route/route.component';
 
 @NgModule({
   declarations: [
@@ -26,8 +28,9 @@ import { ServerComponent } from './component/nodes/server/server.component';
     CanvasComponent,
     BoardComponent,
     SideBarComponent,
-    PanelComponent,
-    ServerComponent
+    ServerComponent,
+    MiddlewareComponent,
+    RouteComponent
   ],
   imports: [
     BrowserModule,
@@ -39,6 +42,7 @@ import { ServerComponent } from './component/nodes/server/server.component';
     MatSlideToggleModule,
     MatInputModule,
     ReactiveFormsModule,
+    FormsModule,
     MatIconModule,
     MatFormFieldModule,
     BrowserAnimationsModule
