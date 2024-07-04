@@ -13,7 +13,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NodeComponent } from './component/node/node.component';
 import { CanvasComponent } from './component/canvas/canvas.component';
 import { BoardComponent } from './component/board/board.component';
 import { SideBarComponent } from './component/side-bar/side-bar.component';
@@ -24,7 +23,6 @@ import { RouteComponent } from './component/nodes/route/route.component';
 @NgModule({
   declarations: [
     AppComponent,
-    NodeComponent,
     CanvasComponent,
     BoardComponent,
     SideBarComponent,
