@@ -1,41 +1,36 @@
 import { CdkDragEnd, CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 
 @Component({
-  selector: 'app-server',
-  templateUrl: './server.component.html',
-  styleUrls: ['./server.component.sass']
+  selector: 'app-route',
+  templateUrl: './route.component.html',
+  styleUrls: ['./route.component.sass']
 })
-export class ServerComponent {
-  @Input() nodeName: string = 'server';
+export class RouteComponent {
+  @Input() nodeName: string = ''; width: number = 200;
+  routeName: string = "";
   @Input() position: { x: number, y: number } = { x: 0, y: 0 };
-  width: number = 200;
-
+  @Output() routeChanged = new EventEmitter<string>();
   @Output() nodeMoved = new EventEmitter<{ name: string, position: { x: number, y: number } }>();
-  @Output() startConnection = new EventEmitter<{ node: any, position: { x: number, y: number }, name: string }>();
-
-  @Output() settingsChanged = new EventEmitter<{ port: string, dbUrl: string }>();
+  @Output() startConnection = new EventEmitter<any>();
   @Output() dragStarted = new EventEmitter<void>();
   @Output() dragEnded = new EventEmitter<void>();
+  @ViewChild('routeInput') routeInput: ElementRef | undefined;
 
-  serverForm!: FormGroup;
+  isEditing = false;
 
-  constructor(private fb: FormBuilder) { }
-
-  ngOnInit() {
-    this.serverForm = this.fb.group({
-      port: [''],
-      dbUrl: [''],
-      environment: [false], // false for development, true for production
-    });
+  enableEditing(): void {
+    this.isEditing = true;
+    setTimeout(() => this.routeInput!.nativeElement.focus(), 0);
   }
 
+  disableEditing(): void {
+    this.isEditing = false;
+  }
 
-  serverSettings = {
-    port: '3000',
-    dbUrl: 'mongodb://localhost:27017/mydb'
-  };
+  constructor() {
+    this.routeName = `/${this.nodeName}`
+  }
 
   onDragMoved(event: CdkDragMove): void {
     const { x, y, width } = event.source.element.nativeElement.getBoundingClientRect();
@@ -51,13 +46,11 @@ export class ServerComponent {
   onDragEnd(event: CdkDragEnd): void {
     this.dragEnded.emit();
   }
-
   startConnecting(event: MouseEvent): void {
     event.stopPropagation();
     this.dragStarted.emit();
     const x = this.position.x + this.width;
     const y = this.position.y;
     this.startConnection.emit({ node: this, position: { x, y }, name: this.nodeName });
-    console.log("sakdl;akd;a")
   }
 }

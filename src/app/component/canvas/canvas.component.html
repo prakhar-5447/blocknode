@@ -1,14 +1,20 @@
-<button class="add-btn" (click)="addNode()">Add Node</button>
+<button class="add-btn" (click)="addNode(NodeType.Route)">Add Generic Node</button>
 <div class="canvas-container" (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)"
   (mouseup)="onMouseUp()">
   <div class="virtual-space" [ngStyle]="{'transform': 'translate(' + panX + 'px, ' + panY + 'px)'}">
-    <app-node *ngFor="let node of nodes" [nodeName]="node.name" [position]="node.position"
-      (nodeMoved)="onNodeMoved($event)" (startConnection)="startConnection($event)"
-      (mouseup)="endConnection({ node: node })" (dragStarted)="onDragStarted()" (dragEnded)="onDragEnded()">
-    </app-node>
-    <app-server nodeName="server" [position]="server.position" (serverMoved)="onServerMoved($event)"
-      (startConnection)="startConnection($event)" (dragStarted)="onDragStarted()"
-      (dragEnded)="onDragEnded()"></app-server>
+    <ng-container *ngFor="let node of nodes">
+      <app-server *ngIf="node.type === NodeType.Server" [nodeName]="node.name" [position]="node.position"
+        (nodeMoved)="onNodeMoved($event)" (startConnection)="startConnection($event)"
+        (mouseup)="endConnection({ node: node })" (dragStarted)="onDragStarted()"
+        (dragEnded)="onDragEnded()"></app-server>
+      <app-route *ngIf="node.type === NodeType.Route" [nodeName]="node.name" [position]="node.position"
+        (nodeMoved)="onNodeMoved($event)" (startConnection)="startConnection($event)"
+        (mouseup)="endConnection({ node: node })" (dragStarted)="onDragStarted()"
+        (dragEnded)="onDragEnded()"></app-route>
+      <app-middleware *ngIf="node.type === NodeType.Middleware" [nodeName]="node.name" [position]="node.position"
+        (nodeMoved)="onNodeMoved($event)" (startConnection)="startConnection($event)" (dragStarted)="onDragStarted()"
+        (dragEnded)="onDragEnded()"></app-middleware>
+    </ng-container>
     <svg class="connections" [ngStyle]="{'transform': 'translate(' + -panX + 'px, ' + -panY + 'px)'}">
       <path *ngFor="let connection of connections" [attr.d]="generatePath(connection.fromNode, connection.toNode)"
         stroke="black" fill="none" />

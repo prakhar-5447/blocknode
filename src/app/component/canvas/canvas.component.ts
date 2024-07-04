@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Node, NodeType } from 'src/app/models/node';
 
 @Component({
   selector: 'app-canvas',
@@ -6,11 +7,11 @@ import { Component } from '@angular/core';
   styleUrls: ['./canvas.component.sass']
 })
 export class CanvasComponent {
-  server: { name: string, position: { x: number, y: number }, width: number } = {
-    name: "server", position: { x: 0, y: 0 }, width: 300
-  };
+  NodeType = NodeType;
+  nodes: Node[] = [
+    { name: 'Server', position: { x: 0, y: 0 }, width: 300, type: NodeType.Server }
+  ];
 
-  nodes: { name: string, position: { x: number, y: number }, width: number }[] = [];
   connections: { fromNode: any, toNode: any }[] = [];
   drawingConnection: any = null;
   cursorPosition: { x: number, y: number } = { x: 0, y: 0 };
@@ -55,24 +56,17 @@ export class CanvasComponent {
     this.isNodeDragging = false;
   }
 
-  addNode(): void {
-    const nodeName = `Node ${this.nodes.length + 1}`;
-    this.nodes.push({ name: nodeName, position: { x: 0, y: 0 }, width: 250 });
+  addNode(nodeType: NodeType): void {
+    var nodeName = `${nodeType} Node ${this.nodes.length + 1}`;
+    this.nodes.push({ name: nodeName, position: { x: 0, y: 0 }, width: 250, type: nodeType });
+    nodeName = `${nodeType} Node ${this.nodes.length + 1}`;
+    this.nodes.push({ name: nodeName, position: { x: 0, y: 0 }, width: 250, type: NodeType.Middleware });
   }
 
   onNodeMoved(event: { name: string, position: { x: number, y: number } }): void {
     const node = this.nodes.find(n => n.name === event.name);
     if (node) {
       node.position = {
-        x: event.position.x - this.panX,
-        y: event.position.y - this.panY
-      };
-    }
-  }
-
-  onServerMoved(event: { name: string, position: { x: number, y: number } }): void {
-    if (this.server) {
-      this.server.position = {
         x: event.position.x - this.panX,
         y: event.position.y - this.panY
       };
@@ -103,48 +97,47 @@ export class CanvasComponent {
     const start = { x: fromNode.position.x + this.panX - 250, y: fromNode.position.y + this.panY };
     const end = { x: toNode.position.x + this.panX - 250, y: toNode.position.y + this.panY };
 
-    // Calculate path based on relative positions
     let path = `M${start.x},${start.y} `;
 
-    // Determine the direction of the path
     if (start.x < end.x) {
-      path += `H${start.x - 50} `; // Move horizontally left 
+      path += `H${start.x - 50} `;
       if (Math.abs(start.y - end.y) < 100) {
-        // Move vertically first if y difference is less than 50
+
         if (start.y < end.y) {
-          path += `V${end.y + 100} `; // Move vertically up to align
+          path += `V${end.y + 100} `;
         } else {
-          path += `V${end.y - 100} `; // Move vertically down to align
+          path += `V${end.y - 100} `;
         }
-        path += `H${end.x - 50} `; // Move vertically down to align
-        path += `V${end.y} `; // Move vertically down to align
-        path += `H${end.x + 50} `; // Move vertically down to align
+        path += `H${end.x - 50} `;
+        path += `V${end.y} `;
+        path += `H${end.x + 50} `;
       } else {
-        path += `V${end.y} `; // Move vertically down to align
-        path += `H${end.x} `; // Move vertically down to align
+        path += `V${end.y} `;
+        path += `H${end.x} `;
       }
-      path += `H${end.x} `; // Move horizontally to the endpoint
+      path += `H${end.x} `;
     } else {
       if (Math.abs(start.y - end.y) < 100) {
-        path += `H${start.x - 50} `; // Move vertically down to align
+        path += `H${start.x - 50} `;
 
-        // Move vertically first if y difference is less than 50
+
         if (start.y < end.y) {
-          path += `V${end.y - 100} `; // Move vertically up to align
+          path += `V${end.y - 100} `;
         } else {
-          path += `V${end.y + 100} `; // Move vertically down to align
+          path += `V${end.y + 100} `;
         }
-        path += `H${end.x - 50} `; // Move vertically down to align
-        path += `V${end.y} `; // Move vertically down to align
-        path += `H${end.x + 50} `; // Move vertically down to align
+        path += `H${end.x - 50} `;
+        path += `V${end.y} `;
+        path += `H${end.x + 50} `;
 
       } else {
-        path += `H${end.x - 50} `; // Move horizontally left 
-        path += `V${end.y} `; // Move vertically down to align
+        path += `H${end.x - 50} `;
+        path += `V${end.y} `;
       }
-      path += `H${end.x} `; // Move horizontally to the endpoint
+      path += `H${end.x} `;
     }
 
     return path;
   }
+
 }
