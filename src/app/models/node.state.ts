@@ -9,4 +9,18 @@ export interface Node {
     position: { x: number, y: number };
     width: number;
     type: NodeType;
+
+}
+
+export interface CodeNode {
+    id: string;
+    name: string;
+    type: NodeType;
+    content: string,
+}
+
+
+export interface AppState {
+    nodes: CodeNode[];
+    selectedNodeId: string | null;
 }

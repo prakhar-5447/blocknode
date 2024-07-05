@@ -20,6 +20,7 @@ import { ServerComponent } from './component/nodes/server/server.component';
 import { MiddlewareComponent } from './component/nodes/middleware/middleware.component';
 import { RouteComponent } from './component/nodes/route/route.component';
 import { EditorComponent } from './component/editor/editor.component';
+import { StoreModule } from '@ngrx/store';
 
 @NgModule({
   declarations: [
@@ -45,7 +46,8 @@ import { EditorComponent } from './component/editor/editor.component';
     FormsModule,
     MatIconModule,
     MatFormFieldModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    StoreModule.forRoot({}, {})
   ],
   providers: [],
   bootstrap: [AppComponent]

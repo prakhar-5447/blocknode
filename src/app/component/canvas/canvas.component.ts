@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Node, NodeType } from 'src/app/models/node';
+import { Node, NodeType } from 'src/app/models/node.state';
 
 @Component({
   selector: 'app-canvas',
