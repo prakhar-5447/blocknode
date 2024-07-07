@@ -21,6 +21,7 @@ import { MiddlewareComponent } from './component/nodes/middleware/middleware.com
 import { RouteComponent } from './component/nodes/route/route.component';
 import { EditorComponent } from './component/editor/editor.component';
 import { StoreModule } from '@ngrx/store';
+import { nodeReducer } from './store/node.reducer';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,7 @@ import { StoreModule } from '@ngrx/store';
     MatIconModule,
     MatFormFieldModule,
     BrowserAnimationsModule,
-    StoreModule.forRoot({}, {})
+    StoreModule.forRoot({ appState: nodeReducer })
   ],
   providers: [],
   bootstrap: [AppComponent]

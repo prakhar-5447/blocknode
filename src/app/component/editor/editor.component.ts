@@ -1,4 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
+import { Store, select } from '@ngrx/store';
+import { map } from 'rxjs/operators';
+import { AppState } from 'src/app/store/node.state';
+import * as NodeSelectors from '../../store/node.selectors';
+import * as NodeActions from '../../store/node.actions';
 
 @Component({
   selector: 'app-editor',
@@ -6,10 +11,22 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./editor.component.sass']
 })
 export class EditorComponent {
-  @Input() code: string | null = null;
+  code: string = '';
+  id: string = "";
+  constructor(private store: Store<{ appState: AppState }>) { }
 
-  getCodeForNode(nodeName: string): string {
-    // Replace with logic to fetch or generate code for the node
-    return `// Code for ${nodeName}`;
+  ngOnInit(): void {
+    this.store.pipe(
+      select(NodeSelectors.selectSelectedNode),
+      map(node => node ? ({ id: node.id, code: node.content }) : ({ id: '', code: '' }))
+    ).subscribe(({ id, code }) => {
+      this.id = id;
+      this.code = code ?? "";
+    });
+  }
+
+  updateCode(newCode: string): void {
+    this.code = newCode;
+    this.store.dispatch(NodeActions.updateNodeContent({ id: this.id, content: newCode }));
   }
 }

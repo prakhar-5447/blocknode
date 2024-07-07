@@ -1,5 +1,11 @@
 import { Component } from '@angular/core';
-import { Node, NodeType } from 'src/app/models/node.state';
+import { Store, select } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { AppState } from 'src/app/store/node.state';
+import * as NodeSelectors from '../../store/node.selectors';
+import * as NodeActions from '../../store/node.actions';
+import { NodeType, Node } from 'src/app/models/node.model';
+import { Connection } from 'src/app/models/connection.model';
 
 @Component({
   selector: 'app-canvas',
@@ -7,12 +13,15 @@ import { Node, NodeType } from 'src/app/models/node.state';
   styleUrls: ['./canvas.component.sass']
 })
 export class CanvasComponent {
+  nodes$: Observable<Node[]>;
   NodeType = NodeType;
-  nodes: Node[] = [
-    { name: 'Server', position: { x: 0, y: 0 }, width: 300, type: NodeType.Server }
-  ];
+  connections$: Observable<Connection[]>;
 
-  connections: { fromNode: any, toNode: any }[] = [];
+  constructor(private store: Store<{ appState: AppState }>) {
+    this.nodes$ = this.store.pipe(select(NodeSelectors.selectNodes));
+    this.connections$ = this.store.pipe(select(NodeSelectors.selectConnections));
+  }
+
   drawingConnection: any = null;
   cursorPosition: { x: number, y: number } = { x: 0, y: 0 };
 
@@ -52,43 +61,50 @@ export class CanvasComponent {
     this.isNodeDragging = true;
   }
 
-  onDragEnded(): void {
+  onDragEnded(event: { name: string, position: { x: number, y: number } }): void {
     this.isNodeDragging = false;
+
+    const updatedPosition = {
+      x: event.position.x - this.panX,
+      y: event.position.y - this.panY
+    };
+    this.store.dispatch(NodeActions.updateNodePosition({ name: event.name, position: updatedPosition }));
   }
 
   addNode(nodeType: NodeType): void {
-    var nodeName = `${nodeType} Node ${this.nodes.length + 1}`;
-    this.nodes.push({ name: nodeName, position: { x: 0, y: 0 }, width: 250, type: nodeType });
-    nodeName = `${nodeType} Node ${this.nodes.length + 1}`;
-    this.nodes.push({ name: nodeName, position: { x: 0, y: 0 }, width: 250, type: NodeType.Middleware });
+    const newNode: Node = {
+      id: "1",
+      name: `${nodeType} Node`,
+      position: { x: 0, y: 0 },
+      width: 250,
+      type: nodeType
+    };
+    this.store.dispatch(NodeActions.addNode({ node: newNode }));
   }
 
   onNodeMoved(event: { name: string, position: { x: number, y: number } }): void {
-    const node = this.nodes.find(n => n.name === event.name);
-    if (node) {
-      node.position = {
-        x: event.position.x - this.panX,
-        y: event.position.y - this.panY
-      };
-    }
+    const updatedPosition = {
+      x: event.position.x - this.panX,
+      y: event.position.y - this.panY
+    };
   }
 
-  startConnection(startPosition: { node: any, position: { x: number, y: number }, name: string }): void {
+  startConnection(startPosition: { node: Node, position: { x: number, y: number }, name: string }): void {
     this.drawingConnection = { fromNode: startPosition.node, toNode: null };
     this.cursorPosition = { x: startPosition.position.x, y: startPosition.position.y };
     this.isNodeDragging = true;
   }
 
-  endConnection(endPosition: { node: any }): void {
+  endConnection(endPosition: { node: Node }): void {
     if (this.drawingConnection) {
-      const targetNode = this.nodes.find(node => node === endPosition.node);
-      if (targetNode) {
-        this.drawingConnection.toNode = targetNode;
-        this.connections.push(this.drawingConnection);
-      }
+      const connectionToAdd: Connection = {
+        fromNode: this.drawingConnection.fromNode,
+        toNode: endPosition.node
+      };
+      this.store.dispatch(NodeActions.addConnection({ connection: connectionToAdd }));
+
       this.drawingConnection = null;
       this.isNodeDragging = false;
-
       this.cursorPosition = { x: 0, y: 0 };
     }
   }

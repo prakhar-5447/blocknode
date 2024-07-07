@@ -1,1 +1,3 @@
-<p>{{code}}</p>
+<div class="editor">
+    <textarea [(ngModel)]="code" (ngModelChange)="updateCode($event)"></textarea>
+</div>

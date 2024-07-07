@@ -1,6 +1,9 @@
 import { CdkDragEnd, CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/store/node.state';
+import { Node, NodeType } from '../../../models/node.model';
 
 @Component({
   selector: 'app-server',
@@ -8,20 +11,22 @@ import { FormBuilder, FormGroup } from '@angular/forms';
   styleUrls: ['./server.component.sass']
 })
 export class ServerComponent {
-  @Input() nodeName: string = 'server';
+  @Input() nodeName: string = 'Server';
   @Input() position: { x: number, y: number } = { x: 0, y: 0 };
-  width: number = 200;
-
   @Output() nodeMoved = new EventEmitter<{ name: string, position: { x: number, y: number } }>();
   @Output() startConnection = new EventEmitter<{ node: any, position: { x: number, y: number }, name: string }>();
 
   @Output() settingsChanged = new EventEmitter<{ port: string, dbUrl: string }>();
   @Output() dragStarted = new EventEmitter<void>();
-  @Output() dragEnded = new EventEmitter<void>();
+  @Output() dragEnded = new EventEmitter<{ name: string, position: { x: number, y: number } }>();
 
+  width: number = 200;
+  pos: { x: number, y: number } = { x: 0, y: 0 };
   serverForm!: FormGroup;
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private store: Store<{ appState: AppState }>) {
+
+  }
 
   ngOnInit() {
     this.serverForm = this.fb.group({
@@ -39,9 +44,9 @@ export class ServerComponent {
 
   onDragMoved(event: CdkDragMove): void {
     const { x, y, width } = event.source.element.nativeElement.getBoundingClientRect();
-    this.position = { x, y };
+    this.pos = { x, y };
     this.width = width;
-    this.nodeMoved.emit({ name: this.nodeName, position: this.position });
+    // this.nodeMoved.emit({ name: this.nodeName, position: this.pos });
   }
 
   onDragStart(event: CdkDragStart): void {
@@ -49,7 +54,11 @@ export class ServerComponent {
   }
 
   onDragEnd(event: CdkDragEnd): void {
-    this.dragEnded.emit();
+    // const updatedPosition = {
+    //   x: this.pos.x,
+    //   y: this.pos.y
+    // };
+    this.dragEnded.emit({ name: this.nodeName, position: this.pos });
   }
 
   startConnecting(event: MouseEvent): void {
@@ -57,7 +66,7 @@ export class ServerComponent {
     this.dragStarted.emit();
     const x = this.position.x + this.width;
     const y = this.position.y;
-    this.startConnection.emit({ node: this, position: { x, y }, name: this.nodeName });
-    console.log("sakdl;akd;a")
+    const node: Node = { id: "10", position: this.position, width: this.width, name: this.nodeName, type: NodeType.Server };
+    this.startConnection.emit({ node: node, position: { x, y }, name: this.nodeName });
   }
 }

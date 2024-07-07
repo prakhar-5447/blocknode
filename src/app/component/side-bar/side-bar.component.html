@@ -1,4 +1,8 @@
 <div class="sidebar">
-    <div class="tab" (click)="selectTab('canvas')">Canvas</div>
-    <div class="tab" *ngFor="let node of nodes" (click)="selectTab(node.name)">{{ node.name }}</div>
+    <div class="sidebar">
+        <div class="tab" (click)="selectTab('canvas')">Canvas</div>
+        <div *ngFor="let node of nodes$ | async" class="tab" (click)="selectNode(node.id)">
+            {{ node.name }} {{node.position.x}} {{node.position.y}}
+        </div>
+    </div>
 </div>

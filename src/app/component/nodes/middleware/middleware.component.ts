@@ -1,5 +1,10 @@
 import { CdkDragEnd, CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/store/node.state';
+import { Node } from "../../../models/node.model";
+import * as NodeActions from '../../../store/node.actions';
+import { NodeType } from 'src/app/models/node.model';
 
 @Component({
   selector: 'app-middleware',
@@ -7,13 +12,18 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./middleware.component.sass']
 })
 export class MiddlewareComponent {
-  @Input() nodeName: string = ''; width: number = 200;
+  @Input() nodeName: string = 'Middleware Node'; width: number = 200;
   @Input() position: { x: number, y: number } = { x: 0, y: 0 };
   middlewareCode: string = '';
   @Output() nodeMoved = new EventEmitter<{ name: string, position: { x: number, y: number } }>();
-  @Output() startConnection = new EventEmitter<any>();
   @Output() dragStarted = new EventEmitter<void>();
-  @Output() dragEnded = new EventEmitter<void>();
+  @Output() dragEnded = new EventEmitter<{ name: string, position: { x: number, y: number } }>();
+
+
+  pos: { x: number, y: number } = { x: 0, y: 0 };
+
+  constructor(private store: Store<{ appState: AppState }>) { }
+
   onKeyDown(event: KeyboardEvent): void {
     // Handle tab key for indentation (optional)
     if (event.key === 'Tab') {
@@ -30,9 +40,9 @@ export class MiddlewareComponent {
 
   onDragMoved(event: CdkDragMove): void {
     const { x, y, width } = event.source.element.nativeElement.getBoundingClientRect();
-    this.position = { x, y };
+    this.pos = { x: x, y: y };
     this.width = width;
-    this.nodeMoved.emit({ name: this.nodeName, position: this.position });
+    // this.nodeMoved.emit({ name: this.nodeName, position: this.position });
   }
 
   onDragStart(event: CdkDragStart): void {
@@ -40,13 +50,22 @@ export class MiddlewareComponent {
   }
 
   onDragEnd(event: CdkDragEnd): void {
-    this.dragEnded.emit();
+    const updatedPosition = {
+      x: this.pos.x,
+      y: this.pos.y
+    };
+    this.dragEnded.emit({ name: this.nodeName, position: updatedPosition });
   }
-  startConnecting(event: MouseEvent): void {
-    event.stopPropagation();
-    this.dragStarted.emit();
-    const x = this.position.x + this.width;
-    const y = this.position.y;
-    this.startConnection.emit({ node: this, position: { x, y }, name: this.nodeName });
+
+  addNode(): void {
+    const newNode: Node = {
+      id: Date.now().toString(),
+      name: this.nodeName,
+      type: NodeType.Middleware,
+      content: this.middlewareCode,
+      width: 250,
+      position: { x: 0, y: 0 }
+    };
+    this.store.dispatch(NodeActions.addNode({ node: newNode }));
   }
 }

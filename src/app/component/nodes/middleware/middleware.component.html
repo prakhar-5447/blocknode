@@ -1,4 +1,4 @@
-<div class="middleware-editor" cdkDrag (cdkDragMoved)="onDragMoved($event)" (cdkDragStarted)="onDragStart($event)"
-    (cdkDragEnded)="onDragEnd($event)">
+<div class="middleware-editor" cdkDrag [style.left.px]="position.x - 250" [style.top.px]="position.y"
+    (cdkDragMoved)="onDragMoved($event)" (cdkDragStarted)="onDragStart($event)" (cdkDragEnded)="onDragEnd($event)">{{this.position.x}} {{this.position.y}}
     <!-- <textarea [(ngModel)]="middlewareCode" class="code-editor" (keydown)="onKeyDown($event)"></textarea> -->
 </div>
