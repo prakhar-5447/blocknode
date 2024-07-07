@@ -42,6 +42,22 @@ export const nodeReducer = createReducer(
       node.name === name ? { ...node, position } : node
     );
 
+    // // Update connections based on new node positions
+    // const updatedConnections = state.connections.map(connection =>
+    // ({
+    //   ...connection,
+    //   fromNode: connection.fromNode.name === name ? { ...connection.fromNode, position } : connection.fromNode,
+    //   toNode: connection.toNode.name === name ? { ...connection.toNode, position } : connection.toNode
+    // })
+    // );
+
+    return {
+      ...state,
+      nodes: updatedNodes,
+      // connections: updatedConnections,
+    };
+  }),
+  on(NodeActions.updateConnectionPosition, (state, { name, position }) => {
     // Update connections based on new node positions
     const updatedConnections = state.connections.map(connection =>
     ({
@@ -53,7 +69,6 @@ export const nodeReducer = createReducer(
 
     return {
       ...state,
-      nodes: updatedNodes,
       connections: updatedConnections,
     };
   }),

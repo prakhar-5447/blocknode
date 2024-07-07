@@ -46,7 +46,7 @@ export class ServerComponent {
     const { x, y, width } = event.source.element.nativeElement.getBoundingClientRect();
     this.pos = { x, y };
     this.width = width;
-    // this.nodeMoved.emit({ name: this.nodeName, position: this.pos });
+    this.nodeMoved.emit({ name: this.nodeName, position: this.pos });
   }
 
   onDragStart(event: CdkDragStart): void {

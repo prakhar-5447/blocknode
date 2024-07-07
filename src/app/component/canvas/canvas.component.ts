@@ -87,6 +87,7 @@ export class CanvasComponent {
       x: event.position.x - this.panX,
       y: event.position.y - this.panY
     };
+    this.store.dispatch(NodeActions.updateConnectionPosition({ name: event.name, position: updatedPosition }));
   }
 
   startConnection(startPosition: { node: Node, position: { x: number, y: number }, name: string }): void {
