@@ -32,7 +32,7 @@ import { nodeReducer } from './store/node.reducer';
     ServerComponent,
     MiddlewareComponent,
     RouteComponent,
-    EditorComponent
+    EditorComponent,
   ],
   imports: [
     BrowserModule,
@@ -48,7 +48,8 @@ import { nodeReducer } from './store/node.reducer';
     MatIconModule,
     MatFormFieldModule,
     BrowserAnimationsModule,
-    StoreModule.forRoot({ appState: nodeReducer })
+    StoreModule.forRoot({ appState: nodeReducer }),
+    
   ],
   providers: [],
   bootstrap: [AppComponent]
