@@ -91,20 +91,21 @@ export class CanvasComponent {
     this.store.dispatch(NodeActions.updateConnectionPosition({ name: event.name, position: updatedPosition, width: event.width }));
   }
 
-  startConnection(startPosition: { node: Node, position: { x: number, y: number }, name: string }): void {
-    this.drawingConnection = { fromNode: startPosition.node, toNode: null };
+  startConnection(startPosition: { node: Node, position: { x: number, y: number }, name: string, type: NodeType }): void {
+    this.drawingConnection = { fromNode: startPosition.node, toNode: null, type: startPosition.type };
     this.cursorPosition = { x: startPosition.position.x, y: startPosition.position.y };
     this.isNodeDragging = true;
   }
 
   endConnection(endPosition: { node: Node }): void {
     if (this.drawingConnection) {
-      const connectionToAdd: Connection = {
-        fromNode: this.drawingConnection.fromNode,
-        toNode: endPosition.node
-      };
-      this.store.dispatch(NodeActions.addConnection({ connection: connectionToAdd }));
-
+      if (endPosition.node.type == this.drawingConnection.type) {
+        const connectionToAdd: Connection = {
+          fromNode: this.drawingConnection.fromNode,
+          toNode: endPosition.node
+        };
+        this.store.dispatch(NodeActions.addConnection({ connection: connectionToAdd }));
+      }
       this.drawingConnection = null;
       this.isNodeDragging = false;
       this.cursorPosition = { x: 0, y: 0 };

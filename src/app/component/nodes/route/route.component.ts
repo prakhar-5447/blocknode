@@ -12,7 +12,7 @@ export class RouteComponent {
   @Input() position: { x: number, y: number } = { x: 0, y: 0 };
   @Output() routeChanged = new EventEmitter<string>();
   @Output() nodeMoved = new EventEmitter<{ name: string, position: { x: number, y: number }, width: number }>();
-  @Output() startConnection = new EventEmitter<{ node: any, position: { x: number, y: number }, name: string }>();
+  @Output() startConnection = new EventEmitter<{ node: any, position: { x: number, y: number }, name: string, type: NodeType }>();
   @Output() dragStarted = new EventEmitter<void>();
   @Output() dragEnded = new EventEmitter<{ name: string, position: { x: number, y: number } }>();
   @ViewChild('routeInput') routeInput: ElementRef | undefined;
@@ -62,6 +62,6 @@ export class RouteComponent {
     const x = this.position.x + this.width;
     const y = this.position.y;
     const node: Node = { id: "10", position: { x: this.position.x + this.width, y: this.position.y }, width: this.width, name: this.nodeName, type: NodeType.Route };
-    this.startConnection.emit({ node: node, position: { x, y }, name: this.nodeName });
+    this.startConnection.emit({ node: node, position: { x, y }, name: this.nodeName, type: NodeType.Middleware });
   }
 }

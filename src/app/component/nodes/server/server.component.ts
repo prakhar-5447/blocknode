@@ -14,7 +14,7 @@ export class ServerComponent {
   @Input() nodeName: string = 'Server';
   @Input() position: { x: number, y: number } = { x: 0, y: 0 };
   @Output() nodeMoved = new EventEmitter<{ name: string, position: { x: number, y: number }, width: number }>();
-  @Output() startConnection = new EventEmitter<{ node: any, position: { x: number, y: number }, name: string }>();
+  @Output() startConnection = new EventEmitter<{ node: any, position: { x: number, y: number }, name: string, type: NodeType }>();
 
   @Output() settingsChanged = new EventEmitter<{ port: string, dbUrl: string }>();
   @Output() dragStarted = new EventEmitter<void>();
@@ -69,6 +69,6 @@ export class ServerComponent {
     const x = this.position.x + this.width;
     const y = this.position.y;
     const node: Node = { id: "10", position: { x: this.position.x + this.width, y: this.position.y }, width: this.width, name: this.nodeName, type: NodeType.Server };
-    this.startConnection.emit({ node: node, position: { x, y }, name: this.nodeName });
+    this.startConnection.emit({ node: node, position: { x, y }, name: this.nodeName, type: NodeType.Route });
   }
 }
