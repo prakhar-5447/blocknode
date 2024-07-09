@@ -106,4 +106,18 @@ export class EditorComponent implements AfterViewInit {
       }
     });
   }
+
+  // onKeyDown(event: KeyboardEvent): void {
+  //   // Handle tab key for indentation (optional)
+  //   if (event.key === 'Tab') {
+  //     event.preventDefault();
+  //     const textarea = event.target as HTMLTextAreaElement;
+  //     const start = textarea.selectionStart;
+  //     const end = textarea.selectionEnd;
+  //     // Insert tab at cursor position
+  //     this.middlewareCode = this.middlewareCode.substring(0, start) + '\t' + this.middlewareCode.substring(end);
+  //     // Move cursor forward
+  //     textarea.selectionStart = textarea.selectionEnd = start + 1;
+  //   }
+  // }
 }

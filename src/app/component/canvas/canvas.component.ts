@@ -77,7 +77,8 @@ export class CanvasComponent {
       name: `${nodeType} Node`,
       position: { x: 1000, y: 200 },
       width: 250,
-      type: nodeType
+      type: nodeType,
+      content: "const middleware = (req, res, next) => {\n  console.log(\'Request received\');\n  next();\n};"
     };
     this.store.dispatch(NodeActions.addNode({ node: newNode }));
   }

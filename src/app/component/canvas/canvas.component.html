@@ -10,7 +10,7 @@
       <app-route *ngIf="node.type === NodeType.Route" [nodeName]="node.name" [position]="node.position"
         (startConnection)="startConnection($event)" (mouseup)="endConnection({ node: node })"
         (nodeMoved)="onNodeMoved($event)" (dragStarted)="onDragStarted()" (dragEnded)="onDragEnded($event)"></app-route>
-      <app-middleware *ngIf="node.type === NodeType.Middleware" [nodeName]="node.name" [position]="node.position"
+      <app-middleware *ngIf="node.type === NodeType.Middleware" [nodeName]="node.name" [position]="node.position" [code]="node.content!"
         (nodeMoved)="onNodeMoved($event)" (dragStarted)="onDragStarted()" (mouseup)="endConnection({ node: node })"
         (dragEnded)="onDragEnded($event)"></app-middleware>
     </ng-container>
