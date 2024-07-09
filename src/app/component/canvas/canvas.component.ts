@@ -75,19 +75,19 @@ export class CanvasComponent {
     const newNode: Node = {
       id: "1",
       name: `${nodeType} Node`,
-      position: { x: 0, y: 0 },
+      position: { x: 1000, y: 200 },
       width: 250,
       type: nodeType
     };
     this.store.dispatch(NodeActions.addNode({ node: newNode }));
   }
 
-  onNodeMoved(event: { name: string, position: { x: number, y: number } }): void {
+  onNodeMoved(event: { name: string, position: { x: number, y: number }, width: number }): void {
     const updatedPosition = {
       x: event.position.x - this.panX,
       y: event.position.y - this.panY
     };
-    this.store.dispatch(NodeActions.updateConnectionPosition({ name: event.name, position: updatedPosition }));
+    this.store.dispatch(NodeActions.updateConnectionPosition({ name: event.name, position: updatedPosition, width: event.width }));
   }
 
   startConnection(startPosition: { node: Node, position: { x: number, y: number }, name: string }): void {

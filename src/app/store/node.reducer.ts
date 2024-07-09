@@ -8,11 +8,17 @@ const initialState: AppState = {
   nodes: [{
     id: '0',
     name: 'Server',
-    position: { x: 0, y: 0 },
+    position: { x: 300, y: 300 },
     width: 300,
     type: NodeType.Server,
     port: 3000,
     dbUrl: 'mongodb://localhost:27017/mydb'
+  }, {
+    id: '1',
+    name: 'Route Node',
+    position: { x: 1000, y: 300 },
+    width: 250,
+    type: NodeType.Route,
   }],
   selectedNodeId: null,
   connections: []
@@ -42,28 +48,19 @@ export const nodeReducer = createReducer(
       node.name === name ? { ...node, position } : node
     );
 
-    // // Update connections based on new node positions
-    // const updatedConnections = state.connections.map(connection =>
-    // ({
-    //   ...connection,
-    //   fromNode: connection.fromNode.name === name ? { ...connection.fromNode, position } : connection.fromNode,
-    //   toNode: connection.toNode.name === name ? { ...connection.toNode, position } : connection.toNode
-    // })
-    // );
-
     return {
       ...state,
       nodes: updatedNodes,
       // connections: updatedConnections,
     };
   }),
-  on(NodeActions.updateConnectionPosition, (state, { name, position }) => {
+  on(NodeActions.updateConnectionPosition, (state, { name, position, width }) => {
     // Update connections based on new node positions
     const updatedConnections = state.connections.map(connection =>
     ({
       ...connection,
       fromNode: connection.fromNode.name === name ? { ...connection.fromNode, position } : connection.fromNode,
-      toNode: connection.toNode.name === name ? { ...connection.toNode, position } : connection.toNode
+      toNode: connection.toNode.name === name ? { ...connection.toNode,position  } : connection.toNode
     })
     );
 

@@ -13,14 +13,14 @@ import { Node, NodeType } from '../../../models/node.model';
 export class ServerComponent {
   @Input() nodeName: string = 'Server';
   @Input() position: { x: number, y: number } = { x: 0, y: 0 };
-  @Output() nodeMoved = new EventEmitter<{ name: string, position: { x: number, y: number } }>();
+  @Output() nodeMoved = new EventEmitter<{ name: string, position: { x: number, y: number }, width: number }>();
   @Output() startConnection = new EventEmitter<{ node: any, position: { x: number, y: number }, name: string }>();
 
   @Output() settingsChanged = new EventEmitter<{ port: string, dbUrl: string }>();
   @Output() dragStarted = new EventEmitter<void>();
   @Output() dragEnded = new EventEmitter<{ name: string, position: { x: number, y: number } }>();
 
-  width: number = 200;
+  width: number = 300;
   pos: { x: number, y: number } = { x: 0, y: 0 };
   serverForm!: FormGroup;
 
@@ -44,9 +44,11 @@ export class ServerComponent {
 
   onDragMoved(event: CdkDragMove): void {
     const { x, y, width } = event.source.element.nativeElement.getBoundingClientRect();
-    this.pos = { x, y };
+    this.pos = { x: x + this.width, y: y };
     this.width = width;
-    this.nodeMoved.emit({ name: this.nodeName, position: this.pos });
+    this.nodeMoved.emit({
+      name: this.nodeName, position: this.pos, width: this.width
+    });
   }
 
   onDragStart(event: CdkDragStart): void {
@@ -54,11 +56,11 @@ export class ServerComponent {
   }
 
   onDragEnd(event: CdkDragEnd): void {
-    // const updatedPosition = {
-    //   x: this.pos.x,
-    //   y: this.pos.y
-    // };
-    this.dragEnded.emit({ name: this.nodeName, position: this.pos });
+    const updatedPosition = {
+      x: this.pos.x - this.width,
+      y: this.pos.y
+    };
+    this.dragEnded.emit({ name: this.nodeName, position: updatedPosition });
   }
 
   startConnecting(event: MouseEvent): void {
@@ -66,7 +68,7 @@ export class ServerComponent {
     this.dragStarted.emit();
     const x = this.position.x + this.width;
     const y = this.position.y;
-    const node: Node = { id: "10", position: this.position, width: this.width, name: this.nodeName, type: NodeType.Server };
+    const node: Node = { id: "10", position: { x: this.position.x + this.width, y: this.position.y }, width: this.width, name: this.nodeName, type: NodeType.Server };
     this.startConnection.emit({ node: node, position: { x, y }, name: this.nodeName });
   }
 }

@@ -8,10 +8,10 @@ import { Node, NodeType } from '../../../models/node.model';
   styleUrls: ['./route.component.sass']
 })
 export class RouteComponent {
-  @Input() nodeName: string = 'Route Node'; width: number = 200;
+  @Input() nodeName: string = 'Route Node'; width: number = 250;
   @Input() position: { x: number, y: number } = { x: 0, y: 0 };
   @Output() routeChanged = new EventEmitter<string>();
-  @Output() nodeMoved = new EventEmitter<{ name: string, position: { x: number, y: number } }>();
+  @Output() nodeMoved = new EventEmitter<{ name: string, position: { x: number, y: number }, width: number }>();
   @Output() startConnection = new EventEmitter<{ node: any, position: { x: number, y: number }, name: string }>();
   @Output() dragStarted = new EventEmitter<void>();
   @Output() dragEnded = new EventEmitter<{ name: string, position: { x: number, y: number } }>();
@@ -37,9 +37,11 @@ export class RouteComponent {
 
   onDragMoved(event: CdkDragMove): void {
     const { x, y, width } = event.source.element.nativeElement.getBoundingClientRect();
-    this.pos = { x: x, y: y };
+    this.pos = { x: x + this.width, y: y };
     this.width = width;
-    this.nodeMoved.emit({ name: this.nodeName, position: this.pos });
+    this.nodeMoved.emit({
+      name: this.nodeName, position: this.pos, width: this.width
+    });
   }
 
   onDragStart(event: CdkDragStart): void {
@@ -48,7 +50,7 @@ export class RouteComponent {
 
   onDragEnd(event: CdkDragEnd): void {
     const updatedPosition = {
-      x: this.pos.x,
+      x: this.pos.x - this.width,
       y: this.pos.y
     };
     this.dragEnded.emit({ name: this.nodeName, position: updatedPosition });
@@ -59,7 +61,7 @@ export class RouteComponent {
     this.dragStarted.emit();
     const x = this.position.x + this.width;
     const y = this.position.y;
-    const node: Node = { id: "10", position: this.position, width: this.width, name: this.nodeName, type: NodeType.Route };
+    const node: Node = { id: "10", position: { x: this.position.x + this.width, y: this.position.y }, width: this.width, name: this.nodeName, type: NodeType.Route };
     this.startConnection.emit({ node: node, position: { x, y }, name: this.nodeName });
   }
 }

@@ -3,6 +3,8 @@
     <h3 *ngIf="!isEditing" (dblclick)="enableEditing()">{{ routeName }}</h3>
     <input *ngIf="isEditing" #routeInput [(ngModel)]="routeName" (blur)="disableEditing()"
         (keyup.enter)="disableEditing()" />
-    <span class="connect-icon" (mousedown)="startConnecting($event)">+</span>
-    <span class="middleware-icon" (mousedown)="startConnecting($event)"></span>
+    <div class="buttons">
+        <span (mousedown)="startConnecting($event)"></span>
+        <span (mousedown)="startConnecting($event)"></span>
+    </div>
 </div>

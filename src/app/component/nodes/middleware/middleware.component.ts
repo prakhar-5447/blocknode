@@ -12,10 +12,10 @@ import { NodeType } from 'src/app/models/node.model';
   styleUrls: ['./middleware.component.sass']
 })
 export class MiddlewareComponent {
-  @Input() nodeName: string = 'Middleware Node'; width: number = 200;
+  @Input() nodeName: string = 'Middleware Node'; width: number = 250;
   @Input() position: { x: number, y: number } = { x: 0, y: 0 };
   middlewareCode: string = '';
-  @Output() nodeMoved = new EventEmitter<{ name: string, position: { x: number, y: number } }>();
+  @Output() nodeMoved = new EventEmitter<{ name: string, position: { x: number, y: number }, width: number }>();
   @Output() dragStarted = new EventEmitter<void>();
   @Output() dragEnded = new EventEmitter<{ name: string, position: { x: number, y: number } }>();
 
@@ -42,7 +42,9 @@ export class MiddlewareComponent {
     const { x, y, width } = event.source.element.nativeElement.getBoundingClientRect();
     this.pos = { x: x, y: y };
     this.width = width;
-    // this.nodeMoved.emit({ name: this.nodeName, position: this.position });
+    this.nodeMoved.emit({
+      name: this.nodeName, position: this.pos, width: this.width
+    });
   }
 
   onDragStart(event: CdkDragStart): void {

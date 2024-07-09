@@ -25,40 +25,28 @@
         outline: none
         font-size: inherit
 
-    .connect-icon
-        cursor: pointer
-        width: 20px
-        height: 20px
-        border-radius: 100px
-        display: flex
-        justify-content: center
-        align-items: center
-        padding: 4px
-        font-size: 18px
-        color: white
+    .buttons
         position: absolute
-        background: #809bd6
-        border: 2px solid #3e69c4
         top: 0px
         bottom: 0px
-        right: -10px
+        right: -7px
         margin: auto
-
-    .middleware-icon
-        cursor: pointer
-        width: 20px
-        height: 20px
-        border-radius: 100px
         display: flex
+        flex-direction: column
         justify-content: center
-        align-items: center
-        padding: 4px
-        font-size: 18px
-        color: white
-        position: absolute
-        background: #80c0d6
-        border: 2px solid #3eb0c4
-        top: -10px
-        left: 0px
-        right: 0px
-        margin: auto
+
+        span
+            cursor: pointer
+            width: 14px
+            height: 14px
+            border-radius: 100px
+            display: flex
+            justify-content: center
+            align-items: center
+            padding: 4px
+            font-size: 18px
+            color: white
+            background: #809bd6
+            border: 2px solid #3e69c4
+            &:first-child
+                margin-bottom: 5px

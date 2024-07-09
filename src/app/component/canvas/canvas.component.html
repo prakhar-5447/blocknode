@@ -1,4 +1,4 @@
-<button class="add-btn" (click)="addNode(NodeType.Route)">Add Generic Node</button>
+<button class="add-btn" (click)="addNode(NodeType.Middleware)">Add Generic Node</button>
 <div class="canvas-container" (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)"
   (mouseup)="onMouseUp()">
   <div class="virtual-space" [ngStyle]="{'transform': 'translate(' + panX + 'px, ' + panY + 'px)'}">
@@ -15,10 +15,31 @@
         (dragEnded)="onDragEnded($event)"></app-middleware>
     </ng-container>
     <svg class="connections" [ngStyle]="{'transform': 'translate(' + -panX + 'px, ' + -panY + 'px)'}">
+      <!-- Define neon glow filter -->
+      <defs>
+        <filter id="neon">
+          <feGaussianBlur stdDeviation="3.5" result="coloredBlur"></feGaussianBlur>
+          <feMerge>
+            <feMergeNode in="coloredBlur"></feMergeNode>
+            <feMergeNode in="SourceGraphic"></feMergeNode>
+          </feMerge>
+        </filter>
+      </defs>
+    
+      <!-- Render connections with neon effect -->
       <path *ngFor="let connection of connections$ | async"
-        [attr.d]="generatePath(connection.fromNode, connection.toNode)" stroke="black" fill="none" />
-      <path *ngIf="drawingConnection" [attr.d]="generatePath(drawingConnection.fromNode, { position: cursorPosition })"
-        stroke="red" fill="none" />
+            [attr.d]="generatePath(connection.fromNode, connection.toNode)" 
+            stroke="cyan" 
+            stroke-width="2"
+            fill="none"
+            filter="url(#neon)" />
+      <path *ngIf="drawingConnection" 
+            [attr.d]="generatePath(drawingConnection.fromNode, { position: cursorPosition })"
+            stroke="red"
+            stroke-width="2"
+            fill="none"
+            filter="url(#neon)" />
     </svg>
+    
   </div>
 </div>
