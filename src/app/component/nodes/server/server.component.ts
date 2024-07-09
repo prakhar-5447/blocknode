@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/node.state';
-import { Node, NodeType } from '../../../models/node.model';
+import { Enviroment, Node, NodeType } from '../../../models/node.model';
 
 @Component({
   selector: 'app-server',
@@ -13,6 +13,10 @@ import { Node, NodeType } from '../../../models/node.model';
 export class ServerComponent {
   @Input() nodeName: string = 'Server';
   @Input() position: { x: number, y: number } = { x: 0, y: 0 };
+  @Input() port: number = 0;
+  @Input() dburl: string = '';
+  @Input() env!: Enviroment;
+
   @Output() nodeMoved = new EventEmitter<{ name: string, position: { x: number, y: number }, width: number }>();
   @Output() startConnection = new EventEmitter<{ node: any, position: { x: number, y: number }, name: string, type: NodeType }>();
 
@@ -30,17 +34,11 @@ export class ServerComponent {
 
   ngOnInit() {
     this.serverForm = this.fb.group({
-      port: [''],
-      dbUrl: [''],
-      environment: [false], // false for development, true for production
+      port: this.port,
+      dbUrl: this.dburl,
+      environment: [this.env == Enviroment.Development ? false : true],
     });
   }
-
-
-  serverSettings = {
-    port: '3000',
-    dbUrl: 'mongodb://localhost:27017/mydb'
-  };
 
   onDragMoved(event: CdkDragMove): void {
     const { x, y, width } = event.source.element.nativeElement.getBoundingClientRect();

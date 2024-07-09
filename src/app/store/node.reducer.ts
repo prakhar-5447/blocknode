@@ -1,7 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import { AppState } from './node.state';
 import * as NodeActions from './node.actions';
-import { NodeType } from '../models/node.model';
+import { Enviroment, NodeType } from '../models/node.model';
 import { map } from 'rxjs/operators';
 
 const initialState: AppState = {
@@ -12,7 +12,8 @@ const initialState: AppState = {
     width: 300,
     type: NodeType.Server,
     port: 3000,
-    dbUrl: 'mongodb://localhost:27017/mydb'
+    dbUrl: 'mongodb://localhost:27017/mydb',
+    enviroment: Enviroment.Development
   }, {
     id: '1',
     name: 'Route Node',
@@ -60,7 +61,7 @@ export const nodeReducer = createReducer(
     ({
       ...connection,
       fromNode: connection.fromNode.name === name ? { ...connection.fromNode, position } : connection.fromNode,
-      toNode: connection.toNode.name === name ? { ...connection.toNode,position  } : connection.toNode
+      toNode: connection.toNode.name === name ? { ...connection.toNode, position } : connection.toNode
     })
     );
 

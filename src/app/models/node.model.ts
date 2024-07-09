@@ -4,6 +4,11 @@ export enum NodeType {
     Middleware = 'Middleware'
 }
 
+export enum Enviroment {
+    Production = 'Production',
+    Development = 'Development'
+}
+
 export interface Node {
     id: string;
     name: string;
@@ -13,4 +18,5 @@ export interface Node {
     content?: string;
     port?: number;
     dbUrl?: string;
+    enviroment?: Enviroment;
 }
