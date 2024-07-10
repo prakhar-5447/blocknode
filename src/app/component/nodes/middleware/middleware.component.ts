@@ -12,13 +12,13 @@ import * as NodeActions from '../../../store/node.actions';
 export class MiddlewareComponent {
   @Input() nodeId: string = '0';
   @Input() nodeName: string = 'Middleware Node';
-   width: number = 250;
+  width: number = 250;
   @Input() position: { x: number, y: number } = { x: 0, y: 0 };
   middlewareCode: string = '';
-  @Output() nodeMoved = new EventEmitter<{ name: string, position: { x: number, y: number }, width: number }>();
+  @Output() nodeMoved = new EventEmitter<{ id: string, position: { x: number, y: number }, width: number }>();
   @Output() nodeSelected = new EventEmitter<void>();
   @Output() dragStarted = new EventEmitter<void>();
-  @Output() dragEnded = new EventEmitter<{ name: string, position: { x: number, y: number } }>();
+  @Output() dragEnded = new EventEmitter<{ id: string, position: { x: number, y: number } }>();
   @Input() code: string = '';
 
   pos: { x: number, y: number } = { x: 0, y: 0 };
@@ -30,7 +30,7 @@ export class MiddlewareComponent {
     this.pos = { x: x, y: y };
     this.width = width;
     this.nodeMoved.emit({
-      name: this.nodeName, position: this.pos, width: this.width
+      id: this.nodeId, position: this.pos, width: this.width
     });
   }
 
@@ -43,11 +43,11 @@ export class MiddlewareComponent {
       x: this.pos.x,
       y: this.pos.y
     };
-    this.dragEnded.emit({ name: this.nodeName, position: updatedPosition });
+    this.dragEnded.emit({ id: this.nodeId, position: updatedPosition });
   }
 
   nodeSelect(): void {
-    this.nodeSelected.emit(); 
+    this.nodeSelected.emit();
     this.store.dispatch(NodeActions.selectNode({ id: this.nodeId }));
 
   }

@@ -66,14 +66,14 @@ export class CanvasComponent {
     this.isNodeDragging = true;
   }
 
-  onDragEnded(event: { name: string, position: { x: number, y: number } }): void {
+  onDragEnded(event: { id: string, position: { x: number, y: number } }): void {
     this.isNodeDragging = false;
 
     const updatedPosition = {
       x: event.position.x - this.panX,
       y: event.position.y - this.panY
     };
-    this.store.dispatch(NodeActions.updateNodePosition({ name: event.name, position: updatedPosition }));
+    this.store.dispatch(NodeActions.updateNodePosition({ id: event.id, position: updatedPosition }));
   }
 
   addNode(nodeType: NodeType): void {
@@ -88,12 +88,12 @@ export class CanvasComponent {
     this.store.dispatch(NodeActions.addNode({ node: newNode }));
   }
 
-  onNodeMoved(event: { name: string, position: { x: number, y: number }, width: number }): void {
+  onNodeMoved(event: { id: string, position: { x: number, y: number }, width: number }): void {
     const updatedPosition = {
       x: event.position.x - this.panX,
       y: event.position.y - this.panY
     };
-    this.store.dispatch(NodeActions.updateConnectionPosition({ name: event.name, position: updatedPosition, width: event.width }));
+    this.store.dispatch(NodeActions.updateConnectionPosition({ id: event.id, position: updatedPosition, width: event.width }));
   }
 
   startConnection(startPosition: { node: Node, position: { x: number, y: number }, name: string, type: NodeType }): void {

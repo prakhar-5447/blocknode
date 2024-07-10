@@ -4,11 +4,12 @@
   <div class="virtual-space" [ngStyle]="{'transform': 'translate(' + panX + 'px, ' + panY + 'px)'}">
     <ng-container *ngFor="let node of nodes$ | async">
       <app-server *ngIf="node.type === NodeType.Server" [nodeName]="node.name" [position]="node.position"
-        [port]="node.port!" [dburl]="node.dbUrl!" [env]="node.enviroment!" (startConnection)="startConnection($event)"
-        (mouseup)="endConnection({ node: node })" (nodeMoved)="onNodeMoved($event)" (dragStarted)="onDragStarted()"
+        [nodeId]="node.id" [port]="node.port!" [dburl]="node.dbUrl!" [env]="node.enviroment!"
+        (startConnection)="startConnection($event)" (mouseup)="endConnection({ node: node })"
+        (nodeMoved)="onNodeMoved($event)" (dragStarted)="onDragStarted()"
         (dragEnded)="onDragEnded($event)"></app-server>
       <app-route *ngIf="node.type === NodeType.Route" [nodeName]="node.name" [position]="node.position"
-        (startConnection)="startConnection($event)" (mouseup)="endConnection({ node: node })"
+        [nodeId]="node.id" (startConnection)="startConnection($event)" (mouseup)="endConnection({ node: node })"
         (nodeMoved)="onNodeMoved($event)" (dragStarted)="onDragStarted()" (dragEnded)="onDragEnded($event)"></app-route>
       <app-middleware *ngIf="node.type === NodeType.Middleware" [nodeName]="node.name" [position]="node.position"
         [nodeId]="node.id" [code]="node.content!" (nodeMoved)="onNodeMoved($event)" (dragStarted)="onDragStarted()"
