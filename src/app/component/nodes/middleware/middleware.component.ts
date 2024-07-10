@@ -49,6 +49,5 @@ export class MiddlewareComponent {
   nodeSelect(): void {
     this.nodeSelected.emit();
     this.store.dispatch(NodeActions.selectNode({ id: this.nodeId }));
-
   }
 }

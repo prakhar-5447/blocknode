@@ -36,6 +36,7 @@ const initialState: AppState = {
     content: "func main(){\nint i = 0;\n}"
   }],
   selectedNodeId: null,
+  selectedNodeContent: null,
   connections: []
 };
 
@@ -52,6 +53,7 @@ export const nodeReducer = createReducer(
   on(NodeActions.selectNode, (state, { id }) => ({
     ...state,
     selectedNodeId: id,
+    selectedNodeContent: state.nodes.find(node => node.id === id) || null
   })),
   on(NodeActions.deselectNode, state => ({
     ...state,

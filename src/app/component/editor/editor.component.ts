@@ -18,48 +18,34 @@ declare var monaco: any;
 export class EditorComponent implements AfterViewInit {
   @ViewChild('editorContainer', { static: true }) editorContainer!: ElementRef;
   private editor: any;
-  private selectedNodeSubscription!: Subscription;
-  private selectedNodeId: string | null = null;
+  private selectedNodeId: Node | null = null;
+  private selectedNodeSubscription$: Subscription;
 
-  private node$: Observable<Node | undefined>;
   constructor(private monacoEditorService: MonacoEditorService, private store: Store<{ appState: AppState }>) {
-    this.node$ = this.store.pipe(select(NodeSelectors.selectSelectedNode));
-
+    this.selectedNodeSubscription$ = this.store.pipe(select(NodeSelectors.selectSelectedNodeContent))
+      .subscribe(node => {
+        this.selectedNodeId = node;
+        this.updateEditorContent(this.selectedNodeId?.content!)
+      });
   }
 
   ngAfterViewInit(): void {
     this.monacoEditorService.loadMonaco().pipe(first()).subscribe(() => {
       this.initMonaco();
-
-      this.selectedNodeSubscription = this.node$.subscribe((selectedNode: Node | undefined) => {
-        if (selectedNode) {
-          this.selectedNodeId = selectedNode.id;
-          this.updateEditorContent(selectedNode.content || '');
-        } else {
-          this.selectedNodeId = null;
-          this.updateEditorContent('');
-        }
-      });
     });
-  }
-
-
-  ngOnDestroy(): void {
-    if (this.selectedNodeSubscription) {
-      this.selectedNodeSubscription.unsubscribe();
-    }
   }
 
 
   private updateEditorContent(content: string): void {
     if (this.editor) {
-      this.editor.setValue(content); 
-      // this.editor.onDidChangeModelContent(() => {
-      //   const content = this.editor.getValue();
-      //   if (this.selectedNodeId) {
-      //     this.store.dispatch(NodeActions.updateNodeContent({ id: this.selectedNodeId, content }));
-      //   }
-      // });
+      this.editor.setValue(content);
+      this.editor.getModel().onDidChangeContent(() => {
+        const content = this.editor.getValue();
+        if (this.selectedNodeId) {
+          this.store.dispatch(NodeActions.updateNodeContent({ id: this.selectedNodeId.id, content }));
+        }
+      });
+
     }
   }
 
