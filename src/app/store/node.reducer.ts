@@ -20,6 +20,20 @@ const initialState: AppState = {
     position: { x: 1000, y: 300 },
     width: 250,
     type: NodeType.Route,
+  }, {
+    id: "2",
+    name: `Middleware Node`,
+    position: { x: 1000, y: 200 },
+    width: 250,
+    type: NodeType.Middleware,
+    content: "const middleware = (req, res, next) => {\n  console.log(\'Request received\');\n  next();\n};"
+  }, {
+    id: "3",
+    name: `Middleware Node`,
+    position: { x: 1000, y: 100 },
+    width: 250,
+    type: NodeType.Middleware,
+    content: "func main(){\nint i = 0;\n}"
   }],
   selectedNodeId: null,
   connections: []

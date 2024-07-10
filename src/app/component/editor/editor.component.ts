@@ -1,6 +1,12 @@
 import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { MonacoEditorService } from './editor-service';
 import { first } from 'rxjs/operators';
+import * as NodeActions from '../../store/node.actions';
+import { AppState } from '@/app/store/node.state';
+import { Store, select } from '@ngrx/store';
+import * as NodeSelectors from '../../store/node.selectors';
+import { Observable, Subscription } from 'rxjs';
+import { Node } from '@/app/models/node.model';
 
 declare var monaco: any;
 
@@ -12,31 +18,60 @@ declare var monaco: any;
 export class EditorComponent implements AfterViewInit {
   @ViewChild('editorContainer', { static: true }) editorContainer!: ElementRef;
   private editor: any;
+  private selectedNodeSubscription!: Subscription;
+  private selectedNodeId: string | null = null;
 
-  constructor(private monacoEditorService: MonacoEditorService) { }
+  private node$: Observable<Node | undefined>;
+  constructor(private monacoEditorService: MonacoEditorService, private store: Store<{ appState: AppState }>) {
+    this.node$ = this.store.pipe(select(NodeSelectors.selectSelectedNode));
+
+  }
 
   ngAfterViewInit(): void {
     this.monacoEditorService.loadMonaco().pipe(first()).subscribe(() => {
       this.initMonaco();
+
+      this.selectedNodeSubscription = this.node$.subscribe((selectedNode: Node | undefined) => {
+        if (selectedNode) {
+          this.selectedNodeId = selectedNode.id;
+          this.updateEditorContent(selectedNode.content || '');
+        } else {
+          this.selectedNodeId = null;
+          this.updateEditorContent('');
+        }
+      });
     });
+  }
+
+
+  ngOnDestroy(): void {
+    if (this.selectedNodeSubscription) {
+      this.selectedNodeSubscription.unsubscribe();
+    }
+  }
+
+
+  private updateEditorContent(content: string): void {
+    if (this.editor) {
+      this.editor.setValue(content); 
+      // this.editor.onDidChangeModelContent(() => {
+      //   const content = this.editor.getValue();
+      //   if (this.selectedNodeId) {
+      //     this.store.dispatch(NodeActions.updateNodeContent({ id: this.selectedNodeId, content }));
+      //   }
+      // });
+    }
   }
 
   private initMonaco(): void {
     const myDiv: HTMLDivElement = this.editorContainer.nativeElement;
 
     this.editor = monaco.editor.create(myDiv, {
-      value: [
-        'import express from "express";',
-        'const app = express();',
-        'app.get("/", (req, res) => {',
-        '  res.send("Hello World!");',
-        '});',
-        'app.listen(3000, () => {',
-        '  console.log("Server is running on port 3000");',
-        '});'
-      ].join('\n'),
+      value: [].join('\n'),
       language: 'typescript',
-      theme: 'vs-dark'
+      theme: 'vs-dark',
+      wordWrap: 'on',
+      wrappingIndent: 'indent'
     });
 
     const compilerOptions = {
@@ -60,8 +95,6 @@ export class EditorComponent implements AfterViewInit {
     this.registerAutoImportCommand();
     this.enableAutoImports();
   }
-
-
 
   private registerAutoImportCommand(): void {
     this.editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.F1, (args: any) => {
@@ -106,7 +139,6 @@ export class EditorComponent implements AfterViewInit {
       }
     });
   }
-
   // onKeyDown(event: KeyboardEvent): void {
   //   // Handle tab key for indentation (optional)
   //   if (event.key === 'Tab') {

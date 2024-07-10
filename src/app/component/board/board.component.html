@@ -1,7 +1,6 @@
 <div class="dashboard">
-    <app-side-bar (tabSelected)="selectTab($event)"></app-side-bar>
+    <app-side-bar></app-side-bar>
     <div class="main-content">
-        <app-canvas *ngIf="selectedTab === 'canvas'"></app-canvas>
-        <app-editor *ngIf="selectedTab !== 'canvas'"></app-editor>
+        <app-canvas></app-canvas>
     </div>
 </div>

@@ -24,6 +24,7 @@ export class CanvasComponent {
 
   drawingConnection: any = null;
   cursorPosition: { x: number, y: number } = { x: 0, y: 0 };
+  isEditorOpen: boolean = false;
 
   // Zoom and pan properties
   panX = 0;
@@ -32,6 +33,10 @@ export class CanvasComponent {
   isPanning = false;
   startX = 0;
   startY = 0;
+
+  openEditor(): void {
+    this.isEditorOpen = !this.isEditorOpen;
+  }
 
   onMouseMove(event: MouseEvent): void {
     if (this.drawingConnection) {
@@ -73,7 +78,7 @@ export class CanvasComponent {
 
   addNode(nodeType: NodeType): void {
     const newNode: Node = {
-      id: "1",
+      id: "2",
       name: `${nodeType} Node`,
       position: { x: 1000, y: 200 },
       width: 250,

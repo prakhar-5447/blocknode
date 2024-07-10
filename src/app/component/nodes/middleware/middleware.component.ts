@@ -2,6 +2,7 @@ import { CdkDragEnd, CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/node.state';
+import * as NodeActions from '../../../store/node.actions';
 
 @Component({
   selector: 'app-middleware',
@@ -9,10 +10,13 @@ import { AppState } from 'src/app/store/node.state';
   styleUrls: ['./middleware.component.sass']
 })
 export class MiddlewareComponent {
-  @Input() nodeName: string = 'Middleware Node'; width: number = 250;
+  @Input() nodeId: string = '0';
+  @Input() nodeName: string = 'Middleware Node';
+   width: number = 250;
   @Input() position: { x: number, y: number } = { x: 0, y: 0 };
   middlewareCode: string = '';
   @Output() nodeMoved = new EventEmitter<{ name: string, position: { x: number, y: number }, width: number }>();
+  @Output() nodeSelected = new EventEmitter<void>();
   @Output() dragStarted = new EventEmitter<void>();
   @Output() dragEnded = new EventEmitter<{ name: string, position: { x: number, y: number } }>();
   @Input() code: string = '';
@@ -40,5 +44,11 @@ export class MiddlewareComponent {
       y: this.pos.y
     };
     this.dragEnded.emit({ name: this.nodeName, position: updatedPosition });
+  }
+
+  nodeSelect(): void {
+    this.nodeSelected.emit(); 
+    this.store.dispatch(NodeActions.selectNode({ id: this.nodeId }));
+
   }
 }
