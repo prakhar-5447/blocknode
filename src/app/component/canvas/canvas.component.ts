@@ -47,20 +47,19 @@ export class CanvasComponent {
       this.cursorPosition = { x: (event.clientX - this.panX), y: (event.clientY - this.panY) };
     }
     if (this.isPanning && !this.isNodeDragging) {
-      this.isEditorOpen = false;
-      this.panX += (event.clientX - this.startX);
-      this.panY += (event.clientY - this.startY);
-      this.startX = event.clientX;
-      this.startY = event.clientY;
+      this.panX = event.clientX - this.startX;
+      this.panY = event.clientY - this.startY;
     }
   }
 
   onMouseDown(event: MouseEvent): void {
-    if (!this.isNodeDragging) {
+    if (event.button === 1) {  // Check for middle mouse button
       this.isPanning = true;
-      this.startX = event.clientX;
-      this.startY = event.clientY;
+      this.startX = event.clientX - this.panX;
+      this.startY = event.clientY - this.panY;
+      event.preventDefault(); // Prevent the default middle mouse button action
     }
+    this.isNodeDragging = false;
   }
 
   onMouseUp(): void {

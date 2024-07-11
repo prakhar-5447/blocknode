@@ -1,4 +1,4 @@
-<div class="canvas-container" (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)"
+<div class="canvas-container"(mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)"
   (mouseup)="onMouseUp()">
   <div class="virtual-space" [ngStyle]="{'transform': 'translate(' + panX + 'px, ' + panY + 'px)'}">
     <ng-container *ngFor="let node of nodes$ | async">
