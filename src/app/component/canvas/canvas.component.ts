@@ -37,7 +37,7 @@ export class CanvasComponent {
   openEditor(): void {
     this.isEditorOpen = true;
   }
-  
+
   closeEditor(): void {
     this.isEditorOpen = false;
   }
@@ -128,8 +128,8 @@ export class CanvasComponent {
   }
 
   generatePath(fromNode: any, toNode: any): string {
-    const start = { x: fromNode.position.x + this.panX - 250, y: fromNode.position.y + this.panY };
-    const end = { x: toNode.position.x + this.panX - 250, y: toNode.position.y + this.panY };
+    const start = { x: fromNode.position.x + this.panX - 300, y: fromNode.position.y + this.panY };
+    const end = { x: toNode.position.x + this.panX - 300, y: toNode.position.y + this.panY };
 
     let path = `M${start.x},${start.y} `;
 

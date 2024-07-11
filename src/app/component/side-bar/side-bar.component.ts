@@ -10,8 +10,15 @@ import { Store } from '@ngrx/store';
   styleUrls: ['./side-bar.component.sass']
 })
 export class SideBarComponent {
-  NodeType = NodeType
+  activeTab: string = 'canvas';
+
+  NodeType = NodeType;
+
+  setActiveTab(tabName: string) {
+    this.activeTab = tabName;
+  }
   constructor(private store: Store<{ appState: AppState }>) { }
+
   addNode(nodeType: NodeType): void {
     const newNode: Node = {
       id: "2",

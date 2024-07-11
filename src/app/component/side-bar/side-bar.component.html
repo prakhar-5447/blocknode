@@ -1,7 +1,24 @@
 <div class="sidebar">
-    <div class="sidebar">
-        <div class="tab">Canvas</div>
-        <button class="add-btn" (click)="addNode(NodeType.Middleware)">Add Generic
-            Node</button>
+  <div class="tabs">
+    <div class="tab" [ngClass]="{active: activeTab === 'canvas'}" (click)="setActiveTab('canvas')">
+      <mat-icon>dashboard</mat-icon></div>
+    <div class="tab" [ngClass]="{active: activeTab === 'settings'}" (click)="setActiveTab('settings')">
+      <mat-icon>build</mat-icon></div>
+    <div class="tab" [ngClass]="{active: activeTab === 'tree'}" (click)="setActiveTab('tree')">
+      <mat-icon>graphic_eq</mat-icon></div>
+  </div>
+  <div class="content">
+    <div *ngIf="activeTab === 'canvas'">
+      <button class="add-btn" (click)="addNode(NodeType.Middleware)">Add Generic Node</button>
     </div>
+    <div *ngIf="activeTab === 'files'">
+      <p>Files content goes here</p>
+    </div>
+    <div *ngIf="activeTab === 'extensions'">
+      <p>Extensions content goes here</p>
+    </div>
+    <div *ngIf="activeTab === 'search'">
+      <p>Search content goes here</p>
+    </div>
+  </div>
 </div>
