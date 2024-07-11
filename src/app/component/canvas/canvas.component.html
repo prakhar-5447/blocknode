@@ -1,4 +1,3 @@
-<button class="add-btn" (click)="addNode(NodeType.Middleware)">Add Generic Node</button>
 <div class="canvas-container" (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)"
   (mouseup)="onMouseUp()">
   <div class="virtual-space" [ngStyle]="{'transform': 'translate(' + panX + 'px, ' + panY + 'px)'}">
@@ -30,13 +29,14 @@
 
       <!-- Render connections with neon effect -->
       <path *ngFor="let connection of connections$ | async"
-        [attr.d]="generatePath(connection.fromNode, connection.toNode)" stroke="cyan" stroke-width="2" fill="none"
-        filter="url(#neon)" />
+        [attr.d]="generatePath(connection.fromNode, connection.toNode)" [attr.stroke]="connection.color"
+        stroke-width="2" fill="none" filter="url(#neon)" />
       <path *ngIf="drawingConnection" [attr.d]="generatePath(drawingConnection.fromNode, { position: cursorPosition })"
         stroke="red" stroke-width="2" fill="none" filter="url(#neon)" />
     </svg>
   </div>
   <div class="editor-panel" [ngClass]="{'open': isEditorOpen}">
+    <button [ngClass]="{'show':isEditorOpen}" (click)="closeEditor()">X</button>
     <app-editor></app-editor>
   </div>
 </div>

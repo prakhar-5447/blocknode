@@ -32,6 +32,23 @@
     height: 100%
     background: #2d2d2d
     transition: right 0.3s ease
+    display: flex
+    button
+      cursor: pointer
+      position: absolute
+      width: 30px
+      height: 30px
+      color: black
+      border-radius: 100px
+      left: -40px
+      top: 10px
+      background: white
+      border: none
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3)
+      display: none
+      &.show
+        display: block !important
+
 
     &.open
       right: 0

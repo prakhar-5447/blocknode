@@ -12,7 +12,7 @@ import * as NodeActions from '../../../store/node.actions';
 export class MiddlewareComponent {
   @Input() nodeId: string = '0';
   @Input() nodeName: string = 'Middleware Node';
-  width: number = 250;
+  width: number = 400;
   @Input() position: { x: number, y: number } = { x: 0, y: 0 };
   middlewareCode: string = '';
   @Output() nodeMoved = new EventEmitter<{ id: string, position: { x: number, y: number }, width: number }>();
@@ -27,7 +27,7 @@ export class MiddlewareComponent {
 
   onDragMoved(event: CdkDragMove): void {
     const { x, y, width } = event.source.element.nativeElement.getBoundingClientRect();
-    this.pos = { x: x, y: y };
+    this.pos = { x: x + this.width, y: y };
     this.width = width;
     this.nodeMoved.emit({
       id: this.nodeId, position: this.pos, width: this.width
@@ -40,7 +40,7 @@ export class MiddlewareComponent {
 
   onDragEnd(event: CdkDragEnd): void {
     const updatedPosition = {
-      x: this.pos.x,
+      x: this.pos.x - this.width,
       y: this.pos.y
     };
     this.dragEnded.emit({ id: this.nodeId, position: updatedPosition });

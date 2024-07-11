@@ -17,23 +17,16 @@ const initialState: AppState = {
   }, {
     id: '1',
     name: 'Route Node',
-    position: { x: 1000, y: 300 },
+    position: { x: 700, y: 200 },
     width: 250,
     type: NodeType.Route,
   }, {
     id: "2",
     name: `Middleware Node`,
-    position: { x: 1000, y: 200 },
+    position: { x: 700, y: 300 },
     width: 250,
     type: NodeType.Middleware,
     content: "const middleware = (req, res, next) => {\n  console.log(\'Request received\');\n  next();\n};"
-  }, {
-    id: "3",
-    name: `Middleware Node`,
-    position: { x: 1000, y: 100 },
-    width: 250,
-    type: NodeType.Middleware,
-    content: "func main(){\nint i = 0;\n}"
   }],
   selectedNodeId: null,
   selectedNodeContent: null,
@@ -77,21 +70,35 @@ export const nodeReducer = createReducer(
     ({
       ...connection,
       fromNode: connection.fromNode.id === id ? { ...connection.fromNode, position } : connection.fromNode,
+    })
+    );
+    position = { x: position.x - width, y: position.y };
+    const updatedConnectionsto = updatedConnections.map(connection =>
+    ({
+      ...connection,
       toNode: connection.toNode.id === id ? { ...connection.toNode, position } : connection.toNode
     })
     );
 
     return {
       ...state,
-      connections: updatedConnections,
+      connections: updatedConnectionsto,
     };
   }),
   on(NodeActions.getNodePosition, (state, { id }) => ({
     ...state,
     selectedNodePosition: state.nodes.find(node => node.id === id)?.position || null
   })),
-  on(NodeActions.addConnection, (state, { connection }) => ({
-    ...state,
-    connections: [...state.connections, connection],
-  })),
+  on(NodeActions.addConnection, (state, { connection }) => {
+    const connectionExists = state.connections.some(conn =>
+      conn.fromNode.id === connection.fromNode.id && conn.toNode.id === connection.toNode.id
+    );
+
+    return connectionExists
+      ? state
+      : {
+        ...state,
+        connections: [...state.connections, connection],
+      };
+  }),
 );

@@ -35,7 +35,11 @@ export class CanvasComponent {
   startY = 0;
 
   openEditor(): void {
-    this.isEditorOpen = !this.isEditorOpen;
+    this.isEditorOpen = true;
+  }
+  
+  closeEditor(): void {
+    this.isEditorOpen = false;
   }
 
   onMouseMove(event: MouseEvent): void {
@@ -43,6 +47,7 @@ export class CanvasComponent {
       this.cursorPosition = { x: (event.clientX - this.panX), y: (event.clientY - this.panY) };
     }
     if (this.isPanning && !this.isNodeDragging) {
+      this.isEditorOpen = false;
       this.panX += (event.clientX - this.startX);
       this.panY += (event.clientY - this.startY);
       this.startX = event.clientX;
@@ -63,6 +68,7 @@ export class CanvasComponent {
   }
 
   onDragStarted(): void {
+    this.isEditorOpen = false;
     this.isNodeDragging = true;
   }
 
@@ -76,17 +82,6 @@ export class CanvasComponent {
     this.store.dispatch(NodeActions.updateNodePosition({ id: event.id, position: updatedPosition }));
   }
 
-  addNode(nodeType: NodeType): void {
-    const newNode: Node = {
-      id: "2",
-      name: `${nodeType} Node`,
-      position: { x: 1000, y: 200 },
-      width: 250,
-      type: nodeType,
-      content: "const middleware = (req, res, next) => {\n  console.log(\'Request received\');\n  next();\n};"
-    };
-    this.store.dispatch(NodeActions.addNode({ node: newNode }));
-  }
 
   onNodeMoved(event: { id: string, position: { x: number, y: number }, width: number }): void {
     const updatedPosition = {
@@ -107,13 +102,28 @@ export class CanvasComponent {
       if (endPosition.node.type == this.drawingConnection.type) {
         const connectionToAdd: Connection = {
           fromNode: this.drawingConnection.fromNode,
-          toNode: endPosition.node
+          toNode: endPosition.node,
+          color: this.getConnectionColor(this.drawingConnection.type)
+
         };
         this.store.dispatch(NodeActions.addConnection({ connection: connectionToAdd }));
       }
       this.drawingConnection = null;
       this.isNodeDragging = false;
       this.cursorPosition = { x: 0, y: 0 };
+    }
+  }
+
+  getConnectionColor(nodeType: NodeType): string {
+    switch (nodeType) {
+      case NodeType.Server:
+        return 'cyan';
+      case NodeType.Route:
+        return 'magenta';
+      case NodeType.Middleware:
+        return 'yellow';
+      default:
+        return 'white';
     }
   }
 
