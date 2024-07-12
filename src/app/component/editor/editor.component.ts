@@ -20,6 +20,7 @@ export class EditorComponent implements AfterViewInit {
   private editor: any;
   private selectedNodeId: Node | null = null;
   private selectedNodeSubscription$: Subscription;
+  private detectedLibraries: Set<string> = new Set();
 
   constructor(private monacoEditorService: MonacoEditorService, private store: Store<{ appState: AppState }>) {
     this.selectedNodeSubscription$ = this.store.pipe(select(NodeSelectors.selectSelectedNodeContent))
@@ -35,11 +36,18 @@ export class EditorComponent implements AfterViewInit {
     });
   }
 
+  ngOnDestroy(): void {
+    if (this.selectedNodeSubscription$) {
+      this.selectedNodeSubscription$.unsubscribe();
+    }
+  }
+
 
   private updateEditorContent(content: string): void {
     if (this.editor) {
       this.editor.setValue(content);
       this.editor.getModel().onDidChangeContent(() => {
+        console.log("kuiikyu")
         const content = this.editor.getValue();
         if (this.selectedNodeId) {
           this.store.dispatch(NodeActions.updateNodeContent({ id: this.selectedNodeId.id, content }));
@@ -70,16 +78,18 @@ export class EditorComponent implements AfterViewInit {
     // Set compiler options for the TypeScript model
     monaco.languages.typescript.typescriptDefaults.setCompilerOptions(compilerOptions);
 
-
-    monaco.languages.typescript.typescriptDefaults.addExtraLib(
-      `declare module 'express';`,
-      'node_modules/@types/express/index.d.ts'
-    );
-
-
     // Register and enable auto imports
     this.registerAutoImportCommand();
     this.enableAutoImports();
+  }
+
+
+  private loadLibraryTypes(library: string): void {
+    // Example: Dynamically fetch and load TypeScript types for the library
+    const typings = `declare module '${library}';`; // Example declaration for 'express'
+
+    // Add the typings to Monaco Editor's TypeScript defaults
+    monaco.languages.typescript.typescriptDefaults.addExtraLib(typings, 'node_modules/@types/' + library + '/index.d.ts');
   }
 
   private registerAutoImportCommand(): void {
@@ -106,25 +116,38 @@ export class EditorComponent implements AfterViewInit {
           endColumn: word.endColumn
         };
 
+        // Example suggestion for 'express'
         return {
           suggestions: [
-            {
-              label: 'express',
-              kind: monaco.languages.CompletionItemKind.Function,
-              documentation: 'Express library',
-              insertText: 'express',
-              range: range,
-              command: {
-                id: 'add-import',
-                title: 'Add Import',
-                arguments: ['express']
-              }
-            }
+
           ]
         };
       }
     });
   }
+
+  detectAndLoadLibraries(): void {
+    const model = this.editor.getModel();
+    if (model) {
+      const content = model.getValue();
+      const importRegex = /import\s+[\w{}*]+\s+from\s+['"]([^'"]+)['"]/g;
+      let match: RegExpExecArray | null;
+
+      while ((match = importRegex.exec(content)) !== null) {
+        const libraryName = match[1];
+        console.log(libraryName)
+        if (!this.detectedLibraries.has(libraryName)) {
+          this.loadLibraryTypes(libraryName);
+          this.detectedLibraries.add(libraryName);
+        }
+      }
+    }
+  }
+
+  onButtonClick(): void {
+    this.detectAndLoadLibraries();
+  }
+
   // onKeyDown(event: KeyboardEvent): void {
   //   // Handle tab key for indentation (optional)
   //   if (event.key === 'Tab') {

@@ -26,7 +26,24 @@ const initialState: AppState = {
     position: { x: 700, y: 300 },
     width: 250,
     type: NodeType.Middleware,
-    content: "const middleware = (req, res, next) => {\n  console.log(\'Request received\');\n  next();\n};"
+    content: `import jwt from 'jsonwebtoken';
+
+function jwtAuth(req, res, next) {
+  const token = req.header('Authorization').replace('Bearer ', '');
+  if (!token) {
+    return res.status(401).send({ error: 'No token provided' });
+  }
+
+  try {
+    const decoded = jwt.verify(token, 'your_jwt_secret_key');
+    req.user = decoded;
+    next();
+  } catch (err) {
+    res.status(401).send({ error: 'Invalid token' });
+  }
+}
+
+export default jwtAuth;`
   }],
   selectedNodeId: null,
   selectedNodeContent: null,

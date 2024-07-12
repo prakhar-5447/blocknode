@@ -64,6 +64,15 @@ export class RouteComponent {
     const x = this.position.x + this.width;
     const y = this.position.y;
     const node: Node = { id: this.nodeId, position: { x: this.position.x + this.width, y: this.position.y }, width: this.width, name: this.nodeName, type: NodeType.Route };
+    this.startConnection.emit({ node: node, position: { x, y }, name: this.nodeName, type: NodeType.Code });
+  }
+
+  startConnectingMiddleware(event: MouseEvent): void {
+    event.stopPropagation();
+    this.dragStarted.emit();
+    const x = this.position.x + this.width;
+    const y = this.position.y;
+    const node: Node = { id: this.nodeId, position: { x: this.position.x + this.width, y: this.position.y }, width: this.width, name: this.nodeName, type: NodeType.Route };
     this.startConnection.emit({ node: node, position: { x, y }, name: this.nodeName, type: NodeType.Middleware });
   }
 }

@@ -4,8 +4,8 @@
     "baseUrl": "./",
     "types": [
       "node",
-      "express"
     ],
+    "typeRoots": ["node_modules/@types"],
     "esModuleInterop": true,
     "allowJs": true,
     "skipLibCheck": true,

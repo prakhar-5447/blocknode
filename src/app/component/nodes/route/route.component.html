@@ -4,7 +4,7 @@
     <input *ngIf="isEditing" #routeInput [(ngModel)]="routeName" (blur)="disableEditing()"
         (keyup.enter)="disableEditing()" />
     <div class="buttons">
-        <span (mousedown)="startConnecting($event)"></span>
+        <span (mousedown)="startConnectingMiddleware($event)"></span>
         <span (mousedown)="startConnecting($event)"></span>
     </div>
 </div>

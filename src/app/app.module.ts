@@ -22,6 +22,7 @@ import { RouteComponent } from './component/nodes/route/route.component';
 import { EditorComponent } from './component/editor/editor.component';
 import { StoreModule } from '@ngrx/store';
 import { nodeReducer } from './store/node.reducer';
+import { CodeComponent } from './component/nodes/code/code.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { nodeReducer } from './store/node.reducer';
     MiddlewareComponent,
     RouteComponent,
     EditorComponent,
+    CodeComponent,
   ],
   imports: [
     BrowserModule,

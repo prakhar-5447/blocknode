@@ -1,4 +1,4 @@
-<div class="canvas-container"(mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)"
+<div class="canvas-container" (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)"
   (mouseup)="onMouseUp()">
   <div class="virtual-space" [ngStyle]="{'transform': 'translate(' + panX + 'px, ' + panY + 'px)'}">
     <ng-container *ngFor="let node of nodes$ | async">
@@ -14,6 +14,10 @@
         [nodeId]="node.id" [code]="node.content!" (nodeMoved)="onNodeMoved($event)" (dragStarted)="onDragStarted()"
         (mouseup)="endConnection({ node: node })" (dragEnded)="onDragEnded($event)"
         (nodeSelected)="openEditor()"></app-middleware>
+      <app-code *ngIf="node.type === NodeType.Code" [nodeName]="node.name" [position]="node.position" [nodeId]="node.id"
+        [code]="node.content!" (nodeMoved)="onNodeMoved($event)" (dragStarted)="onDragStarted()"
+        (mouseup)="endConnection({ node: node })" (dragEnded)="onDragEnded($event)"
+        (nodeSelected)="openEditor()"></app-code>
     </ng-container>
     <svg class="connections" [ngStyle]="{'transform': 'translate(' + -panX + 'px, ' + -panY + 'px)'}">
       <!-- Define neon glow filter -->

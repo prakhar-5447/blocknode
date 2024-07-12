@@ -21,7 +21,7 @@ export class SideBarComponent {
 
   addNode(nodeType: NodeType): void {
     const newNode: Node = {
-      id: "2",
+      id: "5",
       name: `${nodeType} Node`,
       position: { x: 1000, y: 200 },
       width: 250,

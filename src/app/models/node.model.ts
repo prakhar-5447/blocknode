@@ -1,7 +1,8 @@
 export enum NodeType {
     Server = 'Server',
     Route = 'Route',
-    Middleware = 'Middleware'
+    Middleware = 'Middleware',
+    Code = 'Code'
 }
 
 export enum Enviroment {

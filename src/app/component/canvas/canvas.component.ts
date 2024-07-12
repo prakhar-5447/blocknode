@@ -118,9 +118,11 @@ export class CanvasComponent {
       case NodeType.Server:
         return 'cyan';
       case NodeType.Route:
-        return 'magenta';
+        return '#2196f3';
       case NodeType.Middleware:
-        return 'yellow';
+        return '#4caf50';
+      case NodeType.Code:
+        return '#2e2e2e';
       default:
         return 'white';
     }
