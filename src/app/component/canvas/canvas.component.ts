@@ -6,6 +6,7 @@ import * as NodeSelectors from '../../store/node.selectors';
 import * as NodeActions from '../../store/node.actions';
 import { NodeType, Node } from 'src/app/models/node.model';
 import { Connection } from 'src/app/models/connection.model';
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-canvas',
@@ -17,7 +18,7 @@ export class CanvasComponent {
   NodeType = NodeType;
   connections$: Observable<Connection[]>;
 
-  constructor(private store: Store<{ appState: AppState }>) {
+  constructor(private store: Store<{ appState: AppState }>, private _snackBar: MatSnackBar) {
     this.nodes$ = this.store.pipe(select(NodeSelectors.selectNodes));
     this.connections$ = this.store.pipe(select(NodeSelectors.selectConnections));
   }
@@ -34,6 +35,18 @@ export class CanvasComponent {
   isPanning = false;
   startX = 0;
   startY = 0;
+  durationInSeconds = 5;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'end';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+
+  openSnackBar(data: { message: string, action: string }) {
+    this._snackBar.open(data.message, data.action, {
+      duration: this.durationInSeconds * 1000,
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+    });
+  }
+
 
   openEditor(): void {
     this.isEditorOpen = true;
