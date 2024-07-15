@@ -16,6 +16,8 @@ export class RouteComponent {
   @Output() nodeMoved = new EventEmitter<{ id: string, position: { x: number, y: number }, width: number }>();
   @Output() startConnection = new EventEmitter<{ node: any, position: { x: number, y: number }, name: string, type: NodeType }>();
   @Output() dragStarted = new EventEmitter<void>();
+  @Output() removeConnection = new EventEmitter<void>();
+  @Output() connectionAttach = new EventEmitter<{ node: any, position: { x: number, y: number }, name: string, type: NodeType }>();
   @Output() dragEnded = new EventEmitter<{ id: string, position: { x: number, y: number } }>();
   @ViewChild('routeInput') routeInput: ElementRef | undefined;
 
@@ -74,5 +76,16 @@ export class RouteComponent {
     const y = this.position.y;
     const node: Node = { id: this.nodeId, position: { x: this.position.x + this.width, y: this.position.y }, width: this.width, name: this.nodeName, type: NodeType.Route };
     this.startConnection.emit({ node: node, position: { x, y }, name: this.nodeName, type: NodeType.Middleware });
+  }
+
+  mouseEnter(event: MouseEvent) {
+    const x = this.position.x + this.width;
+    const y = this.position.y;
+    const node: Node = { id: this.nodeId, position: { x: this.position.x, y: this.position.y }, width: this.width, name: this.nodeName, type: NodeType.Route };
+    this.connectionAttach.emit({ node: node, position: { x, y }, name: this.nodeName, type: NodeType.Code });
+  }
+
+  mouseOut(event: MouseEvent) {
+    this.removeConnection.emit();
   }
 }

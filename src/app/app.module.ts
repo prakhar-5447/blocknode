@@ -11,6 +11,7 @@ import { FormsModule } from '@angular/forms';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CanvasComponent } from './component/canvas/canvas.component';
@@ -45,13 +46,14 @@ import { CodeComponent } from './component/nodes/code/code.component';
     MatTabsModule,
     MatSlideToggleModule,
     MatInputModule,
+    MatSnackBarModule,
     ReactiveFormsModule,
     FormsModule,
     MatIconModule,
     MatFormFieldModule,
     BrowserAnimationsModule,
     StoreModule.forRoot({ appState: nodeReducer }),
-    
+
   ],
   providers: [],
   bootstrap: [AppComponent]

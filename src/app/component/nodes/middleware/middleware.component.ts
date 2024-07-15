@@ -3,6 +3,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/node.state';
 import * as NodeActions from '../../../store/node.actions';
+import { Node, NodeType } from '../../../models/node.model';
 
 @Component({
   selector: 'app-middleware',
@@ -18,6 +19,8 @@ export class MiddlewareComponent {
   @Output() nodeMoved = new EventEmitter<{ id: string, position: { x: number, y: number }, width: number }>();
   @Output() nodeSelected = new EventEmitter<void>();
   @Output() dragStarted = new EventEmitter<void>();
+  @Output() removeConnection = new EventEmitter<void>();
+  @Output() connectionAttach = new EventEmitter<{ node: any, position: { x: number, y: number }, name: string, type: NodeType }>();
   @Output() dragEnded = new EventEmitter<{ id: string, position: { x: number, y: number } }>();
   @Input() code: string = '';
 
@@ -49,5 +52,16 @@ export class MiddlewareComponent {
   nodeSelect(): void {
     this.nodeSelected.emit();
     this.store.dispatch(NodeActions.selectNode({ id: this.nodeId }));
+  }
+
+  mouseEnter(event: MouseEvent) {
+    const x = this.position.x + this.width;
+    const y = this.position.y;
+    const node: Node = { id: this.nodeId, position: { x: this.position.x, y: this.position.y }, width: this.width, name: this.nodeName, type: NodeType.Route };
+    this.connectionAttach.emit({ node: node, position: { x, y }, name: this.nodeName, type: NodeType.Code });
+  }
+
+  mouseOut(event: MouseEvent) {
+    this.removeConnection.emit();
   }
 }

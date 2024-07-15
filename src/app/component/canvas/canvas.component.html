@@ -9,15 +9,16 @@
         (dragEnded)="onDragEnded($event)"></app-server>
       <app-route *ngIf="node.type === NodeType.Route" [nodeName]="node.name" [position]="node.position"
         [nodeId]="node.id" (startConnection)="startConnection($event)" (mouseup)="endConnection({ node: node })"
-        (nodeMoved)="onNodeMoved($event)" (dragStarted)="onDragStarted()" (dragEnded)="onDragEnded($event)"></app-route>
+        (nodeMoved)="onNodeMoved($event)" (dragStarted)="onDragStarted()" (dragEnded)="onDragEnded($event)"
+        (connectionAttach)="connect($event)" (removeConnection)="disconnect()"></app-route>
       <app-middleware *ngIf="node.type === NodeType.Middleware" [nodeName]="node.name" [position]="node.position"
         [nodeId]="node.id" [code]="node.content!" (nodeMoved)="onNodeMoved($event)" (dragStarted)="onDragStarted()"
-        (mouseup)="endConnection({ node: node })" (dragEnded)="onDragEnded($event)"
-        (nodeSelected)="openEditor()"></app-middleware>
+        (mouseup)="endConnection({ node: node })" (dragEnded)="onDragEnded($event)" (nodeSelected)="openEditor()"
+        (connectionAttach)="connect($event)" (removeConnection)="disconnect()"></app-middleware>
       <app-code *ngIf="node.type === NodeType.Code" [nodeName]="node.name" [position]="node.position" [nodeId]="node.id"
         [code]="node.content!" (nodeMoved)="onNodeMoved($event)" (dragStarted)="onDragStarted()"
-        (mouseup)="endConnection({ node: node })" (dragEnded)="onDragEnded($event)"
-        (nodeSelected)="openEditor()"></app-code>
+        (mouseup)="endConnection({ node: node })" (dragEnded)="onDragEnded($event)" (nodeSelected)="openEditor()"
+        (connectionAttach)="connect($event)" (removeConnection)="disconnect()"></app-code>
     </ng-container>
     <svg class="connections" [ngStyle]="{'transform': 'translate(' + -panX + 'px, ' + -panY + 'px)'}">
       <!-- Define neon glow filter -->

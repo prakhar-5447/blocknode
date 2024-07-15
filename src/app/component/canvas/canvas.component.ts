@@ -25,6 +25,7 @@ export class CanvasComponent {
   drawingConnection: any = null;
   cursorPosition: { x: number, y: number } = { x: 0, y: 0 };
   isEditorOpen: boolean = false;
+  position: any = null;
 
   // Zoom and pan properties
   panX = 0;
@@ -44,7 +45,12 @@ export class CanvasComponent {
 
   onMouseMove(event: MouseEvent): void {
     if (this.drawingConnection) {
-      this.cursorPosition = { x: (event.clientX - this.panX), y: (event.clientY - this.panY) };
+      if (this.position) {
+        this.cursorPosition = { x: this.position.x, y: this.position.y };
+      } else {
+
+        this.cursorPosition = { x: (event.clientX - this.panX), y: (event.clientY - this.panY) };
+      }
     }
     if (this.isPanning && !this.isNodeDragging) {
       this.panX = event.clientX - this.startX;
@@ -110,6 +116,18 @@ export class CanvasComponent {
       this.drawingConnection = null;
       this.isNodeDragging = false;
       this.cursorPosition = { x: 0, y: 0 };
+    }
+  }
+
+  connect(node: { node: Node }): void {
+    if (this.drawingConnection) {
+      this.position = { x: node.node.position.x, y: node.node.position.y };
+    }
+  }
+
+  disconnect(): void {
+    if (this.drawingConnection || this.position) {
+      this.position = null;
     }
   }
 
