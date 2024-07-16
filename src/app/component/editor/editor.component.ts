@@ -23,20 +23,29 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
   private detectedLibraries: Set<string> = new Set();
   private nodes: Node[] = [];
   private monacoInitialized: boolean = false;
+  private nodeModels: { [id: string]: any } = {};
 
   constructor(private monacoEditorService: MonacoEditorService, private store: Store<{ appState: AppState }>) {
-    this.selectedNodeSubscription$ = this.store.pipe(select(NodeSelectors.selectSelectedNodeContent))
-      .subscribe(node => {
-        this.selectedNodeId = node;
-        this.updateEditorContent(this.selectedNodeId?.content!)
-      });
     this.store.pipe(select(NodeSelectors.selectNodes)).subscribe(nodes => {
       this.nodes = nodes;
       if (this.monacoInitialized) {
         this.updateMonacoFiles();
       }
     });
+    this.selectedNodeSubscription$ = this.store.pipe(select(NodeSelectors.selectSelectedNodeContent))
+    .subscribe(node => {
+      this.selectedNodeId = node;
+      this.switchEditorModel(this.selectedNodeId?.id!)
+    });
   }
+
+  private switchEditorModel(nodeId: string): void {
+    if (this.editor && this.nodeModels[nodeId]) {
+      this.editor.setModel(this.nodeModels[nodeId]);
+      console.log(this.nodeModels[nodeId])
+    }
+  }
+
 
   ngAfterViewInit(): void {
     this.monacoEditorService.loadMonaco().pipe(first()).subscribe(() => {
@@ -47,19 +56,6 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     if (this.selectedNodeSubscription$) {
       this.selectedNodeSubscription$.unsubscribe();
-    }
-  }
-
-  private updateEditorContent(content: string): void {
-    if (this.editor) {
-      this.editor.setValue(content);
-      this.editor.getModel().onDidChangeContent(() => {
-        const content = this.editor.getValue();
-        if (this.selectedNodeId) {
-          this.store.dispatch(NodeActions.updateNodeContent({ id: this.selectedNodeId.id, content }));
-          this.updateMonacoFile(this.selectedNodeId.id, content);
-        }
-      });
     }
   }
 
@@ -110,27 +106,20 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
 
     const filePath = `file:///node_${id}.ts`;
     monaco.languages.typescript.typescriptDefaults.addExtraLib(content, filePath);
-    console.log(filePath)
     const uri = monaco.Uri.parse(filePath);
     let model = monaco.editor.getModel(uri);
     if (!model) {
       model = monaco.editor.createModel(content, 'typescript', uri);
-    } else {
-      model.setValue(content);
+      this.nodeModels[id] = model;
+      model.onDidChangeContent(() => {
+        const content = this.editor.getValue();
+        if (this.selectedNodeId) {
+          this.store.dispatch(NodeActions.updateNodeContent({ id: this.selectedNodeId.id, content }));
+        }
+      });
     }
-    console.log(model)
   }
 
-  private updateMonacoFile(id: string, content: string): void {
-    const filePath = `file:///node_${id}.ts`;
-    const uri = monaco.Uri.parse(filePath);
-    const model = monaco.editor.getModel(uri);
-    if (model) {
-      model.setValue(content);
-    } else {
-      this.createMonacoFile(id, content);
-    }
-  }
 
   private loadLibraryTypes(library: string): void {
     const typings = `declare module '${library}';`;
