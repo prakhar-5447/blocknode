@@ -5,11 +5,6 @@ export enum NodeType {
     Code = 'Code'
 }
 
-export enum Enviroment {
-    Production = 'Production',
-    Development = 'Development'
-}
-
 export interface Node {
     id: string;
     name: string;
@@ -17,7 +12,4 @@ export interface Node {
     width: number;
     type: NodeType;
     content?: string;
-    port?: number;
-    dbUrl?: string;
-    enviroment?: Enviroment;
 }

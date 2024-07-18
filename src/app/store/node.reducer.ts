@@ -1,8 +1,7 @@
 import { createReducer, on } from '@ngrx/store';
 import { AppState } from './node.state';
 import * as NodeActions from './node.actions';
-import { Enviroment, NodeType } from '../models/node.model';
-import { map } from 'rxjs/operators';
+import { NodeType } from '../models/node.model';
 
 const initialState: AppState = {
   nodes: [{
@@ -10,10 +9,7 @@ const initialState: AppState = {
     name: 'Server',
     position: { x: 300, y: 300 },
     width: 300,
-    type: NodeType.Server,
-    port: 3000,
-    dbUrl: 'mongodb://localhost:27017/mydb',
-    enviroment: Enviroment.Development
+    type: NodeType.Server
   }, {
     id: '1',
     name: 'Route Node',
@@ -47,7 +43,8 @@ export default jwtAuth;`
   }],
   selectedNodeId: null,
   selectedNodeContent: null,
-  connections: []
+  connections: [],
+  envVariables: []
 };
 
 export const nodeReducer = createReducer(
@@ -118,4 +115,18 @@ export const nodeReducer = createReducer(
         connections: [...state.connections, connection],
       };
   }),
+  on(NodeActions.addEnvVariable, (state, { envVariable }) => ({
+    ...state,
+    envVariables: [...state.envVariables, envVariable],
+  })),
+  on(NodeActions.deleteEnvVariable, (state, { key }) => ({
+    ...state,
+    envVariables: state.envVariables.filter(env => env.key !== key),
+  })),
+  on(NodeActions.updateEnvVariable, (state, { key, value }) => ({
+    ...state,
+    envVariables: state.envVariables.map(env =>
+      env.key === key ? { ...env, key, value } : env
+    ),
+  }))
 );
