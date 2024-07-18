@@ -1,15 +1,34 @@
 <div class="sidebar">
   <div class="tabs">
     <div class="tab" [ngClass]="{active: activeTab === 'canvas'}" (click)="setActiveTab('canvas')">
-      <mat-icon>dashboard</mat-icon></div>
+      <mat-icon>dashboard</mat-icon>
+    </div>
     <div class="tab" [ngClass]="{active: activeTab === 'settings'}" (click)="setActiveTab('settings')">
-      <mat-icon>build</mat-icon></div>
+      <mat-icon>build</mat-icon>
+    </div>
     <div class="tab" [ngClass]="{active: activeTab === 'tree'}" (click)="setActiveTab('tree')">
-      <mat-icon>graphic_eq</mat-icon></div>
+      <mat-icon>graphic_eq</mat-icon>
+    </div>
   </div>
   <div class="content">
     <div *ngIf="activeTab === 'canvas'">
       <button class="add-btn" (click)="addNode(NodeType.Code)">Add Generic Node</button>
+      <form (ngSubmit)="addEnvVariable(nextInput)" #envForm="ngForm">
+        <input type="text" placeholder="Key" [(ngModel)]="newEnvKey" name="key"  
+        (input)="capitalize()"
+        autocomplete="off" required onkeydown="return /[a-z_]/i.test(event.key)"
+          appCapitalize (keydown.enter)="moveToNextInput(nextInput)" #key="ngModel">
+        <input type="text" placeholder="Value" [(ngModel)]="newEnvValue" name="value" autocomplete="off" required
+          #nextInput (keydown.enter)="addEnvVariable(nextInput)" #value="ngModel">
+        <button type="submit" [disabled]="envForm.invalid">Add Env</button>
+      </form>
+      <ul>
+        <li *ngFor="let env of envVariables">
+          {{env.key}}: {{env.value}}
+          <button (click)="deleteEnvVariable(env.key)">Delete</button>
+          <button (click)="editEnvVariable(env.key)">Edit</button>
+        </li>
+      </ul>
     </div>
     <div *ngIf="activeTab === 'files'">
       <p>Files content goes here</p>

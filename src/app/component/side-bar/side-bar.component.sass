@@ -1,3 +1,6 @@
+::placeholder
+    color: #7a7a7a
+
 .sidebar
     display: flex
     flex-direction: row
@@ -26,3 +29,42 @@
             color: white
             border: none
             cursor: pointer
+            margin-bottom: 30px
+
+        form
+            display: flex
+            flex-direction: column
+
+            input
+                margin-bottom: 8px
+                padding: 10px 14px
+                border: 1px solid #4a4a4a
+                border-radius: 5px
+                background-color: #2f2f2f
+                color: #d0d0d0
+                outline: none
+                caret-color: #a4a4a4
+
+            button
+                align-self: flex-end
+                padding: 10px
+                background-color: #212121
+                color: white
+                border: none
+                cursor: pointer
+
+            button:disabled
+                background-color: #666666
+                color: #ababab
+
+        ul
+            list-style-type: none
+            padding: 0
+
+        li
+            display: flex
+            align-items: center
+            margin-bottom: 5px
+
+            button
+                margin-left: 10px
