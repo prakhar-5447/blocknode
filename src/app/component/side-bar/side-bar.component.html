@@ -12,32 +12,35 @@
   </div>
   <div class="content">
     <div *ngIf="activeTab === 'canvas'">
-      <button class="add-btn" (click)="addNode(NodeType.Code)">Add Generic Node</button>
+      <div class="heading">
+        Enviroment Variable
+      </div>
       <form (ngSubmit)="addEnvVariable(nextInput)" #envForm="ngForm">
-        <input type="text" placeholder="Key" [(ngModel)]="newEnvKey" name="key"  
-        (input)="capitalize()"
-        autocomplete="off" required onkeydown="return /[a-z_]/i.test(event.key)"
-          appCapitalize (keydown.enter)="moveToNextInput(nextInput)" #key="ngModel">
+        <input type="text" placeholder="Key" [(ngModel)]="newEnvKey" name="key" (input)="capitalize()"
+          autocomplete="off" required onkeydown="return /[a-z_]/i.test(event.key)" appCapitalize
+          (keydown.enter)="moveToNextInput(nextInput)" #key="ngModel">
         <input type="text" placeholder="Value" [(ngModel)]="newEnvValue" name="value" autocomplete="off" required
           #nextInput (keydown.enter)="addEnvVariable(nextInput)" #value="ngModel">
         <button type="submit" [disabled]="envForm.invalid">Add Env</button>
       </form>
-      <ul>
-        <li *ngFor="let env of envVariables">
-          {{env.key}}: {{env.value}}
-          <button (click)="deleteEnvVariable(env.key)">Delete</button>
-          <button (click)="editEnvVariable(env.key)">Edit</button>
+      <ul class="env-list">
+        <li *ngFor="let env of envVariables" class="env-card" (click)="edit(env)">
+          <div class="env-card-front">
+            {{ env.key }}
+          </div>
+          <div class="env-card-back" *ngIf="!isEditing || editingKey !== env.key">
+            {{ env.value }}
+          </div>
+          <input #editInput *ngIf="isEditing && editingKey === env.key" type="text" [(ngModel)]="newVal"
+            (keydown.enter)="save(env.key)" (blur)="save(env.key)" />
         </li>
       </ul>
     </div>
-    <div *ngIf="activeTab === 'files'">
-      <p>Files content goes here</p>
+    <div *ngIf="activeTab === 'settings'">
+      <button class="add-btn" (click)="addNode(NodeType.Code)">Add Generic Node</button>
     </div>
-    <div *ngIf="activeTab === 'extensions'">
+    <div *ngIf="activeTab === 'tree'">
       <p>Extensions content goes here</p>
-    </div>
-    <div *ngIf="activeTab === 'search'">
-      <p>Search content goes here</p>
     </div>
   </div>
 </div>

@@ -1,5 +1,5 @@
 ::placeholder
-    color: #7a7a7a
+    color: #6e6e6e
 
 .sidebar
     display: flex
@@ -8,8 +8,9 @@
     background-color: #2d2d2d
     color: white
     height: 100vh
-    .tabs
+    overflow-y: auto
 
+    .tabs
         height: 100%
         .tab
             padding: 10px
@@ -21,8 +22,8 @@
 
     .content
         flex: 1
-        padding: 10px
         background-color: #3d3d3d
+        overflow-y: auto
         .add-btn
             padding: 10px
             background-color: #007acc
@@ -31,9 +32,18 @@
             cursor: pointer
             margin-bottom: 30px
 
+        .heading
+            padding: 10px 0
+            font-size: 12px
+            color: white
+            text-align: center
+            margin-bottom: 16px
+
         form
             display: flex
             flex-direction: column
+            margin-bottom: 12px
+            padding: 10px
 
             input
                 margin-bottom: 8px
@@ -44,27 +54,64 @@
                 color: #d0d0d0
                 outline: none
                 caret-color: #a4a4a4
+                font-size: 12px
 
             button
                 align-self: flex-end
                 padding: 10px
                 background-color: #212121
                 color: white
-                border: none
-                cursor: pointer
+                border: 1px solid transparent
+                border-radius: 3px
 
             button:disabled
                 background-color: #666666
                 color: #ababab
 
-        ul
+            button:enabled:hover
+                border-color: #747474
+                cursor: pointer
+
+        .env-list
             list-style-type: none
-            padding: 0
+            padding: 10px
 
-        li
-            display: flex
-            align-items: center
-            margin-bottom: 5px
+            .env-card
+                margin-bottom: 10px
+                border-radius: 5px
+                cursor: pointer
+                display: flex
+                align-items: center
+                background: #f6f6f6
 
-            button
-                margin-left: 10px
+                .env-card-front,.env-card-back
+                    font-size: 12px
+                    padding: 10px
+                    overflow: hidden
+
+                .env-card-front
+                    width: 60px
+                    background-color: #57544e
+                    color: #fff
+                    border-top-left-radius: 3px
+                    border-bottom-left-radius: 3px
+
+                .env-card-back
+                    flex: 1
+                    background-color: #f6f6f6
+                    color: #868686
+                    border-end-end-radius: 3px
+                    border-start-end-radius: 3px
+
+                input
+                    flex: 1
+                    border: none
+                    border-end-end-radius: 3px
+                    border-start-end-radius: 3px
+                    outline: none
+                    background-color: #f6f6f6
+                    color: #868686
+                    font-size: 12px
+                    padding: 10px
+                    overflow: hidden
+                    height: 100%

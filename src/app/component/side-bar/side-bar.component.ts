@@ -1,4 +1,4 @@
-import { Component, Directive, ElementRef, HostListener, Input } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { AppState } from 'src/app/store/node.state';
 import * as NodeActions from '../../store/node.actions';
 import { NodeType, Node } from 'src/app/models/node.model';
@@ -17,6 +17,10 @@ export class SideBarComponent {
   newEnvValue: string = '';
   envVariables: EnvVariable[] = [];
   NodeType = NodeType
+  isEditing: boolean = false
+  newVal: string = '';
+  editingKey: string | null = null;
+  @ViewChild('editInput') editInput: ElementRef | undefined;
 
   constructor(private store: Store<{ appState: AppState }>) {
     this.store.select(state => state.appState.envVariables).subscribe(envVariables => {
@@ -40,17 +44,21 @@ export class SideBarComponent {
     this.newEnvKey = this.newEnvKey.toUpperCase();
   }
 
-  deleteEnvVariable(key: string) {
-    this.store.dispatch(NodeActions.deleteEnvVariable({ key }));
+  edit(env: EnvVariable) {
+    this.isEditing = true;
+    this.newVal = env.value;
+    this.editingKey = env.key;
+    setTimeout(() => this.editInput!.nativeElement.focus(), 0);
   }
 
-  editEnvVariable(key: string) {
-    const envVariable = this.envVariables.find(env => env.key === key);
-    if (envVariable) {
-      this.newEnvKey = envVariable.key;
-      this.newEnvValue = envVariable.value;
-      this.deleteEnvVariable(key);
-    }
+  save(key: string) {
+    this.store.dispatch(NodeActions.updateEnvVariable({ key: key, value: this.newVal }));
+    this.isEditing = false;
+    this.newVal = '';
+  }
+
+  deleteEnvVariable(key: string) {
+    this.store.dispatch(NodeActions.deleteEnvVariable({ key }));
   }
 
   moveToNextInput(nextInput: HTMLInputElement) {
