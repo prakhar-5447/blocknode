@@ -7,19 +7,19 @@ const initialState: AppState = {
   nodes: [{
     id: '0',
     name: 'Server',
-    position: { x: 300, y: 300 },
+    position: { x: 0, y: 0 },
     width: 300,
     type: NodeType.Server
   }, {
     id: '1',
     name: 'Route Node',
-    position: { x: 700, y: 200 },
+    position: { x: 300, y: 200 },
     width: 250,
     type: NodeType.Route,
   }, {
     id: "2",
     name: `Middleware Node`,
-    position: { x: 700, y: 300 },
+    position: { x: 300, y: 300 },
     width: 250,
     type: NodeType.Middleware,
     content: `import jwt from 'jsonwebtoken';
