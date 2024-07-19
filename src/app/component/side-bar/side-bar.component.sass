@@ -13,7 +13,7 @@
     .tabs
         height: 100%
         .tab
-            padding: 10px
+            padding: 8px
             cursor: pointer
             background-color: #2d2d2d
             border-bottom: 1px solid #444
@@ -24,6 +24,23 @@
         flex: 1
         background-color: #3d3d3d
         overflow-y: auto
+
+        // canvas
+        .node-list
+            padding: 0 20px
+            li
+                list-style: none
+                display: flex
+                align-items: center
+                margin-bottom: 10px
+                .node
+                    font-size: 12px
+                .icon
+                    margin-right: 10px
+                    &:hover
+                        cursor: pointer
+
+        // setting
         .add-btn
             padding: 10px
             background-color: #007acc

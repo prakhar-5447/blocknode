@@ -9,9 +9,27 @@
     <div class="tab" [ngClass]="{active: activeTab === 'tree'}" (click)="setActiveTab('tree')">
       <mat-icon>graphic_eq</mat-icon>
     </div>
+    <div class="tab" [ngClass]="{active: activeTab === 'setting'}" (click)="setActiveTab('setting')">
+      <mat-icon>settings</mat-icon>
+    </div>
   </div>
   <div class="content">
     <div *ngIf="activeTab === 'canvas'">
+      <div class="heading">Nodes</div>
+      <ul class="node-list">
+        <li *ngFor="let node of nodes$ | async">
+          <div class="icon" (dblclick)="centerNode(node)">&#11034;</div>
+          <div class="node">{{node.name}}</div>
+        </li>
+      </ul>
+    </div>
+    <div *ngIf="activeTab === 'settings'">
+      <button class="add-btn" (click)="addNode(NodeType.Code)">Add Generic Node</button>
+    </div>
+    <div *ngIf="activeTab === 'tree'">
+      <p>Extensions content goes here</p>
+    </div>
+    <div *ngIf="activeTab === 'setting'">
       <div class="heading">
         Enviroment Variable
       </div>
@@ -24,7 +42,7 @@
         <button type="submit" [disabled]="envForm.invalid">Add Env</button>
       </form>
       <ul class="env-list">
-        <li *ngFor="let env of envVariables" class="env-card" (click)="edit(env)">
+        <li *ngFor="let env of envVariables$ | async" class="env-card" (click)="edit(env)">
           <div class="env-card-front">
             {{ env.key }}
           </div>
@@ -35,12 +53,6 @@
             (keydown.enter)="save(env.key)" (blur)="save(env.key)" />
         </li>
       </ul>
-    </div>
-    <div *ngIf="activeTab === 'settings'">
-      <button class="add-btn" (click)="addNode(NodeType.Code)">Add Generic Node</button>
-    </div>
-    <div *ngIf="activeTab === 'tree'">
-      <p>Extensions content goes here</p>
     </div>
   </div>
 </div>

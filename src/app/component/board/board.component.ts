@@ -11,4 +11,10 @@ export class BoardComponent {
   selectTab(tabName: string): void {
     this.selectedTab = tabName;
   }
+
+  centerNodePosition: { x: number, y: number } = { x: 0, y: 0 };
+
+  onCenterNode(position: { x: number, y: number }) {
+    this.centerNodePosition = position;
+  }
 }

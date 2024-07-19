@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AppState } from 'src/app/store/node.state';
@@ -38,6 +38,24 @@ export class CanvasComponent {
   durationInSeconds = 5;
   horizontalPosition: MatSnackBarHorizontalPosition = 'end';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+
+  @Input() set centerNodePosition(position: { x: number, y: number }) {
+    if (position) {
+      this.panToCenter(position);
+    }
+  }
+
+  panToCenter(position: { x: number, y: number }) {
+    const canvas = document.querySelector('.virtual-space');
+    if (canvas) {
+      const canvasRect = canvas.getBoundingClientRect();
+      const canvasCenterX = canvasRect.width / 2;
+      const canvasCenterY = canvasRect.height / 2;
+
+      this.panX = canvasCenterX - position.x;
+      this.panY = canvasCenterY - position.y;
+    }
+  }
 
   openSnackBar(data: { message: string, action: string }) {
     this._snackBar.open(data.message, data.action, {

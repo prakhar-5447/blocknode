@@ -1,10 +1,11 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
 import { AppState } from 'src/app/store/node.state';
 import * as NodeActions from '../../store/node.actions';
 import { NodeType, Node } from 'src/app/models/node.model';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
+import * as NodeSelectors from '../../store/node.selectors';
 import { EnvVariable } from '@/app/models/env.model';
-
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-side-bar',
@@ -15,17 +16,18 @@ export class SideBarComponent {
   activeTab: string = 'canvas';
   newEnvKey: string = '';
   newEnvValue: string = '';
-  envVariables: EnvVariable[] = [];
+  envVariables$: Observable<EnvVariable[]>;
+  nodes$: Observable<Node[]>;
   NodeType = NodeType
   isEditing: boolean = false
   newVal: string = '';
   editingKey: string | null = null;
+  @Output() centerNodeEvent = new EventEmitter<{ x: number, y: number }>();
   @ViewChild('editInput') editInput: ElementRef | undefined;
 
   constructor(private store: Store<{ appState: AppState }>) {
-    this.store.select(state => state.appState.envVariables).subscribe(envVariables => {
-      this.envVariables = envVariables;
-    });
+    this.envVariables$ = this.store.pipe(select(NodeSelectors.selectEnv));
+    this.nodes$ = this.store.pipe(select(NodeSelectors.selectNodes));
   }
 
   setActiveTab(tab: string) {
@@ -52,13 +54,13 @@ export class SideBarComponent {
   }
 
   save(key: string) {
-    this.store.dispatch(NodeActions.updateEnvVariable({ key: key, value: this.newVal }));
+    if (this.newVal == "") {
+      this.store.dispatch(NodeActions.deleteEnvVariable({ key }));
+    } else {
+      this.store.dispatch(NodeActions.updateEnvVariable({ key: key, value: this.newVal }));
+      this.newVal = '';
+    }
     this.isEditing = false;
-    this.newVal = '';
-  }
-
-  deleteEnvVariable(key: string) {
-    this.store.dispatch(NodeActions.deleteEnvVariable({ key }));
   }
 
   moveToNextInput(nextInput: HTMLInputElement) {
@@ -75,5 +77,9 @@ export class SideBarComponent {
       content: "const middleware = (req, res, next) => {\n  console.log(\'Request received\');\n  next();\n};"
     };
     this.store.dispatch(NodeActions.addNode({ node: newNode }));
+  }
+
+  centerNode(node: Node) {
+    this.centerNodeEvent.emit(node.position);
   }
 }
