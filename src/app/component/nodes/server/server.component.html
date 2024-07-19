@@ -1,31 +1,10 @@
-<div class="server-node" cdkDrag (cdkDragMoved)="onDragMoved($event)" [style.left.px]="position.x - 300" [style.top.px]="position.y"
-    (cdkDragStarted)="onDragStart($event)" (cdkDragEnded)="onDragEnd($event)">
-    <div class="head">
-        <h3>Server {{position.x}} {{position.y}}</h3>
-        <mat-icon (mousedown)="startConnecting($event)">add_circle_outline</mat-icon>
+<div class="server-node card" cdkDrag (cdkDragMoved)="onDragMoved($event)" [style.left.px]="position.x - 300"
+    [style.top.px]="position.y" (cdkDragStarted)="onDragStart($event)" (cdkDragEnded)="onDragEnd($event)">
+    <div class="id">@{{nodeId}}</div>
+    <div class="card-header">
+        <h3>Server</h3>
+        <mat-icon class="connect-icon" (mousedown)="startConnecting($event)">add_circle_outline</mat-icon>
     </div>
-    <form [formGroup]="serverForm">
-        <div class="form-row-1">
-            <div class="form-label">Port:</div>
-            <div class="form-input">
-                <input matInput formControlName="port" type="number" />
-            </div>
-        </div>
-        <div class="form-row-2">
-            <div class="form-label">DB URL:</div>
-            <div class="form-input">
-                <input matInput formControlName="dbUrl" type="text" />
-            </div>
-        </div>
-        <div class="form-row-3">
-            <div class="form-label">Environment:</div>
-            <div class="environment-toggle">
-                <mat-slide-toggle formControlName="environment">
-                    <span>
-                        {{ serverForm!.get('environment')!.value ? 'Production' : 'Development' }}
-                    </span>
-                </mat-slide-toggle>
-            </div>
-        </div>
-    </form>
+    <div class="card-content">
+    </div>
 </div>

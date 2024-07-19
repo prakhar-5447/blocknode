@@ -1,73 +1,33 @@
 .server-node
     position: absolute
-    border: 1px solid #ccc
-    padding: 30px
-    width: 300px
-    background-color: #9c27b0 
-    border-radius: 12px
-    font-size: 12px
+    border: 1px solid #ddd
+    width: 250px
+    background-color: #9c27b0
+    border-radius: 8px
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
+    font-size: 14px
     color: white
 
-    .head
+    .id
+        position: absolute
+        top: -16px
+        color: black
+        font-size: 10px
+        &:hover
+            color: blue
+            text-decoration: underline
+            cursor: pointer
+
+    .card-header
+        padding: 16px
         display: flex
         justify-content: space-between
         align-items: center
-        margin-bottom: 12px
         h3
             margin: 0
-            font-size: 16px
+            font-size: 18px
 
         .connect-icon
-            right: -15px
-            top: 20px
-            font-size: 24px
-            color: red
+            font-size: 20px
+            color: white
             cursor: pointer
-
-    .form-row-1
-        display: flex
-        margin-bottom: 12px
-        align-items: center
-
-        .form-label
-            flex: 1
-
-        .form-input
-            width: 60px
-            position: relative
-            border: 1px solid white
-            padding: 5px 10px
-            border-radius: 3px
-            caret-color: white
-            input
-                color: white
-                width: 100%
-                border: none
-                outline: none
-                background-color: transparent
-
-    .form-row-2
-        margin-bottom: 10px
-        .form-input
-            width: auto
-            position: relative
-            border: 1px solid white
-            padding: 5px 10px
-            border-radius: 3px
-            caret-color: white
-            input
-                color: white
-                width: 100%
-                border: none
-                outline: none
-                background-color: transparent
-
-    .form-row-3
-        .form-label
-            flex: 1
-
-        .environment-toggle
-            display: flex
-            align-items: center
-            span
-                color: #fff
