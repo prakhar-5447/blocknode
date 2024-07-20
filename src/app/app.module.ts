@@ -24,6 +24,7 @@ import { EditorComponent } from './component/editor/editor.component';
 import { StoreModule } from '@ngrx/store';
 import { nodeReducer } from './store/node.reducer';
 import { CodeComponent } from './component/nodes/code/code.component';
+import { ToolbarComponent } from './component/toolbar/toolbar.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +37,7 @@ import { CodeComponent } from './component/nodes/code/code.component';
     RouteComponent,
     EditorComponent,
     CodeComponent,
+    ToolbarComponent,
   ],
   imports: [
     BrowserModule,
