@@ -69,7 +69,7 @@ export class SideBarComponent {
 
   addNode(nodeType: NodeType): void {
     const newNode: Node = {
-      id: "5",
+      id: this.generateUniqueId(),
       name: `${nodeType} Node`,
       position: { x: 1000, y: 200 },
       width: 250,
@@ -78,6 +78,19 @@ export class SideBarComponent {
     };
     this.store.dispatch(NodeActions.addNode({ node: newNode }));
   }
+
+  generateUniqueId(): string {
+    const now = new Date();
+    const uniqueId = `${now.getFullYear()}${this.pad(now.getMonth() + 1, 2)}${this.pad(now.getDate(), 2)}${this.pad(now.getHours(), 2)}${this.pad(now.getMinutes(), 2)}${this.pad(now.getSeconds(), 2)}${this.pad(now.getMilliseconds(), 3)}`;
+    return uniqueId;
+  }
+
+  pad(num: number, size: number): string {
+    let s = num.toString();
+    while (s.length < size) s = "0" + s;
+    return s;
+  }
+
 
   centerNode(node: Node) {
     this.centerNodeEvent.emit(node.position);

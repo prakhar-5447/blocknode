@@ -5,7 +5,6 @@ import * as NodeActions from '../../store/node.actions';
 import { AppState } from '@/app/store/node.state';
 import { Store, select } from '@ngrx/store';
 import * as NodeSelectors from '../../store/node.selectors';
-import { Subscription } from 'rxjs';
 import { Node } from '@/app/models/node.model';
 
 declare var monaco: any;
@@ -15,11 +14,10 @@ declare var monaco: any;
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.sass']
 })
-export class EditorComponent implements AfterViewInit, OnDestroy {
+export class EditorComponent implements AfterViewInit {
   @ViewChild('editorContainer', { static: true }) editorContainer!: ElementRef;
   private editor: any;
   private selectedNodeId: Node | null = null;
-  private selectedNodeSubscription$: Subscription;
   private detectedLibraries: Set<string> = new Set();
   private nodes: Node[] = [];
   private monacoInitialized: boolean = false;
@@ -32,7 +30,7 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
         this.updateMonacoFiles();
       }
     });
-    this.selectedNodeSubscription$ = this.store.pipe(select(NodeSelectors.selectSelectedNodeContent))
+  this.store.pipe(select(NodeSelectors.selectSelectedNodeContent))
     .subscribe(node => {
       this.selectedNodeId = node;
       this.switchEditorModel(this.selectedNodeId?.id!)
@@ -46,18 +44,13 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-
   ngAfterViewInit(): void {
     this.monacoEditorService.loadMonaco().pipe(first()).subscribe(() => {
       this.initMonaco();
     });
   }
 
-  ngOnDestroy(): void {
-    if (this.selectedNodeSubscription$) {
-      this.selectedNodeSubscription$.unsubscribe();
-    }
-  }
+
 
   private initMonaco(): void {
     const myDiv: HTMLDivElement = this.editorContainer.nativeElement;
