@@ -6,6 +6,7 @@ export const selectSelectedNodeContent = (state: { appState: AppState }) => stat
 export const selectSelectedNodeId = (state: { appState: AppState }) => state.appState.selectedNodeId;
 export const selectConnections = (state: { appState: AppState }) => state.appState.connections;
 export const selectEnv = (state: { appState: AppState }) => state.appState.envVariables;
+export const selectSelectedConnection = (state: { appState: AppState }) => state.appState.selectConnection;
 
 export const selectSelectedNode = createSelector(
   selectNodes,

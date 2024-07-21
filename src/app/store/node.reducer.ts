@@ -44,7 +44,8 @@ export default jwtAuth;`
   selectedNodeId: null,
   selectedNodeContent: null,
   connections: [],
-  envVariables: []
+  selectConnection: null,
+  envVariables: [],
 };
 
 export const nodeReducer = createReducer(
@@ -128,5 +129,9 @@ export const nodeReducer = createReducer(
     envVariables: state.envVariables.map(env =>
       env.key === key ? { ...env, key, value } : env
     ),
-  }))
+  })),
+  on(NodeActions.selectConnection, (state, { connection }) => ({
+    ...state,
+    selectConnection: state.connections.find(c => c.id === connection.id) || null,
+  })),
 );

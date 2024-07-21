@@ -8,4 +8,5 @@ export interface AppState {
     selectedNodeContent: Node | null,
     connections: Connection[];
     envVariables: EnvVariable[];
+    selectConnection: Connection | null;
 }
