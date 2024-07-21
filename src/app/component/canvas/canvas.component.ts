@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AppState } from 'src/app/store/node.state';
@@ -17,6 +17,7 @@ export class CanvasComponent {
   nodes$: Observable<Node[]>;
   NodeType = NodeType;
   connections$: Observable<Connection[]>;
+  @ViewChild('canvas') canvas: ElementRef | undefined;
 
   constructor(private store: Store<{ appState: AppState }>, private _snackBar: MatSnackBar) {
     this.nodes$ = this.store.pipe(select(NodeSelectors.selectNodes));
@@ -94,6 +95,7 @@ export class CanvasComponent {
       this.isPanning = true;
       this.startX = event.clientX - this.panX;
       this.startY = event.clientY - this.panY;
+      this.canvas?.nativeElement.classList.add("grab")
       event.preventDefault(); // Prevent the default middle mouse button action
     }
     this.isNodeDragging = false;
@@ -101,6 +103,7 @@ export class CanvasComponent {
 
   onMouseUp(): void {
     this.isPanning = false;
+    this.canvas?.nativeElement.classList.remove("grab")
   }
 
   onDragStarted(): void {
@@ -137,6 +140,7 @@ export class CanvasComponent {
     if (this.drawingConnection) {
       if (endPosition.node.type == this.drawingConnection.type) {
         const connectionToAdd: Connection = {
+          id: this.generateUniqueId(),
           fromNode: this.drawingConnection.fromNode,
           toNode: endPosition.node,
           color: this.getConnectionColor(this.drawingConnection.type)
@@ -149,6 +153,19 @@ export class CanvasComponent {
       this.cursorPosition = { x: 0, y: 0 };
     }
   }
+
+  generateUniqueId(): string {
+    const now = new Date();
+    const uniqueId = `${now.getFullYear()}${this.pad(now.getMonth() + 1, 2)}${this.pad(now.getDate(), 2)}${this.pad(now.getHours(), 2)}${this.pad(now.getMinutes(), 2)}${this.pad(now.getSeconds(), 2)}${this.pad(now.getMilliseconds(), 3)}`;
+    return uniqueId;
+  }
+
+  pad(num: number, size: number): string {
+    let s = num.toString();
+    while (s.length < size) s = "0" + s;
+    return s;
+  }
+
 
   connect(node: { node: Node }): void {
     if (this.drawingConnection) {
@@ -222,6 +239,13 @@ export class CanvasComponent {
     }
 
     return path;
+  }
+
+  selectConnection(connection: Connection) {
+    this.store.dispatch(NodeActions.selectConnection({ connection:connection }));
+    console.log(connection.id)
+    this.store.pipe(select(NodeSelectors.selectSelectedConnection)).subscribe(conn => {
+    });
   }
 
 }

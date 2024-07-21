@@ -1,10 +1,9 @@
 <div class="canvas-container" (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)"
-  (mouseup)="onMouseUp()">
+  (mouseup)="onMouseUp()" #canvas>
   <div class="virtual-space" [ngStyle]="{'transform': 'translate(' + panX + 'px, ' + panY + 'px)'}">
     <ng-container *ngFor="let node of nodes$ | async">
       <app-server *ngIf="node.type === NodeType.Server" [nodeName]="node.name" [position]="node.position"
-        [nodeId]="node.id" [port]="node.port!" [dburl]="node.dbUrl!" [env]="node.enviroment!"
-        (startConnection)="startConnection($event)" (mouseup)="endConnection({ node: node })"
+        [nodeId]="node.id" (startConnection)="startConnection($event)" (mouseup)="endConnection({ node: node })"
         (nodeMoved)="onNodeMoved($event)" (dragStarted)="onDragStarted()"
         (dragEnded)="onDragEnded($event)"></app-server>
       <app-route *ngIf="node.type === NodeType.Route" [nodeName]="node.name" [position]="node.position"
@@ -33,11 +32,11 @@
       </defs>
 
       <!-- Render connections with neon effect -->
-      <path *ngFor="let connection of connections$ | async"
+      <path *ngFor="let connection of connections$ | async" class="path"
         [attr.d]="generatePath(connection.fromNode, connection.toNode)" [attr.stroke]="connection.color"
-        stroke-width="2" fill="none" filter="url(#neon)" />
+        stroke-width="3" fill="none" filter="url(#neon)" (click)="selectConnection(connection)" />
       <path *ngIf="drawingConnection" [attr.d]="generatePath(drawingConnection.fromNode, { position: cursorPosition })"
-        stroke="red" stroke-width="2" fill="none" filter="url(#neon)" />
+        stroke="red" stroke-width="3" fill="none" filter="url(#neon)" />
     </svg>
   </div>
   <div class="editor-panel" [ngClass]="{'open': isEditorOpen}">
