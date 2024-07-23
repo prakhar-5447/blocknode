@@ -12,6 +12,8 @@ export const selectNode = createAction('[Node] Select', props<{ id: string }>())
 export const deselectNode = createAction('[Node] Deselect');
 export const addConnection = createAction('[Connection] Add Connection', props<{ connection: Connection }>());
 export const selectConnection = createAction('[Connection] Select', props<{ connection: Connection }>());
+export const deselectConnection = createAction('[Connection] Deselect');
+export const updateConnection = createAction('[Node] Update Connection', props<{ id: string, fromNode: Node, toNode: Node }>());
 
 
 export const addEnvVariable = createAction('[Env] Add Env Variable', props<{ envVariable: EnvVariable }>());

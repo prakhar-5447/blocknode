@@ -1,13 +1,33 @@
 <div class="container">
-    <div class="connection" *ngIf="selectedConnection!=null">
-        {{selectedConnection.fromNode.name}}
-    </div>
-    <div *ngIf="selectedConnection==null" class="toolbar-area">
-        <div class="box">
-            <img src="/assets/cursor.svg" class="hand" alt="">
+    <div class="connection" *ngIf="selectedConnection; else toolbar" @fadeInOut>
+        <div class="dropdown">
+            <select id="fromNode" [(ngModel)]="fromNodeId" (change)="checkToNode()">
+                <option *ngFor="let node of nodes" [ngValue]="node.id" [disabled]="node.id == fromNodeId">
+                    {{node.name}}
+                </option>
+            </select>
+            <div class="line"></div>
+            <img src="/assets/connection.svg" alt="">
+            <div class="line"></div>
+            <select id="toNode" [(ngModel)]="toNodeId" (change)="changeType()">
+                <option *ngFor="let node of nodes" [ngValue]="node.id"
+                    [disabled]="node.id == fromNodeId || (fromNodeId && !isAllowedConnection(fromNodeType!, node.type))">
+                    {{node.name}}
+                </option>
+            </select>
         </div>
-        <div class="box">
-            <img src="/assets/hand.svg" class="hand" alt="">
+        <div class="button">
+            <button (click)="saveConnection()">Save</button>
         </div>
     </div>
+    <ng-template #toolbar>
+        <div class="toolbar-area" @fadeInOut>
+            <div class="box">
+                <img src="/assets/cursor.svg" class="hand" alt="">
+            </div>
+            <div class="box">
+                <img src="/assets/hand.svg" class="hand" alt="">
+            </div>
+        </div>
+    </ng-template>
 </div>

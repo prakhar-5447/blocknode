@@ -8,7 +8,7 @@ const initialState: AppState = {
     id: '0',
     name: 'Server',
     position: { x: 0, y: 0 },
-    width: 300,
+    width: 250,
     type: NodeType.Server
   }, {
     id: '1',
@@ -87,7 +87,7 @@ export const nodeReducer = createReducer(
       fromNode: connection.fromNode.id === id ? { ...connection.fromNode, position } : connection.fromNode,
     })
     );
-    position = { x: position.x - width, y: position.y };
+    position = { x: position.x, y: position.y };
     const updatedConnectionsto = updatedConnections.map(connection =>
     ({
       ...connection,
@@ -134,4 +134,15 @@ export const nodeReducer = createReducer(
     ...state,
     selectConnection: state.connections.find(c => c.id === connection.id) || null,
   })),
+  on(NodeActions.deselectConnection, (state) => ({
+    ...state,
+    selectConnection: null,
+  })),
+  on(NodeActions.updateConnection, (state, { id, fromNode, toNode }) => ({
+    ...state,
+    connections: state.connections.map(conn =>
+      conn.id === id ? { ...conn, fromNode, toNode } : conn
+    ),
+    selectConnection: null,
+  }))
 );
