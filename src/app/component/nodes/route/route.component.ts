@@ -14,7 +14,7 @@ export class RouteComponent {
   @Input() position: { x: number, y: number } = { x: 0, y: 0 };
   @Output() routeChanged = new EventEmitter<string>();
   @Output() nodeMoved = new EventEmitter<{ id: string, position: { x: number, y: number }, width: number }>();
-  @Output() startConnection = new EventEmitter<{ node: any, position: { x: number, y: number }, name: string, type: NodeType }>();
+  @Output() startConnection = new EventEmitter<{ position: { x: number, y: number }, type: NodeType }>();
   @Output() dragStarted = new EventEmitter<void>();
   @Output() removeConnection = new EventEmitter<void>();
   @Output() connectionAttach = new EventEmitter<{ node: any, position: { x: number, y: number }, name: string, type: NodeType }>();
@@ -41,7 +41,7 @@ export class RouteComponent {
 
   onDragMoved(event: CdkDragMove): void {
     const { x, y, width } = event.source.element.nativeElement.getBoundingClientRect();
-    this.pos = { x: x + this.width, y: y };
+    this.pos = { x: x, y: y };
     this.width = width;
     this.nodeMoved.emit({
       id: this.nodeId, position: this.pos, width: this.width
@@ -54,7 +54,7 @@ export class RouteComponent {
 
   onDragEnd(event: CdkDragEnd): void {
     const updatedPosition = {
-      x: this.pos.x - this.width,
+      x: this.pos.x,
       y: this.pos.y
     };
     this.dragEnded.emit({ id: this.nodeId, position: updatedPosition });
@@ -65,8 +65,7 @@ export class RouteComponent {
     this.dragStarted.emit();
     const x = this.position.x + this.width;
     const y = this.position.y;
-    const node: Node = { id: this.nodeId, position: { x: this.position.x + this.width, y: this.position.y }, width: this.width, name: this.nodeName, type: NodeType.Route };
-    this.startConnection.emit({ node: node, position: { x, y }, name: this.nodeName, type: NodeType.Code });
+    this.startConnection.emit({ position: { x, y }, type: NodeType.Code });
   }
 
   startConnectingMiddleware(event: MouseEvent): void {
@@ -74,8 +73,7 @@ export class RouteComponent {
     this.dragStarted.emit();
     const x = this.position.x + this.width;
     const y = this.position.y;
-    const node: Node = { id: this.nodeId, position: { x: this.position.x + this.width, y: this.position.y }, width: this.width, name: this.nodeName, type: NodeType.Route };
-    this.startConnection.emit({ node: node, position: { x, y }, name: this.nodeName, type: NodeType.Middleware });
+    this.startConnection.emit({ position: { x, y }, type: NodeType.Middleware });
   }
 
   mouseEnter(event: MouseEvent) {

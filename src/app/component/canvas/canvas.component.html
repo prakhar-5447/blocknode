@@ -1,15 +1,16 @@
 <div class="canvas-container" (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)"
   (mouseup)="onMouseUp()" #canvas>
   <div class="virtual-space" [ngStyle]="{'transform': 'translate(' + panX + 'px, ' + panY + 'px)'}">
-    <ng-container *ngFor="let node of nodes$ | async">
+    <ng-container *ngFor="let node of nodes">
       <app-server *ngIf="node.type === NodeType.Server" [nodeName]="node.name" [position]="node.position"
-        [nodeId]="node.id" (startConnection)="startConnection($event)" (mouseup)="endConnection({ node: node })"
-        (nodeMoved)="onNodeMoved($event)" (dragStarted)="onDragStarted()"
+        [nodeId]="node.id" (startConnection)="startConnection($event,{n:node})"
+        (mouseup)="endConnection({ node: node })" (nodeMoved)="onNodeMoved($event)" (dragStarted)="onDragStarted()"
         (dragEnded)="onDragEnded($event)"></app-server>
       <app-route *ngIf="node.type === NodeType.Route" [nodeName]="node.name" [position]="node.position"
-        [nodeId]="node.id" (startConnection)="startConnection($event)" (mouseup)="endConnection({ node: node })"
-        (nodeMoved)="onNodeMoved($event)" (dragStarted)="onDragStarted()" (dragEnded)="onDragEnded($event)"
-        (connectionAttach)="connect($event)" (removeConnection)="disconnect()"></app-route>
+        [nodeId]="node.id" (startConnection)="startConnection($event,{n:node})"
+        (mouseup)="endConnection({ node: node })" (nodeMoved)="onNodeMoved($event)" (dragStarted)="onDragStarted()"
+        (dragEnded)="onDragEnded($event)" (connectionAttach)="connect($event)"
+        (removeConnection)="disconnect()"></app-route>
       <app-middleware *ngIf="node.type === NodeType.Middleware" [nodeName]="node.name" [position]="node.position"
         [nodeId]="node.id" [code]="node.content!" (nodeMoved)="onNodeMoved($event)" (dragStarted)="onDragStarted()"
         (mouseup)="endConnection({ node: node })" (dragEnded)="onDragEnded($event)" (nodeSelected)="openEditor()"
@@ -32,7 +33,7 @@
       </defs>
 
       <!-- Render connections with neon effect -->
-      <path *ngFor="let connection of connections$ | async" class="path"
+      <path *ngFor="let connection of connections" class="path"
         [attr.d]="generatePath(connection.fromNode, connection.toNode)" [attr.stroke]="connection.color"
         stroke-width="3" fill="none" filter="url(#neon)" (click)="selectConnection(connection)" />
       <path *ngIf="drawingConnection" [attr.d]="generatePath(drawingConnection.fromNode, { position: cursorPosition })"

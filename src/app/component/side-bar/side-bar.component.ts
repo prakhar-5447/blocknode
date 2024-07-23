@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { AppState } from 'src/app/store/node.state';
 import * as NodeActions from '../../store/node.actions';
 import { NodeType, Node } from 'src/app/models/node.model';
@@ -13,11 +13,11 @@ import { Observable } from 'rxjs';
   styleUrls: ['./side-bar.component.sass']
 })
 export class SideBarComponent {
+  @Input() nodes: Node[] | null = [];
   activeTab: string = 'canvas';
   newEnvKey: string = '';
   newEnvValue: string = '';
   envVariables$: Observable<EnvVariable[]>;
-  nodes$: Observable<Node[]>;
   NodeType = NodeType
   isEditing: boolean = false
   newVal: string = '';
@@ -27,7 +27,6 @@ export class SideBarComponent {
 
   constructor(private store: Store<{ appState: AppState }>) {
     this.envVariables$ = this.store.pipe(select(NodeSelectors.selectEnv));
-    this.nodes$ = this.store.pipe(select(NodeSelectors.selectNodes));
   }
 
   setActiveTab(tab: string) {

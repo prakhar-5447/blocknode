@@ -12,7 +12,7 @@ export class ServerComponent {
   @Input() nodeName: string = 'Server';
   @Input() position: { x: number, y: number } = { x: 0, y: 0 };
   @Output() nodeMoved = new EventEmitter<{ id: string, position: { x: number, y: number }, width: number }>();
-  @Output() startConnection = new EventEmitter<{ node: any, position: { x: number, y: number }, name: string, type: NodeType }>();
+  @Output() startConnection = new EventEmitter<{ position: { x: number, y: number }, type: NodeType }>();
 
   @Output() settingsChanged = new EventEmitter<{ port: string, dbUrl: string }>();
   @Output() dragStarted = new EventEmitter<void>();
@@ -23,7 +23,7 @@ export class ServerComponent {
 
   onDragMoved(event: CdkDragMove): void {
     const { x, y, width } = event.source.element.nativeElement.getBoundingClientRect();
-    this.pos = { x: x + this.width, y: y };
+    this.pos = { x: x, y: y };
     this.width = width;
     this.nodeMoved.emit({
       id: this.nodeId, position: this.pos, width: this.width
@@ -36,7 +36,7 @@ export class ServerComponent {
 
   onDragEnd(event: CdkDragEnd): void {
     const updatedPosition = {
-      x: this.pos.x - this.width,
+      x: this.pos.x,
       y: this.pos.y
     };
     this.dragEnded.emit({ id: this.nodeId, position: updatedPosition });
@@ -47,7 +47,6 @@ export class ServerComponent {
     this.dragStarted.emit();
     const x = this.position.x + this.width;
     const y = this.position.y;
-    const node: Node = { id: this.nodeId, position: { x: this.position.x + this.width, y: this.position.y }, width: this.width, name: this.nodeName, type: NodeType.Server };
-    this.startConnection.emit({ node: node, position: { x, y }, name: this.nodeName, type: NodeType.Route });
+    this.startConnection.emit({ position: { x, y }, type: NodeType.Route });
   }
 }

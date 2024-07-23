@@ -30,7 +30,7 @@ export class CodeComponent {
 
   onDragMoved(event: CdkDragMove): void {
     const { x, y, width } = event.source.element.nativeElement.getBoundingClientRect();
-    this.pos = { x: x + this.width, y: y };
+    this.pos = { x: x, y: y };
     this.width = width;
     this.nodeMoved.emit({
       id: this.nodeId, position: this.pos, width: this.width
@@ -43,7 +43,7 @@ export class CodeComponent {
 
   onDragEnd(event: CdkDragEnd): void {
     const updatedPosition = {
-      x: this.pos.x - this.width,
+      x: this.pos.x,
       y: this.pos.y
     };
     this.dragEnded.emit({ id: this.nodeId, position: updatedPosition });

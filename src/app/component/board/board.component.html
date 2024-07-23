@@ -1,9 +1,12 @@
 <div class="dashboard">
-    <app-side-bar (centerNodeEvent)="onCenterNode($event)"></app-side-bar>
+    <app-side-bar [nodes]="nodes$ | async" (centerNodeEvent)="onCenterNode($event)"></app-side-bar>
     <div class="main-content">
-        <app-canvas [centerNodePosition]="centerNodePosition"></app-canvas>
+        <app-canvas [nodes]="nodes$ | async" [connections]="connections$ | async"
+            [centerNodePosition]="centerNodePosition" (canvasMoved)="cancelSelection()"></app-canvas>
     </div>
     <div class="toolbar">
-        <app-toolbar></app-toolbar>
+        <app-toolbar [fromNodeId]="fromNodeId" [fromNodeType]="fromNodeType" [toNodeId]="toNodeId"
+            [toNodeType]="toNodeType" [connId]="connId" [selectedConnection]="fromNodeId!=null"
+            [nodes]="nodes$ | async"></app-toolbar>
     </div>
 </div>

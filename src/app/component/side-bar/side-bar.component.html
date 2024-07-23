@@ -17,7 +17,7 @@
     <div *ngIf="activeTab === 'canvas'">
       <div class="heading">Nodes</div>
       <ul class="node-list">
-        <li *ngFor="let node of nodes$ | async">
+        <li *ngFor="let node of nodes">
           <div class="icon" (dblclick)="centerNode(node)">&#11034;</div>
           <div class="node">{{node.name}}</div>
         </li>

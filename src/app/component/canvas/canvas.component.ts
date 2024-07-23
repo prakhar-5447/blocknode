@@ -1,6 +1,5 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { Observable } from 'rxjs';
 import { AppState } from 'src/app/store/node.state';
 import * as NodeSelectors from '../../store/node.selectors';
 import * as NodeActions from '../../store/node.actions';
@@ -14,14 +13,13 @@ import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition
   styleUrls: ['./canvas.component.sass']
 })
 export class CanvasComponent {
-  nodes$: Observable<Node[]>;
+  @Input() nodes: Node[] | null = [];
   NodeType = NodeType;
-  connections$: Observable<Connection[]>;
+  @Input() connections: Connection[] | null = [];
   @ViewChild('canvas') canvas: ElementRef | undefined;
+  @Output() canvasMoved = new EventEmitter<void>();
 
   constructor(private store: Store<{ appState: AppState }>, private _snackBar: MatSnackBar) {
-    this.nodes$ = this.store.pipe(select(NodeSelectors.selectNodes));
-    this.connections$ = this.store.pipe(select(NodeSelectors.selectConnections));
   }
 
   drawingConnection: any = null;
@@ -85,6 +83,7 @@ export class CanvasComponent {
       }
     }
     if (this.isPanning && !this.isNodeDragging) {
+      this.canvasMoved.emit();
       this.panX = event.clientX - this.startX;
       this.panY = event.clientY - this.startY;
     }
@@ -123,15 +122,16 @@ export class CanvasComponent {
 
 
   onNodeMoved(event: { id: string, position: { x: number, y: number }, width: number }): void {
+    this.canvasMoved.emit();
     const updatedPosition = {
       x: event.position.x - this.panX,
       y: event.position.y - this.panY
     };
-    this.store.dispatch(NodeActions.updateConnectionPosition({ id: event.id, position: updatedPosition, width: event.width }));
+    this.store.dispatch(NodeActions.updateConnectionPosition({ id: event.id, position: updatedPosition, width: 0 }));
   }
 
-  startConnection(startPosition: { node: Node, position: { x: number, y: number }, name: string, type: NodeType }): void {
-    this.drawingConnection = { fromNode: startPosition.node, toNode: null, type: startPosition.type };
+  startConnection(startPosition: { position: { x: number, y: number }, type: NodeType }, node: { n: Node }): void {
+    this.drawingConnection = { fromNode: node.n, toNode: null, type: startPosition.type };
     this.cursorPosition = { x: startPosition.position.x, y: startPosition.position.y };
     this.isNodeDragging = true;
   }
@@ -195,7 +195,7 @@ export class CanvasComponent {
   }
 
   generatePath(fromNode: any, toNode: any): string {
-    const start = { x: fromNode.position.x + this.panX - 300, y: fromNode.position.y + this.panY };
+    const start = { x: fromNode.position.x + this.panX - 300 + fromNode.width, y: fromNode.position.y + this.panY };
     const end = { x: toNode.position.x + this.panX - 300, y: toNode.position.y + this.panY };
 
     let path = `M${start.x},${start.y} `;
@@ -242,10 +242,7 @@ export class CanvasComponent {
   }
 
   selectConnection(connection: Connection) {
-    this.store.dispatch(NodeActions.selectConnection({ connection:connection }));
-    console.log(connection.id)
-    this.store.pipe(select(NodeSelectors.selectSelectedConnection)).subscribe(conn => {
-    });
+    this.store.dispatch(NodeActions.selectConnection({ connection: connection }));
   }
 
 }
