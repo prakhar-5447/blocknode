@@ -48,8 +48,6 @@ export class ToolbarComponent {
     if (!this.isAllowedConnection(this.fromNodeType!, this.toNodeType!)) {
       this.toNodeId = null;
       this.toNodeType = null;
-      console.log(this.toNodeId);
-      console.log("dkl;askd;l");
     }
   }
 

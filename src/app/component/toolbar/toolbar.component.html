@@ -9,7 +9,7 @@
             <div class="line"></div>
             <img src="/assets/connection.svg" alt="">
             <div class="line"></div>
-            <select id="toNode" [(ngModel)]="toNodeId" (change)="changeType()">
+            <select id="toNode" [(ngModel)]="toNodeId">
                 <option *ngFor="let node of nodes" [ngValue]="node.id"
                     [disabled]="node.id == fromNodeId || (fromNodeId && !isAllowedConnection(fromNodeType!, node.type))">
                     {{node.name}}
