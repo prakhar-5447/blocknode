@@ -1,5 +1,6 @@
 <div class="dashboard">
-    <app-side-bar [nodes]="nodes$ | async" (centerNodeEvent)="onCenterNode($event)"></app-side-bar>
+    <app-side-bar [connections]="connections$ | async" [nodes]="nodes$ | async"
+        (centerNodeEvent)="onCenterNode($event)"></app-side-bar>
     <div class="main-content">
         <app-canvas [nodes]="nodes$ | async" [connections]="connections$ | async"
             [centerNodePosition]="centerNodePosition" (canvasMoved)="cancelSelection()"></app-canvas>

@@ -6,6 +6,7 @@ import { Store, select } from '@ngrx/store';
 import * as NodeSelectors from '../../store/node.selectors';
 import { EnvVariable } from '@/app/models/env.model';
 import { Observable } from 'rxjs';
+import { Connection } from '@/app/models/connection.model';
 
 @Component({
   selector: 'app-side-bar',
@@ -14,6 +15,7 @@ import { Observable } from 'rxjs';
 })
 export class SideBarComponent {
   @Input() nodes: Node[] | null = [];
+  @Input() connections: Connection[] | null = [];
   activeTab: string = 'canvas';
   newEnvKey: string = '';
   newEnvValue: string = '';

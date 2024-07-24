@@ -27,7 +27,7 @@
       <button class="add-btn" (click)="addNode(NodeType.Code)">Add Generic Node</button>
     </div>
     <div *ngIf="activeTab === 'tree'">
-      <p>Extensions content goes here</p>
+      <app-tree [nodes]="nodes" [connections]="connections"></app-tree>
     </div>
     <div *ngIf="activeTab === 'setting'">
       <div class="heading">

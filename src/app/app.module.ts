@@ -13,6 +13,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatTreeModule } from '@angular/material/tree';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CanvasComponent } from './component/canvas/canvas.component';
 import { BoardComponent } from './component/board/board.component';
@@ -25,6 +26,7 @@ import { StoreModule } from '@ngrx/store';
 import { nodeReducer } from './store/node.reducer';
 import { CodeComponent } from './component/nodes/code/code.component';
 import { ToolbarComponent } from './component/toolbar/toolbar.component';
+import { TreeComponent } from './shared/tree/tree.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +40,7 @@ import { ToolbarComponent } from './component/toolbar/toolbar.component';
     EditorComponent,
     CodeComponent,
     ToolbarComponent,
+    TreeComponent,
   ],
   imports: [
     BrowserModule,
@@ -48,6 +51,7 @@ import { ToolbarComponent } from './component/toolbar/toolbar.component';
     MatTabsModule,
     MatSlideToggleModule,
     MatInputModule,
+    MatTreeModule,
     MatSnackBarModule,
     ReactiveFormsModule,
     FormsModule,
