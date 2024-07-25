@@ -16,11 +16,14 @@ export class CanvasComponent {
   @Input() nodes: Node[] | null = [];
   NodeType = NodeType;
   @Input() connections: Connection[] | null = [];
-  @ViewChild('canvas') canvas: ElementRef | undefined;
-  @Output() canvasMoved = new EventEmitter<void>();
+  @ViewChild('canvas', { static: true }) canvas!: ElementRef<HTMLDivElement>;
 
   constructor(private store: Store<{ appState: AppState }>, private _snackBar: MatSnackBar) {
   }
+
+  focusedNode: any = null;
+  contextMenuVisible: boolean = false;
+  contextMenuPosition: { x: number, y: number } = { x: 0, y: 0 };
 
   drawingConnection: any = null;
   cursorPosition: { x: number, y: number } = { x: 0, y: 0 };
@@ -37,6 +40,18 @@ export class CanvasComponent {
   durationInSeconds = 5;
   horizontalPosition: MatSnackBarHorizontalPosition = 'end';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+  sidebarOffset = 250;
+
+  onNodeDoubleClicked(node: any) {
+    this.store.dispatch(NodeActions.deselectConnection());
+    this.focusedNode = node;
+    this.contextMenuVisible = true;
+    this.contextMenuPosition = { x: node.position.x + node.width + 10, y: node.position.y };
+  }
+  closeContextMenu() {
+    this.contextMenuVisible = false;
+    this.focusedNode = null;
+  }
 
   @Input() set centerNodePosition(position: { x: number, y: number }) {
     if (position) {
@@ -78,21 +93,20 @@ export class CanvasComponent {
       if (this.position) {
         this.cursorPosition = { x: this.position.x, y: this.position.y };
       } else {
-
-        this.cursorPosition = { x: (event.clientX - this.panX), y: (event.clientY - this.panY) };
+        this.cursorPosition = { x: (event.clientX - this.panX) - this.sidebarOffset, y: (event.clientY - this.panY) };
       }
     }
     if (this.isPanning && !this.isNodeDragging) {
-      this.canvasMoved.emit();
-      this.panX = event.clientX - this.startX;
+      this.store.dispatch(NodeActions.deselectConnection());
+      this.panX = event.clientX - this.startX - this.sidebarOffset;
       this.panY = event.clientY - this.startY;
     }
   }
 
   onMouseDown(event: MouseEvent): void {
-    if (event.button === 1) {  // Check for middle mouse button
+    if (event.button === 1 && !this.contextMenuVisible) {  // Check for middle mouse button
       this.isPanning = true;
-      this.startX = event.clientX - this.panX;
+      this.startX = event.clientX - this.panX - this.sidebarOffset;
       this.startY = event.clientY - this.panY;
       this.canvas?.nativeElement.classList.add("grab")
       event.preventDefault(); // Prevent the default middle mouse button action
@@ -114,7 +128,7 @@ export class CanvasComponent {
     this.isNodeDragging = false;
 
     const updatedPosition = {
-      x: event.position.x - this.panX,
+      x: event.position.x - this.panX - this.sidebarOffset,
       y: event.position.y - this.panY
     };
     this.store.dispatch(NodeActions.updateNodePosition({ id: event.id, position: updatedPosition }));
@@ -122,9 +136,9 @@ export class CanvasComponent {
 
 
   onNodeMoved(event: { id: string, position: { x: number, y: number }, width: number }): void {
-    this.canvasMoved.emit();
+    this.store.dispatch(NodeActions.deselectConnection());
     const updatedPosition = {
-      x: event.position.x - this.panX,
+      x: event.position.x - this.panX - this.sidebarOffset,
       y: event.position.y - this.panY
     };
     this.store.dispatch(NodeActions.updateConnectionPosition({ id: event.id, position: updatedPosition, width: 0 }));
@@ -195,8 +209,8 @@ export class CanvasComponent {
   }
 
   generatePath(fromNode: any, toNode: any): string {
-    const start = { x: fromNode.position.x + this.panX - 300 + fromNode.width, y: fromNode.position.y + this.panY };
-    const end = { x: toNode.position.x + this.panX - 300, y: toNode.position.y + this.panY };
+    const start = { x: fromNode.position.x + this.panX + fromNode.width, y: fromNode.position.y + this.panY };
+    const end = { x: toNode.position.x + this.panX, y: toNode.position.y + this.panY };
 
     let path = `M${start.x},${start.y} `;
 
@@ -242,7 +256,7 @@ export class CanvasComponent {
   }
 
   selectConnection(connection: Connection) {
-    this.store.dispatch(NodeActions.selectConnection({ connection: connection }));
+    this.store.dispatch(NodeActions.selectConnection({ connectionId: connection.id }));
   }
 
 }

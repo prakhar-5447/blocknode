@@ -14,6 +14,7 @@ export class MiddlewareComponent {
   @Input() nodeId: string = '0';
   @Input() nodeName: string = 'Middleware Node';
   width: number = 400;
+  @Input() focused: boolean = false;
   @Input() position: { x: number, y: number } = { x: 0, y: 0 };
   middlewareCode: string = '';
   @Output() nodeMoved = new EventEmitter<{ id: string, position: { x: number, y: number }, width: number }>();

@@ -11,6 +11,7 @@ export class RouteComponent {
   @Input() nodeId: string = '0';
   @Input() nodeName: string = 'Route Node';
   width: number = 250;
+  @Input() focused: boolean = false;
   @Input() position: { x: number, y: number } = { x: 0, y: 0 };
   @Output() routeChanged = new EventEmitter<string>();
   @Output() nodeMoved = new EventEmitter<{ id: string, position: { x: number, y: number }, width: number }>();
@@ -26,8 +27,10 @@ export class RouteComponent {
   isEditing = false;
 
   enableEditing(): void {
-    this.isEditing = true;
-    setTimeout(() => this.routeInput!.nativeElement.focus(), 0);
+    if (this.focused) {
+      this.isEditing = true;
+      setTimeout(() => this.routeInput!.nativeElement.focus(), 0);
+    }
   }
 
   disableEditing(): void {

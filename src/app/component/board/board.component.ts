@@ -35,19 +35,16 @@ export class BoardComponent {
         this.toNodeId = this.selectedConnection$.toNode.id;
         this.toNodeType = this.selectedConnection$.toNode.type;
         this.connId = this.selectedConnection$.id;
+      } else {
+        this.fromNodeId = null;
+        this.fromNodeType = null;
+        this.toNodeId = null;
+        this.toNodeType = null;
+        this.connId = null;
       }
     });
   }
-
-  cancelSelection() {
-    this.fromNodeId = null;
-    this.fromNodeType = null;
-    this.toNodeId = null;
-    this.toNodeType = null;
-    this.connId = null;
-    this.store.dispatch(NodeActions.deselectConnection());
-  }
-
+  
   onCenterNode(position: { x: number, y: number }) {
     this.centerNodePosition = position;
   }

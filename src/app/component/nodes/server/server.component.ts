@@ -10,6 +10,7 @@ import { Node, NodeType } from '../../../models/node.model';
 export class ServerComponent {
   @Input() nodeId: string = '0';
   @Input() nodeName: string = 'Server';
+  @Input() focused: boolean = false;
   @Input() position: { x: number, y: number } = { x: 0, y: 0 };
   @Output() nodeMoved = new EventEmitter<{ id: string, position: { x: number, y: number }, width: number }>();
   @Output() startConnection = new EventEmitter<{ position: { x: number, y: number }, type: NodeType }>();

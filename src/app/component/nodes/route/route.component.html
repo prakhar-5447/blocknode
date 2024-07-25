@@ -1,6 +1,7 @@
-<div class="route-node" cdkDrag [style.left.px]="position.x - 300" [style.top.px]="position.y"
-    (cdkDragMoved)="onDragMoved($event)" (cdkDragStarted)="onDragStart($event)" (cdkDragEnded)="onDragEnd($event)"
-    (mousemove)="mouseEnter($event)" (mouseout)="mouseOut($event)">
+<div class="route-node" [ngClass]="{'focused':focused}" cdkDrag [cdkDragDisabled]="focused"
+    [style.left.px]="position.x" [style.top.px]="position.y" (cdkDragMoved)="onDragMoved($event)"
+    (cdkDragStarted)="onDragStart($event)" (cdkDragEnded)="onDragEnd($event)" (mousemove)="mouseEnter($event)"
+    (mouseout)="mouseOut($event)">
     <div class="id">@{{nodeId}}</div>
     <h3 *ngIf="!isEditing" (dblclick)="enableEditing()">{{ routeName }}</h3>
     <input *ngIf="isEditing" #routeInput [(ngModel)]="routeName" (blur)="disableEditing()"

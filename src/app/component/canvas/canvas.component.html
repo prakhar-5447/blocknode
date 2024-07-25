@@ -5,21 +5,31 @@
       <app-server *ngIf="node.type === NodeType.Server" [nodeName]="node.name" [position]="node.position"
         [nodeId]="node.id" (startConnection)="startConnection($event,{n:node})"
         (mouseup)="endConnection({ node: node })" (nodeMoved)="onNodeMoved($event)" (dragStarted)="onDragStarted()"
-        (dragEnded)="onDragEnded($event)"></app-server>
+        (dragEnded)="onDragEnded($event)" (dblclick)="onNodeDoubleClicked(node)"
+        [focused]="focusedNode && focusedNode.id==node.id"></app-server>
       <app-route *ngIf="node.type === NodeType.Route" [nodeName]="node.name" [position]="node.position"
         [nodeId]="node.id" (startConnection)="startConnection($event,{n:node})"
         (mouseup)="endConnection({ node: node })" (nodeMoved)="onNodeMoved($event)" (dragStarted)="onDragStarted()"
-        (dragEnded)="onDragEnded($event)" (connectionAttach)="connect($event)"
-        (removeConnection)="disconnect()"></app-route>
+        (dragEnded)="onDragEnded($event)" (connectionAttach)="connect($event)" (removeConnection)="disconnect()"
+        (dblclick)="onNodeDoubleClicked(node)" [focused]="focusedNode && focusedNode.id==node.id"></app-route>
       <app-middleware *ngIf="node.type === NodeType.Middleware" [nodeName]="node.name" [position]="node.position"
         [nodeId]="node.id" [code]="node.content!" (nodeMoved)="onNodeMoved($event)" (dragStarted)="onDragStarted()"
         (mouseup)="endConnection({ node: node })" (dragEnded)="onDragEnded($event)" (nodeSelected)="openEditor()"
-        (connectionAttach)="connect($event)" (removeConnection)="disconnect()"></app-middleware>
+        (connectionAttach)="connect($event)" (removeConnection)="disconnect()" (dblclick)="onNodeDoubleClicked(node)"
+        [focused]="focusedNode && focusedNode.id==node.id"></app-middleware>
       <app-code *ngIf="node.type === NodeType.Code" [nodeName]="node.name" [position]="node.position" [nodeId]="node.id"
         [code]="node.content!" (nodeMoved)="onNodeMoved($event)" (dragStarted)="onDragStarted()"
         (mouseup)="endConnection({ node: node })" (dragEnded)="onDragEnded($event)" (nodeSelected)="openEditor()"
-        (connectionAttach)="connect($event)" (removeConnection)="disconnect()"></app-code>
+        (connectionAttach)="connect($event)" (removeConnection)="disconnect()" (dblclick)="onNodeDoubleClicked(node)"
+        [focused]="focusedNode && focusedNode.id==node.id"></app-code>
     </ng-container>
+    <div [ngClass]="{'focused': focusedNode!=null}"
+      [ngStyle]="{'transform': 'translate(' + -panX + 'px, ' + -panY + 'px)'}" (click)="closeContextMenu()"></div>
+    <div class=" context-menu" *ngIf="contextMenuVisible"
+      [ngStyle]="{'top.px': contextMenuPosition.y, 'left.px': contextMenuPosition.x}">
+      <button (click)="closeContextMenu()">Delete</button>
+      <button (click)="closeContextMenu()">Add Node</button>
+    </div>
     <svg class="connections" [ngStyle]="{'transform': 'translate(' + -panX + 'px, ' + -panY + 'px)'}">
       <!-- Define neon glow filter -->
       <defs>
