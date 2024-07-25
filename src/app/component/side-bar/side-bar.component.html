@@ -1,15 +1,15 @@
 <div class="sidebar">
   <div class="tabs">
-    <div class="tab" [ngClass]="{active: activeTab === 'canvas'}" (click)="setActiveTab('canvas')">
+    <div class="tab" [ngClass]="{'active': activeTab === 'canvas'}" (click)="setActiveTab('canvas')">
       <mat-icon>dashboard</mat-icon>
     </div>
-    <div class="tab" [ngClass]="{active: activeTab === 'settings'}" (click)="setActiveTab('settings')">
+    <div class="tab" [ngClass]="{'active': activeTab === 'settings'}" (click)="setActiveTab('settings')">
       <mat-icon>build</mat-icon>
     </div>
-    <div class="tab" [ngClass]="{active: activeTab === 'tree'}" (click)="setActiveTab('tree')">
+    <div class="tab" [ngClass]="{'active': activeTab === 'tree'}" (click)="setActiveTab('tree')">
       <mat-icon>graphic_eq</mat-icon>
     </div>
-    <div class="tab" [ngClass]="{active: activeTab === 'setting'}" (click)="setActiveTab('setting')">
+    <div class="tab" [ngClass]="{'active': activeTab === 'setting'}" (click)="setActiveTab('setting')">
       <mat-icon>settings</mat-icon>
     </div>
   </div>
