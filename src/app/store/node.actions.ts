@@ -11,7 +11,7 @@ export const getNodePosition = createAction('[Node] GET Node Position', props<{ 
 export const selectNode = createAction('[Node] Select', props<{ id: string }>());
 export const deselectNode = createAction('[Node] Deselect');
 export const addConnection = createAction('[Connection] Add Connection', props<{ connection: Connection }>());
-export const selectConnection = createAction('[Connection] Select', props<{ connection: Connection }>());
+export const selectConnection = createAction('[Connection] Select', props<{ connectionId: string }>());
 export const deselectConnection = createAction('[Connection] Deselect');
 export const updateConnection = createAction('[Node] Update Connection', props<{ id: string, fromNode: Node, toNode: Node }>());
 

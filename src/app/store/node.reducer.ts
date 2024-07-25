@@ -130,9 +130,9 @@ export const nodeReducer = createReducer(
       env.key === key ? { ...env, key, value } : env
     ),
   })),
-  on(NodeActions.selectConnection, (state, { connection }) => ({
+  on(NodeActions.selectConnection, (state, { connectionId }) => ({
     ...state,
-    selectConnection: state.connections.find(c => c.id === connection.id) || null,
+    selectConnection: state.connections.find(c => c.id === connectionId) || null,
   })),
   on(NodeActions.deselectConnection, (state) => ({
     ...state,
