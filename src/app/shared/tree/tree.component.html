@@ -1,6 +1,6 @@
 <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="tree">
     <!-- Node with connections -->
-    <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+    <mat-nested-tree-node class="mat-nested-tree-node" *matTreeNodeDef="let node; when: hasChild">
         <div class="mat-tree-node">
             <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.node.name">
                 <mat-icon class="mat-icon-rtl-mirror">
@@ -17,8 +17,24 @@
     <!-- Connection details -->
     <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
         <button mat-icon-button disabled></button>
-        <span [ngStyle]="{'color': node.type === 'from' ? 'green' : 'red'}">
-            {{node.connectionId}} ({{node.type}})
-        </span>
+        <div class="tree-items">
+            <div class="tree-item" *ngIf="node.connectedFrom!=null; else nodeTo"
+                (click)="selectConnection(node.connectionId)">
+                <div class="content">
+                    {{node.connectedFrom.name}}
+                </div>
+                <div class="line"></div>
+                <div class="circle" style="background-color:green"></div>
+            </div>
+            <ng-template #nodeTo>
+                <div class="tree-item" (click)="selectConnection(node.connectionId)">
+                    <div class="circle" style="background-color:red"></div>
+                    <div class="line"></div>
+                    <div class="content">
+                        {{node.connectedTo.name}}
+                    </div>
+                </div>
+            </ng-template>
+        </div>
     </mat-tree-node>
 </mat-tree>

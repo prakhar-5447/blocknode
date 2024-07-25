@@ -1,15 +1,39 @@
-.tree-invisible
-    display: none
-
 .tree
-    margin: 20px
     background-color: transparent
-    .mat-tree-node,button
+    .mat-tree-node
         color: white
+        min-height: auto
+        button
+            border: none
+            background-color: transparent
+        mat-icon
+            font-size: 15px
+            color: white
+            display: flex
+            text-align: center
+            justify-content: center
+            align-items: center
 
-button
-    border: none
-    background-color: transparent
+    .tree-invisible
+        display: none
 
-mat-tree-node
-    padding-left: 30px
+    .tree-items
+        width: 100%
+        padding-left: 30px
+        .tree-item
+            display: flex
+            justify-content: space-between
+            align-items: center
+            .circle
+                height: 10px
+                width: 10px
+                min-width: 10px
+                border-radius: 100px
+            .line
+                flex: 1
+                margin: 0 15px
+                min-width: 50px
+                height: 1px
+                background-color: white
+            .content
+                font-size: 12px

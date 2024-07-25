@@ -3,13 +3,17 @@ import { Node } from '@/app/models/node.model';
 import { Component, Input, OnInit } from '@angular/core';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
+import { AppState } from '@/app/store/node.state';
+import { Store } from '@ngrx/store';
+import * as NodeSelectors from '../../store/node.selectors';
+import * as NodeActions from '../../store/node.actions';
 
 export interface NodeWithConnections {
   node: Node;
   connections: {
     connectionId: string;
-    connectedTo: Node;
-    type: string;
+    connectedFrom: Node | null;
+    connectedTo: Node | null;
   }[];
 }
 
@@ -23,6 +27,8 @@ export class TreeComponent implements OnInit {
   @Input() connections: Connection[] | null = [];
   treeControl = new NestedTreeControl<any>(node => node.connections);
   dataSource = new MatTreeNestedDataSource<any>();
+  
+  constructor(private store: Store<{ appState: AppState }>) {}
 
   ngOnInit() {
     if (this.nodes && this.connections) {
@@ -40,10 +46,9 @@ export class TreeComponent implements OnInit {
       };
       this.connections!.forEach(connection => {
         if (connection.fromNode.id == node.id) {
-          n.connections.push({ connectionId: connection.id, connectedTo: connection.toNode, type: "from" })
-        }
-        if (connection.toNode.id == node.id) {
-          n.connections.push({ connectionId: connection.id, connectedTo: connection.fromNode, type: "to" })
+          n.connections.push({ connectionId: connection.id, connectedTo: connection.toNode, connectedFrom: null })
+        } else if (connection.toNode.id == node.id) {
+          n.connections.push({ connectionId: connection.id, connectedFrom: connection.fromNode, connectedTo: null })
         }
       });
       nodeMap.push(n);
@@ -52,4 +57,8 @@ export class TreeComponent implements OnInit {
   }
 
   hasChild = (_: number, node: any) => !!node.connections && node.connections.length >= 0;
+
+  selectConnection(connectionId: string) {
+    this.store.dispatch(NodeActions.selectConnection({ connectionId: connectionId }));
+  }
 }
