@@ -27,6 +27,7 @@ import { nodeReducer } from './store/node.reducer';
 import { CodeComponent } from './component/nodes/code/code.component';
 import { ToolbarComponent } from './component/toolbar/toolbar.component';
 import { TreeComponent } from './shared/tree/tree.component';
+import { ConnectionComponent } from './shared/connection/connection.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { TreeComponent } from './shared/tree/tree.component';
     CodeComponent,
     ToolbarComponent,
     TreeComponent,
+    ConnectionComponent,
   ],
   imports: [
     BrowserModule,

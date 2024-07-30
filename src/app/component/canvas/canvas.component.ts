@@ -42,6 +42,31 @@ export class CanvasComponent {
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   sidebarOffset = 250;
 
+  // Zoom properties
+  scale = 1;
+  minScale = 0.5;
+  maxScale = 2;
+
+  onWheel(event: WheelEvent) {
+    event.preventDefault();
+  
+    const canvasRect = this.canvas.nativeElement.getBoundingClientRect();
+    const cursorX = event.clientX - canvasRect.left;
+    const cursorY = event.clientY - canvasRect.top;
+  
+    // Calculate the zoom factor
+    const delta = Math.sign(event.deltaY) * -0.1;
+    const newScale = Math.min(Math.max(this.minScale, this.scale + delta), this.maxScale);
+  
+    // Calculate the new pan values to zoom around the cursor position
+    const scaleRatio = newScale / this.scale;
+    this.panX = cursorX - scaleRatio * (cursorX - this.panX);
+    this.panY = cursorY - scaleRatio * (cursorY - this.panY);
+  
+    // Update the scale
+    this.scale = newScale;
+  }
+  
   onNodeDoubleClicked(node: any) {
     this.store.dispatch(NodeActions.deselectConnection());
     this.focusedNode = node;
@@ -63,8 +88,8 @@ export class CanvasComponent {
     const canvas = document.querySelector('.virtual-space');
     if (canvas) {
       const canvasRect = canvas.getBoundingClientRect();
-      const canvasCenterX = canvasRect.width / 2;
-      const canvasCenterY = canvasRect.height / 2;
+      const canvasCenterX = 0;
+      const canvasCenterY = 0;
 
       this.panX = canvasCenterX - position.x;
       this.panY = canvasCenterY - position.y;
@@ -128,18 +153,17 @@ export class CanvasComponent {
     this.isNodeDragging = false;
 
     const updatedPosition = {
-      x: event.position.x - this.panX - this.sidebarOffset,
-      y: event.position.y - this.panY
+      x: event.position.x,
+      y: event.position.y
     };
     this.store.dispatch(NodeActions.updateNodePosition({ id: event.id, position: updatedPosition }));
   }
 
-
   onNodeMoved(event: { id: string, position: { x: number, y: number }, width: number }): void {
     this.store.dispatch(NodeActions.deselectConnection());
     const updatedPosition = {
-      x: event.position.x - this.panX - this.sidebarOffset,
-      y: event.position.y - this.panY
+      x: event.position.x,
+      y: event.position.y
     };
     this.store.dispatch(NodeActions.updateConnectionPosition({ id: event.id, position: updatedPosition, width: 0 }));
   }

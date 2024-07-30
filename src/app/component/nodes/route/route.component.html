@@ -1,5 +1,5 @@
 <div class="route-node" [ngClass]="{'focused':focused}" cdkDrag [cdkDragDisabled]="focused"
-    [style.left.px]="position.x" [style.top.px]="position.y" (cdkDragMoved)="onDragMoved($event)"
+    [ngStyle]="{'transform': 'translate3d(' + calcX + 'px, ' + calcY + 'px,0)'}" (cdkDragMoved)="onDragMoved($event)"
     (cdkDragStarted)="onDragStart($event)" (cdkDragEnded)="onDragEnd($event)" (mousemove)="mouseEnter($event)"
     (mouseout)="mouseOut($event)">
     <div class="id">@{{nodeId}}</div>

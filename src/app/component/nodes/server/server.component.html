@@ -1,5 +1,5 @@
 <div class="server-node" [ngClass]="{'focused':focused}" cdkDrag [cdkDragDisabled]="focused"
-    (cdkDragMoved)="onDragMoved($event)" [style.left.px]="position.x" [style.top.px]="position.y"
+    (cdkDragMoved)="onDragMoved($event)" [ngStyle]="{'transform': 'translate3d(' + calcX + 'px, ' + calcY + 'px,0)'}"
     (cdkDragStarted)="onDragStart($event)" (cdkDragEnded)="onDragEnd($event)">
     <div class="id">@{{nodeId}}</div>
     <div class="header">
