@@ -85,13 +85,13 @@ export class EditorComponent implements AfterViewInit {
   }
 
   private updateMonacoFiles(): void {
-    if (!this.monacoInitialized) return;
+    // if (!this.monacoInitialized) return;
 
-    for (const node of this.nodes) {
-      if (node.content) {
-        this.createMonacoFile(node.id, node.content);
-      }
-    }
+    // for (const node of this.nodes) {
+    //   if (node.content) {
+    //     this.createMonacoFile(node.id, node.content);
+    //   }
+    // }
   }
 
   private createMonacoFile(id: string, content: string): void {

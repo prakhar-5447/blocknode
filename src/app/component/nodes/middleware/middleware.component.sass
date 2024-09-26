@@ -1,54 +1,38 @@
-.middleware-card
-    width: 400px
-    border-radius: 10px
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1)
-    color: #333
+.node
     position: absolute
-    transition: box-shadow 0.3s ease
-    background-color: #4caf50
-    &.custom-node
-        background-color: #ffeb3b
-    &.focused
-        z-index: 20
+    width: 150px
+    background-color: #ffffff45
+    border: 3px solid rgb(76, 175, 80)
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2)
+    cursor: grab
+    border-radius: 8px
+    &:hover .header .connect-icon
+        color: rgba(0, 123, 255)
+
     .id
         position: absolute
         top: -16px
-        color: black
+        color: rgb(76, 175, 80)
         font-size: 10px
         &:hover
-            color: blue
             text-decoration: underline
             cursor: pointer
 
-    .container
-        padding: 20px
+    .header
+        padding: 4px 12px
         display: flex
-        flex-direction: column
-        .editor-btn
-            align-self: flex-end
-            background-color: #4b7be1
-            color: white
-            padding: 10px 15px
-            border: none
-            border-radius: 5px
-            cursor: pointer
-            margin-bottom: 15px
-            transition: background-color 0.3s ease
-
-            &:hover
-                background-color: #3a5ba7
-
-        .code-block
+        justify-content: space-between
+        align-items: center
+        h3
+            font-size: 12px
+            font-weight: 500
             margin: 0
-            background-color: #f5f5f5
-            border-radius: 5px
-            padding: 10px
-            overflow: auto
-            max-height: 400px
-            overflow-y: hidden
 
-            code
-                display: block
-                white-space: pre-wrap
-                line-height: 1.5em
-                color: #333
+        .connect-icon
+            font-size: 16px
+            cursor: pointer
+            color: rgba(0, 123, 255, 0.5)
+            margin: 0
+            display: flex
+            justify-content: center
+            align-items: center

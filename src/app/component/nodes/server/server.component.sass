@@ -1,34 +1,38 @@
-.server-node
+.node
     position: absolute
-    width: 250px
-    background-color: #9c27b0
+    width: 150px
+    background-color: #ffffff45
+    border: 3px solid rgba(0, 123, 255)
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2)
+    cursor: grab
     border-radius: 8px
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1)
-    font-size: 14px
-    color: white
-    &.focused
-        z-index: 20
+    &:hover .header .connect-icon
+        color: rgba(0, 123, 255)
 
     .id
         position: absolute
         top: -16px
-        color: black
+        color: rgba(0, 123, 255)
         font-size: 10px
         &:hover
-            color: blue
             text-decoration: underline
             cursor: pointer
 
     .header
-        padding: 16px
+        padding: 4px 12px
         display: flex
         justify-content: space-between
         align-items: center
         h3
+            font-size: 12px
+            font-weight: 500
             margin: 0
-            font-size: 18px
 
         .connect-icon
-            font-size: 20px
-            color: white
+            font-size: 16px
             cursor: pointer
+            color: rgba(0, 123, 255, 0.5)
+            margin: 0
+            display: flex
+            justify-content: center
+            align-items: center

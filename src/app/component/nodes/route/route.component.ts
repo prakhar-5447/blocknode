@@ -11,8 +11,7 @@ export class RouteComponent implements OnInit {
   @Input() nodeId: string = '0';
   @Input() nodeName: string = 'Route Node';
   @Input() scale: number = 1;
-  width: number = 250;
-  @Input() focused: boolean = false;
+  width: number = 150;
   @Input() position: { x: number, y: number } = { x: 0, y: 0 };
   @Output() routeChanged = new EventEmitter<string>();
   @Output() nodeMoved = new EventEmitter<{ id: string, position: { x: number, y: number }, width: number }>();
@@ -25,22 +24,11 @@ export class RouteComponent implements OnInit {
 
   routeName: string = "";
   pos: { x: number, y: number } = { x: 0, y: 0 };
-  isEditing = false;
   calcX: number = 0;
   calcY: number = 0;
   ngOnInit() {
     this.calcX = this.position.x;
     this.calcY = this.position.y;
-  }
-  enableEditing(): void {
-    if (this.focused) {
-      this.isEditing = true;
-      setTimeout(() => this.routeInput!.nativeElement.focus(), 0);
-    }
-  }
-
-  disableEditing(): void {
-    this.isEditing = false;
   }
 
   constructor() {
@@ -55,7 +43,7 @@ export class RouteComponent implements OnInit {
     this.calcY = this.position.y + this.pos.y;
     this.nodeMoved.emit({
       id: this.nodeId, position: {
-        x: this.calcX + 250, y: this.calcY
+        x: this.calcX, y: this.calcY
       }, width: this.width
     });
   }

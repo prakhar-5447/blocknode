@@ -13,9 +13,8 @@ import { Node, NodeType } from '../../../models/node.model';
 export class MiddlewareComponent implements OnInit {
   @Input() nodeId: string = '0';
   @Input() nodeName: string = 'Middleware Node';
-  width: number = 400;
+  width: number = 150;
   @Input() scale: number = 1;
-  @Input() focused: boolean = false;
   @Input() position: { x: number, y: number } = { x: 0, y: 0 };
   middlewareCode: string = '';
   @Output() nodeMoved = new EventEmitter<{ id: string, position: { x: number, y: number }, width: number }>();
@@ -24,7 +23,6 @@ export class MiddlewareComponent implements OnInit {
   @Output() removeConnection = new EventEmitter<void>();
   @Output() connectionAttach = new EventEmitter<{ node: any, position: { x: number, y: number }, name: string, type: NodeType }>();
   @Output() dragEnded = new EventEmitter<{ id: string, position: { x: number, y: number } }>();
-  @Input() code: string = '';
 
   pos: { x: number, y: number } = { x: 0, y: 0 };
   calcX: number = 0;
@@ -42,7 +40,7 @@ export class MiddlewareComponent implements OnInit {
     this.calcY = this.position.y + this.pos.y;
     this.nodeMoved.emit({
       id: this.nodeId, position: {
-        x: this.calcX + 250, y: this.calcY
+        x: this.calcX, y: this.calcY
       }, width: this.width
     });
   }

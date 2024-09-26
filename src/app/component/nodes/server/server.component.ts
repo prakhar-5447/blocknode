@@ -11,7 +11,6 @@ export class ServerComponent implements OnInit {
   @Input() nodeId: string = '0';
   @Input() scale: number = 1;
   @Input() nodeName: string = 'Server';
-  @Input() focused: boolean = false;
   @Input() position: { x: number, y: number } = { x: 0, y: 0 };
   @Output() nodeMoved = new EventEmitter<{ id: string, position: { x: number, y: number }, width: number }>();
   @Output() startConnection = new EventEmitter<{ position: { x: number, y: number }, type: NodeType }>();
@@ -19,7 +18,7 @@ export class ServerComponent implements OnInit {
   @Output() settingsChanged = new EventEmitter<{ port: string, dbUrl: string }>();
   @Output() dragStarted = new EventEmitter<void>();
   @Output() dragEnded = new EventEmitter<{ id: string, position: { x: number, y: number } }>();
-  width: number = 250;
+  width: number = 150;
   pos: { x: number, y: number } = { x: 0, y: 0 };
   calcX: number = 0;
   calcY: number = 0;
@@ -35,7 +34,7 @@ export class ServerComponent implements OnInit {
     this.calcY = this.position.y + this.pos.y;
     this.nodeMoved.emit({
       id: this.nodeId, position: {
-        x: this.calcX + 250, y: this.calcY
+        x: this.calcX, y: this.calcY
       }, width: this.width
     });
   }

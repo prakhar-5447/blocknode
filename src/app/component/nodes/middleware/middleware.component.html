@@ -1,12 +1,8 @@
-<div class="middleware-card" [ngClass]="{'focused':focused}" cdkDrag [cdkDragDisabled]="focused"
-  [ngStyle]="{'transform': 'translate3d(' + calcX + 'px, ' + calcY + 'px,0)'}" (cdkDragMoved)="onDragMoved($event)"
-  (cdkDragStarted)="onDragStart($event)" (cdkDragEnded)="onDragEnd($event)" (mousemove)="mouseEnter($event)"
-  (mouseout)="mouseOut($event)">
+<div class="node" cdkDrag [ngStyle]="{'transform': 'translate3d(' + calcX + 'px, ' + calcY + 'px,0)'}"
+  (cdkDragMoved)="onDragMoved($event)" (cdkDragStarted)="onDragStart($event)" (cdkDragEnded)="onDragEnd($event)"
+  (mousemove)="mouseEnter($event)" (mouseout)="mouseOut($event)">
   <div class="id">@{{nodeId}}</div>
-  <div class="container">
-    <button class="editor-btn" (click)="nodeSelect()">Open in editor</button>
-    <div class="code-block">
-      <code>{{code}}</code>
-    </div>
+  <div class="header">
+    <h3>Middleware</h3>
   </div>
 </div>

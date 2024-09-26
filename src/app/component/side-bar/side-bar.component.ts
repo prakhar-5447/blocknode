@@ -26,7 +26,11 @@ export class SideBarComponent {
   editingKey: string | null = null;
   @Output() centerNodeEvent = new EventEmitter<{ x: number, y: number }>();
   @ViewChild('editInput') editInput: ElementRef | undefined;
+  dropdownOpen: boolean = false;
 
+  toggleDropdown() {
+    this.dropdownOpen = !this.dropdownOpen;
+  }
   constructor(private store: Store<{ appState: AppState }>) {
     this.envVariables$ = this.store.pipe(select(NodeSelectors.selectEnv));
   }
@@ -41,6 +45,21 @@ export class SideBarComponent {
     this.store.dispatch(NodeActions.addEnvVariable({ envVariable }));
     this.newEnvKey = '';
     this.newEnvValue = '';
+  }
+
+  getConnectionColor(nodeType: NodeType): string {
+    switch (nodeType) {
+      case NodeType.Server:
+        return 'rgba(0, 123, 255)';
+      case NodeType.Route:
+        return 'rgb(139, 53, 192)';
+      case NodeType.Middleware:
+        return 'rgb(76, 175, 80)';
+      case NodeType.Code:
+        return 'rgb(192, 0, 38)';
+      default:
+        return 'black';
+    }
   }
 
   capitalize() {
@@ -72,10 +91,9 @@ export class SideBarComponent {
     const newNode: Node = {
       id: this.generateUniqueId(),
       name: `${nodeType} Node`,
-      position: { x: 1000, y: 200 },
-      width: 250,
+      position: { x: 0, y: 0 },
+      width: 150,
       type: nodeType,
-      content: "const middleware = (req, res, next) => {\n  console.log(\'Request received\');\n  next();\n};"
     };
     this.store.dispatch(NodeActions.addNode({ node: newNode }));
   }
