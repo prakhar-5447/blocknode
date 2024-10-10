@@ -1,11 +1,9 @@
-<div class="server-node" [ngClass]="{'focused':focused}" cdkDrag [cdkDragDisabled]="focused"
-    (cdkDragMoved)="onDragMoved($event)" [ngStyle]="{'transform': 'translate3d(' + calcX + 'px, ' + calcY + 'px,0)'}"
-    (cdkDragStarted)="onDragStart($event)" (cdkDragEnded)="onDragEnd($event)">
+<div class="node" cdkDrag (cdkDragMoved)="onDragMoved($event)"
+    [ngStyle]="{'transform': 'translate3d(' + calcX + 'px, ' + calcY + 'px,0)'}" (cdkDragStarted)="onDragStart($event)"
+    (cdkDragEnded)="onDragEnd($event)">
     <div class="id">@{{nodeId}}</div>
     <div class="header">
         <h3>Server</h3>
         <mat-icon class="connect-icon" (mousedown)="startConnecting($event)">add_circle_outline</mat-icon>
-    </div>
-    <div class="content">
     </div>
 </div>

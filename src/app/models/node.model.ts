@@ -11,5 +11,4 @@ export interface Node {
     position: { x: number, y: number };
     width: number;
     type: NodeType;
-    content?: string;
 }

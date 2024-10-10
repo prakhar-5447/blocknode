@@ -8,38 +8,26 @@ const initialState: AppState = {
     id: '0',
     name: 'Server',
     position: { x: 0, y: 0 },
-    width: 250,
+    width: 150,
     type: NodeType.Server
   }, {
     id: '1',
     name: 'Route Node',
-    position: { x: 300, y: 200 },
-    width: 250,
+    position: { x: 200, y: 100 },
+    width: 150,
     type: NodeType.Route,
   }, {
     id: "2",
     name: `Middleware Node`,
-    position: { x: 300, y: 300 },
-    width: 250,
+    position: { x: 400, y: 0 },
+    width: 150,
     type: NodeType.Middleware,
-    content: `import jwt from 'jsonwebtoken';
-
-function jwtAuth(req, res, next) {
-  const token = req.header('Authorization').replace('Bearer ', '');
-  if (!token) {
-    return res.status(401).send({ error: 'No token provided' });
-  }
-
-  try {
-    const decoded = jwt.verify(token, 'your_jwt_secret_key');
-    req.user = decoded;
-    next();
-  } catch (err) {
-    res.status(401).send({ error: 'Invalid token' });
-  }
-}
-
-export default jwtAuth;`
+  }, {
+    id: "3",
+    name: `Code Node`,
+    position: { x: 500, y: 200 },
+    width: 150,
+    type: NodeType.Code,
   }],
   selectedNodeId: null,
   selectedNodeContent: null,
