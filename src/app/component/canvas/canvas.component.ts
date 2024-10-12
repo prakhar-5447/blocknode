@@ -126,6 +126,9 @@ export class CanvasComponent {
   onMouseUp(): void {
     this.isPanning = false;
     this.canvas?.nativeElement.classList.remove("grab")
+    if (this.drawingConnection) {
+      this.endConnection({ node: this.addNode(this.drawingConnection.type, this.cursorPosition) })
+    }
   }
 
   onDragStarted(): void {
@@ -142,6 +145,28 @@ export class CanvasComponent {
     };
     this.store.dispatch(NodeActions.updateNodePosition({ id: event.id, position: updatedPosition }));
   }
+
+
+  addNode(nodeType: NodeType, position: { x: number, y: number }): Node {
+    let id = this.generateUniqueId();
+    const newNode: Node = {
+      id: id,
+      name: `${nodeType}-${this.nodes?.length ?? id}`,
+      position: position,
+      width: 150,
+      type: nodeType,
+    };
+    this.store.dispatch(NodeActions.addNode({ node: newNode }));
+    return newNode;
+  }
+
+  getEndNodeType(nodeType: NodeType): NodeType {
+    switch (nodeType) {
+      case NodeType.Server: return NodeType.Route;
+    }
+    return NodeType.Code;
+  }
+
 
   onNodeMoved(event: { id: string, position: { x: number, y: number }, width: number }): void {
     this.store.dispatch(NodeActions.deselectConnection());
@@ -200,9 +225,8 @@ export class CanvasComponent {
     return s;
   }
 
-
   connect(node: { node: Node }): void {
-    if (this.drawingConnection) {
+    if (this.drawingConnection && this.drawingConnection.fromNode.id != node.node.id) {
       this.position = { x: node.node.position.x, y: node.node.position.y };
     }
   }

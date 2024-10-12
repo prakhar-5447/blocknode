@@ -28,6 +28,7 @@ import { CodeComponent } from './component/nodes/code/code.component';
 import { ToolbarComponent } from './component/toolbar/toolbar.component';
 import { TreeComponent } from './shared/tree/tree.component';
 import { ConnectionComponent } from './shared/connection/connection.component';
+import { NodeComponent } from './component/nodes/node/node.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { ConnectionComponent } from './shared/connection/connection.component';
     ToolbarComponent,
     TreeComponent,
     ConnectionComponent,
+    NodeComponent,
   ],
   imports: [
     BrowserModule,

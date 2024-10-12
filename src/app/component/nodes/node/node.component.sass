@@ -1,0 +1,40 @@
+.node
+    position: absolute
+    width: 150px
+    background-color: #ffffff45
+    border: 3px
+    border-style: solid 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2)
+    cursor: grab
+    border-radius: 8px
+    &:hover .header .connect-icon
+        color: rgba(0, 123, 255)
+
+    .id
+        position: absolute
+        top: -16px
+        font-size: 10px
+        &:hover
+            text-decoration: underline
+            cursor: pointer
+
+    .header
+        padding: 4px 12px
+        display: flex
+        justify-content: space-between
+        align-items: center
+        .btn
+            display: flex
+        h3
+            font-size: 12px
+            font-weight: 500
+            margin: 0
+
+        .connect-icon
+            font-size: 16px
+            cursor: pointer
+            color: rgba(0, 123, 255, 0.5)
+            margin: 0
+            display: flex
+            justify-content: center
+            align-items: center

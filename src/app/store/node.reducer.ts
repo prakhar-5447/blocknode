@@ -12,19 +12,19 @@ const initialState: AppState = {
     type: NodeType.Server
   }, {
     id: '1',
-    name: 'Route Node',
+    name: 'Route',
     position: { x: 200, y: 100 },
     width: 150,
     type: NodeType.Route,
   }, {
     id: "2",
-    name: `Middleware Node`,
+    name: `Middleware`,
     position: { x: 400, y: 0 },
     width: 150,
     type: NodeType.Middleware,
   }, {
     id: "3",
-    name: `Code Node`,
+    name: `Code`,
     position: { x: 500, y: 200 },
     width: 150,
     type: NodeType.Code,
