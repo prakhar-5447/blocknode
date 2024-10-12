@@ -21,10 +21,6 @@ export class CanvasComponent {
   constructor(private store: Store<{ appState: AppState }>, private _snackBar: MatSnackBar) {
   }
 
-  focusedNode: any = null;
-  contextMenuVisible: boolean = false;
-  contextMenuPosition: { x: number, y: number } = { x: 0, y: 0 };
-
   drawingConnection: any = null;
   cursorPosition: { x: number, y: number } = { x: 0, y: 0 };
   isEditorOpen: boolean = false;
@@ -40,7 +36,6 @@ export class CanvasComponent {
   durationInSeconds = 5;
   horizontalPosition: MatSnackBarHorizontalPosition = 'end';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
-  sidebarOffset = 250;
 
   // Zoom properties
   scale = 1;
@@ -49,33 +44,22 @@ export class CanvasComponent {
 
   onWheel(event: WheelEvent) {
     event.preventDefault();
-  
+
     const canvasRect = this.canvas.nativeElement.getBoundingClientRect();
     const cursorX = event.clientX - canvasRect.left;
     const cursorY = event.clientY - canvasRect.top;
-  
+
     // Calculate the zoom factor
     const delta = Math.sign(event.deltaY) * -0.1;
     const newScale = Math.min(Math.max(this.minScale, this.scale + delta), this.maxScale);
-  
+
     // Calculate the new pan values to zoom around the cursor position
     const scaleRatio = newScale / this.scale;
     this.panX = cursorX - scaleRatio * (cursorX - this.panX);
     this.panY = cursorY - scaleRatio * (cursorY - this.panY);
-  
+
     // Update the scale
     this.scale = newScale;
-  }
-  
-  onNodeDoubleClicked(node: any) {
-    this.store.dispatch(NodeActions.deselectConnection());
-    this.focusedNode = node;
-    this.contextMenuVisible = true;
-    this.contextMenuPosition = { x: node.position.x + node.width + 10, y: node.position.y };
-  }
-  closeContextMenu() {
-    this.contextMenuVisible = false;
-    this.focusedNode = null;
   }
 
   @Input() set centerNodePosition(position: { x: number, y: number }) {
@@ -88,8 +72,8 @@ export class CanvasComponent {
     const canvas = document.querySelector('.virtual-space');
     if (canvas) {
       const canvasRect = canvas.getBoundingClientRect();
-      const canvasCenterX = 0;
-      const canvasCenterY = 0;
+      const canvasCenterX = canvasRect.width / 2;
+      const canvasCenterY = canvasRect.height / 2;
 
       this.panX = canvasCenterX - position.x;
       this.panY = canvasCenterY - position.y;
@@ -118,20 +102,20 @@ export class CanvasComponent {
       if (this.position) {
         this.cursorPosition = { x: this.position.x, y: this.position.y };
       } else {
-        this.cursorPosition = { x: (event.clientX - this.panX) - this.sidebarOffset, y: (event.clientY - this.panY) };
+        this.cursorPosition = { x: event.clientX - this.panX, y: (event.clientY - this.panY) };
       }
     }
     if (this.isPanning && !this.isNodeDragging) {
       this.store.dispatch(NodeActions.deselectConnection());
-      this.panX = event.clientX - this.startX - this.sidebarOffset;
+      this.panX = event.clientX - this.startX;
       this.panY = event.clientY - this.startY;
     }
   }
 
   onMouseDown(event: MouseEvent): void {
-    if (event.button === 1 && !this.contextMenuVisible) {  // Check for middle mouse button
+    if (event.button === 1) {  // Check for middle mouse button
       this.isPanning = true;
-      this.startX = event.clientX - this.panX - this.sidebarOffset;
+      this.startX = event.clientX - this.panX;
       this.startY = event.clientY - this.panY;
       this.canvas?.nativeElement.classList.add("grab")
       event.preventDefault(); // Prevent the default middle mouse button action
@@ -142,6 +126,9 @@ export class CanvasComponent {
   onMouseUp(): void {
     this.isPanning = false;
     this.canvas?.nativeElement.classList.remove("grab")
+    if (this.drawingConnection) {
+      this.endConnection({ node: this.addNode(this.drawingConnection.type, this.cursorPosition) })
+    }
   }
 
   onDragStarted(): void {
@@ -158,6 +145,28 @@ export class CanvasComponent {
     };
     this.store.dispatch(NodeActions.updateNodePosition({ id: event.id, position: updatedPosition }));
   }
+
+
+  addNode(nodeType: NodeType, position: { x: number, y: number }): Node {
+    let id = this.generateUniqueId();
+    const newNode: Node = {
+      id: id,
+      name: `${nodeType}-${this.nodes?.length ?? id}`,
+      position: position,
+      width: 150,
+      type: nodeType,
+    };
+    this.store.dispatch(NodeActions.addNode({ node: newNode }));
+    return newNode;
+  }
+
+  getEndNodeType(nodeType: NodeType): NodeType {
+    switch (nodeType) {
+      case NodeType.Server: return NodeType.Route;
+    }
+    return NodeType.Code;
+  }
+
 
   onNodeMoved(event: { id: string, position: { x: number, y: number }, width: number }): void {
     this.store.dispatch(NodeActions.deselectConnection());
@@ -176,13 +185,12 @@ export class CanvasComponent {
 
   endConnection(endPosition: { node: Node }): void {
     if (this.drawingConnection) {
-      if (endPosition.node.type == this.drawingConnection.type) {
+      if (this.validConnection(endPosition.node.type, this.drawingConnection.fromNode.type)) {
         const connectionToAdd: Connection = {
           id: this.generateUniqueId(),
           fromNode: this.drawingConnection.fromNode,
           toNode: endPosition.node,
-          color: this.getConnectionColor(this.drawingConnection.type)
-
+          color: this.getConnectionColor(endPosition.node.type)
         };
         this.store.dispatch(NodeActions.addConnection({ connection: connectionToAdd }));
       }
@@ -190,6 +198,19 @@ export class CanvasComponent {
       this.isNodeDragging = false;
       this.cursorPosition = { x: 0, y: 0 };
     }
+    console.log(this.connections?.length)
+  }
+
+  validConnection(endType: NodeType, startType: NodeType): boolean {
+    switch (endType) {
+      case NodeType.Route:
+        return startType == NodeType.Server;
+      case NodeType.Middleware:
+        return startType == NodeType.Route;
+      case NodeType.Code:
+        return startType == NodeType.Route;
+    }
+    return false;
   }
 
   generateUniqueId(): string {
@@ -204,9 +225,8 @@ export class CanvasComponent {
     return s;
   }
 
-
   connect(node: { node: Node }): void {
-    if (this.drawingConnection) {
+    if (this.drawingConnection && this.drawingConnection.fromNode.id != node.node.id) {
       this.position = { x: node.node.position.x, y: node.node.position.y };
     }
   }
@@ -220,63 +240,31 @@ export class CanvasComponent {
   getConnectionColor(nodeType: NodeType): string {
     switch (nodeType) {
       case NodeType.Server:
-        return 'cyan';
+        return 'rgba(0, 123, 255)';
       case NodeType.Route:
-        return '#2196f3';
+        return 'rgb(139, 53, 192)';
       case NodeType.Middleware:
-        return '#4caf50';
+        return 'rgb(76, 175, 80)';
       case NodeType.Code:
-        return '#2e2e2e';
+        return 'rgb(192, 0, 38)';
       default:
-        return 'white';
+        return 'black';
     }
   }
 
   generatePath(fromNode: any, toNode: any): string {
-    const start = { x: fromNode.position.x + this.panX + fromNode.width, y: fromNode.position.y + this.panY };
-    const end = { x: toNode.position.x + this.panX, y: toNode.position.y + this.panY };
-
-    let path = `M${start.x},${start.y} `;
-
-    if (start.x < end.x) {
-      path += `H${start.x - 50} `;
-      if (Math.abs(start.y - end.y) < 100) {
-
-        if (start.y < end.y) {
-          path += `V${end.y + 100} `;
-        } else {
-          path += `V${end.y - 100} `;
-        }
-        path += `H${end.x - 50} `;
-        path += `V${end.y} `;
-        path += `H${end.x + 50} `;
-      } else {
-        path += `V${end.y} `;
-        path += `H${end.x} `;
-      }
-      path += `H${end.x} `;
-    } else {
-      if (Math.abs(start.y - end.y) < 100) {
-        path += `H${start.x - 50} `;
+    const start = { x: fromNode.position.x + this.panX + fromNode.width - 5, y: fromNode.position.y + this.panY + 5 };
+    const end = { x: toNode.position.x + this.panX + 5, y: toNode.position.y + this.panY + 5 };
 
 
-        if (start.y < end.y) {
-          path += `V${end.y - 100} `;
-        } else {
-          path += `V${end.y + 100} `;
-        }
-        path += `H${end.x - 50} `;
-        path += `V${end.y} `;
-        path += `H${end.x + 50} `;
+    const fromX = start.x + (this.panX * this.scale);
+    const fromY = start.y + (this.panY * this.scale);
+    const toX = end.x + (this.panX * this.scale);
+    const toY = end.y + (this.panY * this.scale);
 
-      } else {
-        path += `H${end.x - 50} `;
-        path += `V${end.y} `;
-      }
-      path += `H${end.x} `;
-    }
+    // Create a smooth cubic Bezier path between nodes
+    return `M ${fromX} ${fromY} C ${(fromX + toX) / 2} ${fromY}, ${(fromX + toX) / 2} ${toY}, ${toX} ${toY}`;
 
-    return path;
   }
 
   selectConnection(connection: Connection) {

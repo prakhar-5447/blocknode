@@ -1,60 +1,45 @@
 <div class="canvas-container" (mousedown)="onMouseDown($event)" (mousemove)="onMouseMove($event)"
-  (wheel)="onWheel($event)" (mouseup)="onMouseUp()" #canvas>
-  <div class="virtual-space"
-    [ngStyle]="{'transform': 'translate(' + panX + 'px, ' + panY + 'px) scale(' + scale + ')'}">
+  (mouseup)="onMouseUp()" #canvas>
+  <div class="virtual-space" [ngStyle]="{'transform': 'translate(' + panX + 'px, ' + panY + 'px)'}">
     <ng-container *ngFor="let node of nodes">
-      <app-server *ngIf="node.type === NodeType.Server" [nodeName]="node.name" [position]="node.position"
-        [nodeId]="node.id" (startConnection)="startConnection($event,{n:node})" [scale]="scale"
-        (mouseup)="endConnection({ node: node })" (nodeMoved)="onNodeMoved($event)" (dragStarted)="onDragStarted()"
-        (dragEnded)="onDragEnded($event)" (dblclick)="onNodeDoubleClicked(node)"
-        [focused]="focusedNode && focusedNode.id==node.id"></app-server>
-      <app-route *ngIf="node.type === NodeType.Route" [nodeName]="node.name" [position]="node.position"
-        [nodeId]="node.id" (startConnection)="startConnection($event,{n:node})" [scale]="scale"
-        (mouseup)="endConnection({ node: node })" (nodeMoved)="onNodeMoved($event)" (dragStarted)="onDragStarted()"
-        (dragEnded)="onDragEnded($event)" (connectionAttach)="connect($event)" (removeConnection)="disconnect()"
-        (dblclick)="onNodeDoubleClicked(node)" [focused]="focusedNode && focusedNode.id==node.id"></app-route>
-      <app-middleware *ngIf="node.type === NodeType.Middleware" [nodeName]="node.name" [position]="node.position"
-        [nodeId]="node.id" [code]="node.content!" (nodeMoved)="onNodeMoved($event)" (dragStarted)="onDragStarted()"
-        [scale]="scale" (mouseup)="endConnection({ node: node })" (dragEnded)="onDragEnded($event)"
-        (nodeSelected)="openEditor()" (connectionAttach)="connect($event)" (removeConnection)="disconnect()"
-        (dblclick)="onNodeDoubleClicked(node)" [focused]="focusedNode && focusedNode.id==node.id"></app-middleware>
-      <app-code *ngIf="node.type === NodeType.Code" [nodeName]="node.name" [position]="node.position" [nodeId]="node.id"
-        [code]="node.content!" (nodeMoved)="onNodeMoved($event)" (dragStarted)="onDragStarted()"
-        (mouseup)="endConnection({ node: node })" [scale]="scale" (dragEnded)="onDragEnded($event)"
-        (nodeSelected)="openEditor()" (connectionAttach)="connect($event)" (removeConnection)="disconnect()"
-        (dblclick)="onNodeDoubleClicked(node)" [focused]="focusedNode && focusedNode.id==node.id"></app-code>
+      <app-node [nodeName]="node.name" [position]="node.position" [nodeType]="node.type" [nodeId]="node.id"
+        (startConnection)="startConnection($event,{n:node})" (mouseup)="endConnection({ node: node })"
+        (nodeMoved)="onNodeMoved($event)" (dragStarted)="onDragStarted()" (dragEnded)="onDragEnded($event)"
+        (connectionAttach)="connect($event)" (removeConnection)="disconnect()"></app-node>
     </ng-container>
-    <ng-container *ngFor="let connection of connections">
-      <app-connection [fromNode]="connection.fromNode" [toNode]="connection.toNode" [scale]="scale"></app-connection>
-    </ng-container>
-    <div [ngClass]="{'focused': focusedNode!=null}"
-      [ngStyle]="{'transform': 'translate(' + -panX + 'px, ' + -panY + 'px)'}" (click)="closeContextMenu()"></div>
-    <div class=" context-menu" *ngIf="contextMenuVisible"
-      [ngStyle]="{'top.px': contextMenuPosition.y, 'left.px': contextMenuPosition.x}">
-      <button (click)="closeContextMenu()">Delete</button>
-      <button (click)="closeContextMenu()">Add Node</button>
-    </div>
   </div>
-  <!-- <svg class="connections">
+  <svg class="connections">
     <defs>
-      <filter id="neon">
-        <feGaussianBlur stdDeviation="3.5" result="coloredBlur"></feGaussianBlur>
-        <feMerge>
-          <feMergeNode in="coloredBlur"></feMergeNode>
-          <feMergeNode in="SourceGraphic"></feMergeNode>
-        </feMerge>
+      <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+        <feDropShadow dx="0" dy="0" stdDeviation="2" flood-color="black" />
       </filter>
     </defs>
-
-    <path *ngFor="let connection of connections" class="path" 
+    <path *ngFor="let connection of connections" class="path"
       [attr.d]="generatePath(connection.fromNode, connection.toNode)" [attr.stroke]="connection.color" stroke-width="3"
-      [attr.transform]="'scale(' + scale + ')'" fill="none"
-      filter="url(#neon)" (click)="selectConnection(connection)" />
+      [attr.transform]="'translate(' + -panX + ' ' + -panY + ')'" fill="none" filter="url(#neon)"
+      (click)="selectConnection(connection)" />
+
+    <circle *ngFor="let connection of connections"
+      [attr.cx]="connection.fromNode.position.x  + this.panX + connection.fromNode.width - 5"
+      [attr.cy]="connection.fromNode.position.y + this.panY + 5" r="5" fill="white" filter="url(#shadow)" />
+
+    <circle *ngFor="let connection of connections" [attr.cx]="connection.toNode.position.x + this.panX + 5"
+      [attr.cy]="connection.toNode.position.y + this.panY + 5" r="5" fill="white" filter="url(#shadow)" />
+
     <path *ngIf="drawingConnection" [attr.d]="generatePath(drawingConnection.fromNode, { position: cursorPosition })"
-      stroke="red" stroke-width="3" fill="none" filter="url(#neon)" />
-  </svg> -->
-  <div class="editor-panel" [ngClass]="{'open': isEditorOpen}">
-    <button [ngClass]="{'show':isEditorOpen}" (click)="closeEditor()">X</button>
-    <app-editor></app-editor>
-  </div>
+      [attr.transform]="'translate(' + -panX + ' ' + -panY + ')'" stroke="black" stroke-width="3" fill="none"
+      filter="url(#neon)" />
+
+    <circle *ngIf="drawingConnection"
+      [attr.cx]="drawingConnection.fromNode.position.x  + this.panX + drawingConnection.fromNode.width - 5"
+      [attr.cy]="drawingConnection.fromNode.position.y + this.panY + 5" r="5" fill="white" filter="url(#shadow)" />
+
+    <circle *ngIf="drawingConnection" [attr.cx]="cursorPosition.x + this.panX  + 5"
+      [attr.cy]="cursorPosition.y+ this.panY + 5" r="5" fill="white" filter="url(#shadow)" />
+
+    <rect *ngIf="drawingConnection && position==null" [attr.x]="cursorPosition.x + this.panX"
+      [attr.y]="cursorPosition.y + this.panY" width="150" height="40"
+      [attr.stroke]="getConnectionColor(drawingConnection.type)" stroke-width="3" fill="#ffffff45"
+      rx="8" ry="8" />
+  </svg>
 </div>

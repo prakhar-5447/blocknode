@@ -1,58 +1,20 @@
 <div class="sidebar">
-  <div class="tabs">
-    <div class="tab" [ngClass]="{'active': activeTab === 'canvas'}" (click)="setActiveTab('canvas')">
-      <mat-icon>dashboard</mat-icon>
-    </div>
-    <div class="tab" [ngClass]="{'active': activeTab === 'settings'}" (click)="setActiveTab('settings')">
-      <mat-icon>build</mat-icon>
-    </div>
-    <div class="tab" [ngClass]="{'active': activeTab === 'tree'}" (click)="setActiveTab('tree')">
-      <mat-icon>graphic_eq</mat-icon>
-    </div>
-    <div class="tab" [ngClass]="{'active': activeTab === 'setting'}" (click)="setActiveTab('setting')">
-      <mat-icon>settings</mat-icon>
-    </div>
-  </div>
-  <div class="content">
-    <div *ngIf="activeTab === 'canvas'">
-      <div class="heading">Nodes</div>
-      <ul class="node-list">
-        <li *ngFor="let node of nodes">
-          <div class="icon" (dblclick)="centerNode(node)">&#11034;</div>
-          <div class="node">{{node.name}}</div>
-        </li>
-      </ul>
-    </div>
-    <div *ngIf="activeTab === 'settings'">
-      <button class="add-btn" (click)="addNode(NodeType.Code)">Add Generic Node</button>
-    </div>
-    <div *ngIf="activeTab === 'tree'">
-      <app-tree [nodes]="nodes" [connections]="connections"></app-tree>
-    </div>
-    <div *ngIf="activeTab === 'setting'">
-      <div class="heading">
-        Enviroment Variable
+  <div class="panel">
+    <div class="dropdown">
+      <button class="dropbtn" (click)="toggleDropdown()">Files <mat-icon>keyboard_arrow_down</mat-icon></button>
+      <div class="dropdown-content" [ngClass]="{'show': dropdownOpen}">
+        <a href="#">Export</a>
+        <a href="#">Import</a>
+        <a href="#">Settings</a>
       </div>
-      <form (ngSubmit)="addEnvVariable(nextInput)" #envForm="ngForm">
-        <input type="text" placeholder="Key" [(ngModel)]="newEnvKey" name="key" (input)="capitalize()"
-          autocomplete="off" required onkeydown="return /[a-z_]/i.test(event.key)" appCapitalize
-          (keydown.enter)="moveToNextInput(nextInput)" #key="ngModel">
-        <input type="text" placeholder="Value" [(ngModel)]="newEnvValue" name="value" autocomplete="off" required
-          #nextInput (keydown.enter)="addEnvVariable(nextInput)" #value="ngModel">
-        <button type="submit" [disabled]="envForm.invalid">Add Env</button>
-      </form>
-      <ul class="env-list">
-        <li *ngFor="let env of envVariables$ | async" class="env-card" (click)="edit(env)">
-          <div class="env-card-front">
-            {{ env.key }}
-          </div>
-          <div class="env-card-back" *ngIf="!isEditing || editingKey !== env.key">
-            {{ env.value }}
-          </div>
-          <input #editInput *ngIf="isEditing && editingKey === env.key" type="text" [(ngModel)]="newVal"
-            (keydown.enter)="save(env.key)" (blur)="save(env.key)" />
-        </li>
-      </ul>
     </div>
+    <ul class="node-list">
+      <li *ngFor="let node of nodes">
+        <div class="icon"
+          [ngStyle]="{'border-color': getConnectionColor(node.type),'background-color':getConnectionColor(node.type)}"
+          (dblclick)="centerNode(node)"></div>
+        <div class="node">{{node.name}}</div>
+      </li>
+    </ul>
   </div>
 </div>

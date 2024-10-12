@@ -1,13 +1,9 @@
-<div class="route-node" [ngClass]="{'focused':focused}" cdkDrag [cdkDragDisabled]="focused"
-    [ngStyle]="{'transform': 'translate3d(' + calcX + 'px, ' + calcY + 'px,0)'}" (cdkDragMoved)="onDragMoved($event)"
-    (cdkDragStarted)="onDragStart($event)" (cdkDragEnded)="onDragEnd($event)" (mousemove)="mouseEnter($event)"
-    (mouseout)="mouseOut($event)">
+<div class="node" cdkDrag [ngStyle]="{'transform': 'translate3d(' + calcX + 'px, ' + calcY + 'px,0)'}"
+    (cdkDragMoved)="onDragMoved($event)" (cdkDragStarted)="onDragStart($event)" (cdkDragEnded)="onDragEnd($event)"
+    (mousemove)="mouseEnter($event)" (mouseout)="mouseOut($event)">
     <div class="id">@{{nodeId}}</div>
-    <h3 *ngIf="!isEditing" (dblclick)="enableEditing()">{{ routeName }}</h3>
-    <input *ngIf="isEditing" #routeInput [(ngModel)]="routeName" (blur)="disableEditing()"
-        (keyup.enter)="disableEditing()" />
-    <div class="buttons">
-        <span (mousedown)="startConnectingMiddleware($event)"></span>
-        <span (mousedown)="startConnecting($event)"></span>
+    <div class="header">
+        <h3>Route</h3>
+        <mat-icon class="connect-icon" (mousedown)="startConnecting($event)">add_circle_outline</mat-icon>
     </div>
 </div>
