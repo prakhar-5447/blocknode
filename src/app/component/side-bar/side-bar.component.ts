@@ -5,8 +5,9 @@ import { NodeType, Node } from 'src/app/models/node.model';
 import { Store, select } from '@ngrx/store';
 import * as NodeSelectors from '../../store/node.selectors';
 import { EnvVariable } from '@/app/models/env.model';
-import { Observable } from 'rxjs';
+import { combineLatest, Observable } from 'rxjs';
 import { Connection } from '@/app/models/connection.model';
+// import { onSaveClick } from '@/app/store/node.reducer';
 
 @Component({
   selector: 'app-side-bar',
@@ -27,12 +28,15 @@ export class SideBarComponent {
   @Output() centerNodeEvent = new EventEmitter<{ x: number, y: number }>();
   @ViewChild('editInput') editInput: ElementRef | undefined;
   dropdownOpen: boolean = false;
-
+  nodes$: Observable<any[]>;
+  connections$: Observable<any[]>;
   toggleDropdown() {
     this.dropdownOpen = !this.dropdownOpen;
   }
   constructor(private store: Store<{ appState: AppState }>) {
     this.envVariables$ = this.store.pipe(select(NodeSelectors.selectEnv));
+    this.nodes$ = this.store.select(NodeSelectors.selectNodes);
+    this.connections$ = this.store.select(NodeSelectors.selectConnections);
   }
 
   setActiveTab(tab: string) {
@@ -114,4 +118,16 @@ export class SideBarComponent {
   centerNode(node: Node) {
     this.centerNodeEvent.emit(node.position);
   }
+
+  // onSave() {
+  //   combineLatest([this.nodes$, this.connections$]).subscribe(
+  //     ([nodes, connections]) => {
+  //       const stateToSave = {
+  //         nodes,
+  //         connections,
+  //       };
+  //       onSaveClick(stateToSave);
+  //     }
+  //   );
+  // }
 }
