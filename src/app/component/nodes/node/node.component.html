@@ -8,8 +8,7 @@
         <div class="btn">
             <mat-icon *ngIf="nodeType== AllNodeType.Route" class="connect-icon"
                 (mousedown)="startConnectingMiddleware($event)">add_circle_outline</mat-icon>
-            <mat-icon *ngIf="nodeType !== AllNodeType.Middleware && nodeType !== AllNodeType.Code" class="connect-icon"
-                (mousedown)="startConnecting($event)">add_circle_outline</mat-icon>
+            <mat-icon class="connect-icon" (mousedown)="startConnecting($event)">add_circle_outline</mat-icon>
         </div>
     </div>
 </div>

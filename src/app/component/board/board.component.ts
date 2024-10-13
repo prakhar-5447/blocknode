@@ -44,7 +44,7 @@ export class BoardComponent {
       }
     });
   }
-  
+
   onCenterNode(position: { x: number, y: number }) {
     this.centerNodePosition = position;
   }

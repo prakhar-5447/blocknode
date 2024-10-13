@@ -72,8 +72,8 @@ export class CanvasComponent {
     const canvas = document.querySelector('.virtual-space');
     if (canvas) {
       const canvasRect = canvas.getBoundingClientRect();
-      const canvasCenterX = canvasRect.width / 2;
-      const canvasCenterY = canvasRect.height / 2;
+      const canvasCenterX = 0;
+      const canvasCenterY = 0;
 
       this.panX = canvasCenterX - position.x;
       this.panY = canvasCenterY - position.y;
@@ -208,7 +208,7 @@ export class CanvasComponent {
       case NodeType.Middleware:
         return startType == NodeType.Route;
       case NodeType.Code:
-        return startType == NodeType.Route;
+        return startType == NodeType.Route || startType == NodeType.Code || startType == NodeType.Middleware;
     }
     return false;
   }
