@@ -1,6 +1,6 @@
 # Blocknode
 
-NodeFlow is a powerful Angular-based application that allows users to design backend services visually by dragging and dropping functional nodes on a canvas. With a dynamic state management system powered by NgRx, NodeFlow simplifies backend architecture creation by offering a visual interface where nodes represent backend components like servers, routes, middleware, and custom code blocks.
+Blocknode is a powerful Angular-based application that allows users to design backend services visually by dragging and dropping functional nodes on a canvas. With a dynamic state management system powered by NgRx, NodeFlow simplifies backend architecture creation by offering a visual interface where nodes represent backend components like servers, routes, middleware, and custom code blocks.
 
 Each node can be configured, moved, and connected to other nodes to build a fully functional backend system. The application is ideal for developers looking to abstract away the complexities of backend coding by offering a Figma-like experience for backend design.
 
