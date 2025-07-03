@@ -1,10 +1,59 @@
 # Blocknode
 
-Blocknode is a powerful Angular-based application that allows users to design backend services visually by dragging and dropping functional nodes on a canvas. With a dynamic state management system powered by NgRx, NodeFlow simplifies backend architecture creation by offering a visual interface where nodes represent backend components like servers, routes, middleware, and custom code blocks.
+This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.1.
 
-Each node can be configured, moved, and connected to other nodes to build a fully functional backend system. The application is ideal for developers looking to abstract away the complexities of backend coding by offering a Figma-like experience for backend design.
+## Development server
 
-# Use Cases:
-- Backend API Design: Quickly design REST APIs by visually connecting server, route, and middleware nodes without writing a single line of code.
-- Middleware Management: Integrate complex middleware flows by chaining middleware nodes between servers and routes, offering an easy way to manage logic execution.
-- Education and Prototyping: This is ideal for teaching backend concepts or quickly prototyping backend architectures for proof-of-concept projects.
+To start a local development server, run:
+
+```bash
+ng serve
+```
+
+Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+
+## Code scaffolding
+
+Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+
+```bash
+ng generate component component-name
+```
+
+For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+
+```bash
+ng generate --help
+```
+
+## Building
+
+To build the project run:
+
+```bash
+ng build
+```
+
+This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+
+## Running unit tests
+
+To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+
+```bash
+ng test
+```
+
+## Running end-to-end tests
+
+For end-to-end (e2e) testing, run:
+
+```bash
+ng e2e
+```
+
+Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+
+## Additional Resources
+
+For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.

@@ -15,10 +15,45 @@ const initialState: AppState = {
       width: 150,
       type: NodeType.Server
     },
+    {
+      id: "20241013161858575",
+      name: "Api-2",
+      position: {
+        "x": 668,
+        "y": 334
+      },
+      width: 150,
+      type: NodeType.Route
+    },
   ],
   selectedNodeId: null,
   selectedNodeContent: null,
-  connections: [],
+  connections: [
+    {
+      id: "20241013161858875",
+      "fromNode": {
+        id: "20241013161858475",
+        name: "Server",
+        position: {
+          "x": 355,
+          "y": 427
+        },
+        width: 150,
+        type: NodeType.Server
+      },
+      "toNode": {
+        id: "20241013161858575",
+        name: "Api-1",
+        position: {
+          "x": 668,
+          "y": 334
+        },
+        width: 150,
+        type: NodeType.Route
+      },
+      "color": "rgb(139, 53, 192)"
+    },
+  ],
   selectConnection: null,
   envVariables: [],
 };

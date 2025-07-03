@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { fabric } from 'fabric';
+import { BoardComponent } from './component/board/board.component';
 
 @Component({
   selector: 'app-root',
+  imports: [BoardComponent],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.sass']
+  styleUrl: './app.component.sass'
 })
 export class AppComponent {
   title = 'blocknode';

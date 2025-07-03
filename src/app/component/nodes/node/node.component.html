@@ -2,7 +2,7 @@
     [ngStyle]="{'transform': 'translate3d(' + calcX + 'px, ' + calcY + 'px,0)','border-color': getBorderColor(nodeType)}"
     (cdkDragStarted)="onDragStart($event)" (cdkDragEnded)="onDragEnd($event)" (mousemove)="mouseEnter($event)"
     (mouseout)="mouseOut($event)">
-    <div class="id" [ngStyle]="{'color': getBorderColor(nodeType)}">@{{nodeId}}</div>
+    <div class="id" [ngStyle]="{'color': getBorderColor(nodeType)}">&#64;{{nodeId}}</div>
     <div class="header">
         <h3>{{nodeName}}</h3>
         <div class="btn">

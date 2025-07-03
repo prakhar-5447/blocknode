@@ -1,9 +1,12 @@
-import { CdkDragEnd, CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragEnd, CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { NodeType } from '../../../models/node.model';
+import { NgStyle } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-server',
+  imports: [NgStyle, MatIconModule, CdkDrag],
   templateUrl: './server.component.html',
   styleUrls: ['./server.component.sass']
 })

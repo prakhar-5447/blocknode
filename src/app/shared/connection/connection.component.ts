@@ -1,7 +1,9 @@
+import { NgFor, NgStyle } from '@angular/common';
 import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-connection',
+  imports: [NgStyle, NgFor],
   templateUrl: './connection.component.html',
   styleUrls: ['./connection.component.sass']
 })

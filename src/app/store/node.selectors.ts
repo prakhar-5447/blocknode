@@ -1,15 +1,42 @@
-import { createSelector } from '@ngrx/store';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { AppState } from './node.state';
 
-export const selectNodes = (state: { appState: AppState }) => state.appState.nodes;
-export const selectSelectedNodeContent = (state: { appState: AppState }) => state.appState.selectedNodeContent;
-export const selectSelectedNodeId = (state: { appState: AppState }) => state.appState.selectedNodeId;
-export const selectConnections = (state: { appState: AppState }) => state.appState.connections;
-export const selectEnv = (state: { appState: AppState }) => state.appState.envVariables;
-export const selectSelectedConnection = (state: { appState: AppState }) => state.appState.selectConnection;
+const selectAppState = createFeatureSelector<AppState>('appState');
 
+
+export const selectNodes = createSelector(
+  selectAppState,
+  (state) => state?.nodes ?? []
+);
+
+export const selectConnections = createSelector(
+  selectAppState,
+  (state) => state?.connections ?? []
+);
+
+export const selectSelectedNodeId = createSelector(
+  selectAppState,
+  (state) => state?.selectedNodeId ?? null
+);
+
+export const selectSelectedNodeContent = createSelector(
+  selectAppState,
+  (state) => state?.selectedNodeContent ?? null
+);
+
+export const selectSelectedConnection = createSelector(
+  selectAppState,
+  (state) => state?.selectConnection ?? null
+);
+
+// ✅ safe composite selector
 export const selectSelectedNode = createSelector(
   selectNodes,
   selectSelectedNodeId,
-  (nodes, selectedNodeId) => nodes.find(node => node.id === selectedNodeId)
+  (nodes, selectedNodeId) => nodes.find(node => node.id === selectedNodeId) ?? null
+);
+
+export const selectEnv = createSelector(
+  selectAppState,
+  (state) => state.envVariables
 );

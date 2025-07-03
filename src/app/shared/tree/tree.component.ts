@@ -1,12 +1,14 @@
-import { Connection } from '@/app/models/connection.model';
-import { Node } from '@/app/models/node.model';
+import { Connection } from '../../models/connection.model';
+import { Node } from '../../models/node.model';
 import { Component, Input, OnInit } from '@angular/core';
 import { NestedTreeControl } from '@angular/cdk/tree';
 import { MatTreeNestedDataSource } from '@angular/material/tree';
-import { AppState } from '@/app/store/node.state';
+import { AppState } from '../../store/node.state';
 import { Store } from '@ngrx/store';
 import * as NodeSelectors from '../../store/node.selectors';
 import * as NodeActions from '../../store/node.actions';
+import { MatTreeModule } from '@angular/material/tree';
+import { MatIconModule } from '@angular/material/icon';
 
 export interface NodeWithConnections {
   node: Node;
@@ -19,6 +21,7 @@ export interface NodeWithConnections {
 
 @Component({
   selector: 'app-tree',
+  imports: [MatTreeModule, MatIconModule],
   templateUrl: './tree.component.html',
   styleUrls: ['./tree.component.sass']
 })
@@ -27,8 +30,8 @@ export class TreeComponent implements OnInit {
   @Input() connections: Connection[] | null = [];
   treeControl = new NestedTreeControl<any>(node => node.connections);
   dataSource = new MatTreeNestedDataSource<any>();
-  
-  constructor(private store: Store<{ appState: AppState }>) {}
+
+  constructor(private store: Store<{ appState: AppState }>) { }
 
   ngOnInit() {
     if (this.nodes && this.connections) {

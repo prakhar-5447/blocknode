@@ -1,9 +1,12 @@
-import { CdkDragEnd, CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragEnd, CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Node, NodeType } from '../../../models/node.model';
+import { NgStyle } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-route',
+  imports: [NgStyle, CdkDrag, MatIconModule],
   templateUrl: './route.component.html',
   styleUrls: ['./route.component.sass']
 })

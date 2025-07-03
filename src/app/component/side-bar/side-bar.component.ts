@@ -1,16 +1,19 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-import { AppState } from 'src/app/store/node.state';
+import { AppState } from '../../store/node.state';
 import * as NodeActions from '../../store/node.actions';
-import { NodeType, Node } from 'src/app/models/node.model';
+import { NodeType, Node } from '../../models/node.model';
 import { Store, select } from '@ngrx/store';
 import * as NodeSelectors from '../../store/node.selectors';
-import { EnvVariable } from '@/app/models/env.model';
+import { EnvVariable } from '../../models/env.model';
 import { combineLatest, Observable } from 'rxjs';
-import { Connection } from '@/app/models/connection.model';
+import { Connection } from '../../models/connection.model';
+import { NgClass, NgFor, NgStyle } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
 // import { onSaveClick } from '@/app/store/node.reducer';
 
 @Component({
   selector: 'app-side-bar',
+  imports: [NgClass, MatIconModule, NgStyle, NgFor],
   templateUrl: './side-bar.component.html',
   styleUrls: ['./side-bar.component.sass']
 })

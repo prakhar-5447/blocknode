@@ -1,14 +1,17 @@
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild, Inject, PLATFORM_ID } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { AppState } from 'src/app/store/node.state';
+import { AppState } from '../../store/node.state';
 import * as NodeSelectors from '../../store/node.selectors';
 import * as NodeActions from '../../store/node.actions';
-import { NodeType, Node } from 'src/app/models/node.model';
-import { Connection } from 'src/app/models/connection.model';
+import { NodeType, Node } from '../../models/node.model';
+import { Connection } from '../../models/connection.model';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { isPlatformBrowser, NgFor, NgIf, NgStyle } from '@angular/common';
+import { NodeComponent } from '../../component/nodes/node/node.component';
 
 @Component({
   selector: 'app-canvas',
+  imports: [NgStyle, NgIf, NgFor, NodeComponent],
   templateUrl: './canvas.component.html',
   styleUrls: ['./canvas.component.sass']
 })
@@ -18,9 +21,8 @@ export class CanvasComponent {
   @Input() connections: Connection[] | null = [];
   @ViewChild('canvas', { static: true }) canvas!: ElementRef<HTMLDivElement>;
 
-  constructor(private store: Store<{ appState: AppState }>, private _snackBar: MatSnackBar) {
+  constructor(private store: Store<{ appState: AppState }>, private _snackBar: MatSnackBar, @Inject(PLATFORM_ID) private platformId: Object) {
   }
-
   drawingConnection: any = null;
   cursorPosition: { x: number, y: number } = { x: 0, y: 0 };
   isEditorOpen: boolean = false;
@@ -69,14 +71,16 @@ export class CanvasComponent {
   }
 
   panToCenter(position: { x: number, y: number }) {
-    const canvas = document.querySelector('.virtual-space');
-    if (canvas) {
-      const canvasRect = canvas.getBoundingClientRect();
-      const canvasCenterX = 0;
-      const canvasCenterY = 0;
+    if (isPlatformBrowser(this.platformId)) {
+      const canvas = document.querySelector('.virtual-space');
+      if (canvas) {
+        const canvasRect = canvas.getBoundingClientRect();
+        const canvasCenterX = 0;
+        const canvasCenterY = 0;
 
-      this.panX = canvasCenterX - position.x;
-      this.panY = canvasCenterY - position.y;
+        this.panX = canvasCenterX - position.x;
+        this.panY = canvasCenterY - position.y;
+      }
     }
   }
 

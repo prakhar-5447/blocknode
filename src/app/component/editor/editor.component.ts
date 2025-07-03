@@ -2,10 +2,10 @@ import { Component, ElementRef, ViewChild, AfterViewInit, OnDestroy } from '@ang
 import { MonacoEditorService } from './editor-service';
 import { first } from 'rxjs/operators';
 import * as NodeActions from '../../store/node.actions';
-import { AppState } from '@/app/store/node.state';
+import { AppState } from '../../store/node.state';
 import { Store, select } from '@ngrx/store';
 import * as NodeSelectors from '../../store/node.selectors';
-import { Node } from '@/app/models/node.model';
+import { Node } from '../../models/node.model';
 
 declare var monaco: any;
 

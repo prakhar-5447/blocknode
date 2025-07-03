@@ -1,14 +1,18 @@
 import { Component } from '@angular/core';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { AppState } from 'src/app/store/node.state';
+import { AppState } from '../../store/node.state';
 import * as NodeSelectors from '../../store/node.selectors';
-import { Node, NodeType } from 'src/app/models/node.model';
-import { Connection } from 'src/app/models/connection.model';
+import { Node, NodeType } from '../../models/node.model';
+import { Connection } from '../../models/connection.model';
 import * as NodeActions from '../../store/node.actions';
+import { SideBarComponent } from '../../component/side-bar/side-bar.component';
+import { CanvasComponent } from '../../component/canvas/canvas.component';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-board',
+  imports: [SideBarComponent, CanvasComponent, AsyncPipe],
   templateUrl: './board.component.html',
   styleUrls: ['./board.component.sass']
 })

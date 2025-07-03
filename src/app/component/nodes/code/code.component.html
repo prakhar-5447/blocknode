@@ -1,8 +1,7 @@
-<div class="node" cdkDrag
-  [ngStyle]="{'transform': 'translate3d(' + calcX + 'px, ' + calcY + 'px,0)'}" (cdkDragMoved)="onDragMoved($event)"
-  (cdkDragStarted)="onDragStart($event)" (cdkDragEnded)="onDragEnd($event)" (mousemove)="mouseEnter($event)"
-  (mouseout)="mouseOut($event)">
-  <div class="id">@{{nodeId}}</div>
+<div class="node" cdkDrag [ngStyle]="{'transform': 'translate3d(' + calcX + 'px, ' + calcY + 'px,0)'}"
+  (cdkDragMoved)="onDragMoved($event)" (cdkDragStarted)="onDragStart($event)" (cdkDragEnded)="onDragEnd($event)"
+  (mousemove)="mouseEnter($event)" (mouseout)="mouseOut($event)">
+  <div class="id">&#64;{{nodeId}}</div>
   <div class="header">
     <h3>Code</h3>
   </div>

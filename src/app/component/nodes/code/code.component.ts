@@ -1,12 +1,14 @@
-import { CdkDragEnd, CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragEnd, CdkDragMove, CdkDragStart } from '@angular/cdk/drag-drop';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/store/node.state';
+import { AppState } from '../../../store/node.state';
 import * as NodeActions from '../../../store/node.actions';
 import { Node, NodeType } from '../../../models/node.model';
+import { NgStyle } from '@angular/common';
 
 @Component({
   selector: 'app-code',
+  imports: [NgStyle, CdkDrag],
   templateUrl: './code.component.html',
   styleUrls: ['./code.component.sass']
 })

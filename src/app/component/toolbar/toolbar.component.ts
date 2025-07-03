@@ -1,12 +1,17 @@
-import { AppState } from '@/app/store/node.state';
+import { AppState } from '../../store/node.state';
 import { Component, Input } from '@angular/core';
 import { Store, select } from '@ngrx/store';
-import { Node, NodeType } from '@/app/models/node.model';
+import { Node, NodeType } from '../../models/node.model';
 import * as NodeActions from '../../store/node.actions';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { NgFor, NgIf } from '@angular/common';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-toolbar',
+  imports: [NgFor, NgIf, MatFormFieldModule, FormsModule, ReactiveFormsModule],
   templateUrl: './toolbar.component.html',
   styleUrls: ['./toolbar.component.sass'],
   animations: [
